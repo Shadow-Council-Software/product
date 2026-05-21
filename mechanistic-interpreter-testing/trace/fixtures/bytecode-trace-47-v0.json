@@ -1,0 +1,28 @@
+{
+  "bytecode_version": "bytecode-v0",
+  "trace_id": "trace-47-v0",
+  "source_certificate_hash": "sha256:09be11571ecf88f2e15e43fa81dfa2771e7e9e85093a49d6dbbf71161ec290dc",
+  "instructions": [
+    {
+      "op": "OBSERVE",
+      "span_id": "span-intake"
+    },
+    {
+      "op": "POLICY_EVAL",
+      "span_id": "span-policy-check"
+    },
+    {
+      "op": "CHOOSE",
+      "span_id": "span-refusal-choose",
+      "source": "policy"
+    },
+    {
+      "op": "EMIT_OUTCOME",
+      "span_id": "span-refusal-emit"
+    },
+    {
+      "op": "HALT",
+      "span_id": "span-refusal-emit"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "bytecode_version": "bytecode-v0",
+  "trace_id": "trace-calculator-v0-demo-001",
+  "source_certificate_hash": "sha256:8a8581a583be4e39c4a0091077d527b5ebc68d0cdc78a2b506f08e7ac088ca9b",
+  "instructions": [
+    {
+      "op": "OBSERVE",
+      "span_id": "span-root"
+    },
+    {
+      "op": "PARSE_JSON",
+      "span_id": "span-parse"
+    },
+    {
+      "op": "COMPUTE_TAX",
+      "span_id": "span-tax",
+      "rate_imm": 0.08
+    },
+    {
+      "op": "FORMAT_RESP",
+      "span_id": "span-format"
+    },
+    {
+      "op": "HALT",
+      "span_id": "span-format"
+    }
+  ]
+}
