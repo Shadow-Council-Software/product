@@ -7,8 +7,11 @@ This monorepo holds **shared methodology on `main`** and **one git branch per pr
 | Branch | Product folder | Status |
 |--------|----------------|--------|
 | `main` | _(none — BMAD Method, `.agents/skills`, `docs/`)_ | Shared baseline |
-| `product/mechanistic-interpreter-testing` | `mechanistic-interpreter-testing/` | AOIS v0 closed — see `V0-RELEASE.md` on branch |
-| `product/enterprise` | `enterprise/` | Planning in progress |
+| `initial` | `mechanistic-interpreter-testing/` + `enterprise/` + brainstorming | Full snapshot; grouped commits — see [`docs/GIT-HISTORY.md`](docs/GIT-HISTORY.md) |
+| `product/mechanistic-interpreter-testing` | `mechanistic-interpreter-testing/` | Active development (fork from release v0) |
+| `product/enterprise` | `enterprise/` | Active development (fork from planning release) |
+| `release/mechanistic-interpreter-testing/v0` | `mechanistic-interpreter-testing/` | Frozen AOIS v0 baseline (G1–G9) |
+| `release/enterprise/planning-v0` | `enterprise/` | Frozen planning baseline (G1 + G10) |
 
 ## Working on a product
 
@@ -27,6 +30,12 @@ BMad planning output path is set per branch in `_bmad/custom/config.toml` and `_
 4. Point `planning_artifacts` at that folder in both BMad config files
 5. Push `product/<new-slug>` — do not merge product docs to `main` by default
 
+## Commit groups on `initial`
+
+All work is applied in labeled groups **G2–G10** (plus **G1** from `main`). Full SHA table: [`docs/GIT-HISTORY.md`](docs/GIT-HISTORY.md).
+
 ## Legacy
 
-`feature/initial` mixed the first product with shared repo setup. Use **`product/mechanistic-interpreter-testing`** instead.
+| Branch | Replacement |
+|--------|-------------|
+| `feature/initial` | `initial` (grouped history) + `release/*` / `product/*` |
