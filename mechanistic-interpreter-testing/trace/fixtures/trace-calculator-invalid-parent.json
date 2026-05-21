@@ -1,0 +1,25 @@
+{
+  "schema_version": "trace-v0",
+  "trace_id": "trace-calculator-invalid-parent",
+  "replay_envelope_id": "envelope-dev-calculator-v0",
+  "policy_snapshot_id": "policy-snapshot-dev-001",
+  "spans": [
+    {
+      "span_id": "span-a",
+      "parent_span_id": "span-missing",
+      "kind": "TRANSFORM",
+      "lifecycle_state": "CAPTURED",
+      "effect_class": "pure",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "inline": {}
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "inline": {}
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": "trace-v0",
+  "trace_id": "trace-calculator-v0-demo-001",
+  "replay_envelope_id": "envelope-dev-calculator-v0",
+  "policy_snapshot_id": "policy-snapshot-dev-001",
+  "run_envelope": {
+    "model_identity_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "toolchain_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "seed": "deterministic-fixture-0"
+  },
+  "spans": [
+    {
+      "span_id": "span-root",
+      "parent_span_id": null,
+      "kind": "OBSERVE",
+      "lifecycle_state": "CAPTURED",
+      "effect_class": "read",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "inline": { "source": "request", "content_type": "application/json" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "inline": { "parsed": true }
+      },
+      "attachments": [
+        {
+          "attachment_id": "att-request-nl",
+          "media_type": "text/plain",
+          "note": "Human-readable request text — witness only, not in certificate digest"
+        }
+      ]
+    },
+    {
+      "span_id": "span-parse",
+      "parent_span_id": "span-root",
+      "kind": "TRANSFORM",
+      "lifecycle_state": "CANDIDATE",
+      "effect_class": "pure",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "inline": { "op": "parse_json" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "inline": { "amount_cents": 12500, "currency": "USD" }
+      }
+    },
+    {
+      "span_id": "span-tax",
+      "parent_span_id": "span-parse",
+      "kind": "TRANSFORM",
+      "lifecycle_state": "CANDIDATE",
+      "effect_class": "pure",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "inline": { "op": "compute_tax", "rate": "0.08" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "inline": { "tax_cents": 1000, "total_cents": 13500 }
+      }
+    },
+    {
+      "span_id": "span-format",
+      "parent_span_id": "span-tax",
+      "kind": "TRANSFORM",
+      "lifecycle_state": "CANDIDATE",
+      "effect_class": "pure",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "inline": { "op": "format_response" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+        "inline": { "display": "$135.00 USD (incl. $10.00 tax)" }
+      }
+    }
+  ]
+}

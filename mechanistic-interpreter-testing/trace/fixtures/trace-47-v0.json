@@ -1,0 +1,97 @@
+{
+  "schema_version": "trace-v0",
+  "trace_id": "trace-47-v0",
+  "replay_envelope_id": "envelope-flagship-refusal-v0",
+  "policy_snapshot_id": "policy-snapshot-flagship-001",
+  "trace_completeness_score": 0.96,
+  "run_envelope": {
+    "model_identity_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "toolchain_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "seed": "trace-47-fixture-seed"
+  },
+  "spans": [
+    {
+      "span_id": "span-intake",
+      "parent_span_id": null,
+      "kind": "OBSERVE",
+      "lifecycle_state": "CAPTURED",
+      "effect_class": "read",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "inline": { "channel": "user_request", "intent_class": "harmful_instruction" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "inline": { "normalized": true }
+      },
+      "attachments": [
+        {
+          "attachment_id": "att-harmful-prompt",
+          "media_type": "text/plain",
+          "note": "Synthetic harmful instruction text — witness only"
+        }
+      ]
+    },
+    {
+      "span_id": "span-policy-check",
+      "parent_span_id": "span-intake",
+      "kind": "TRANSFORM",
+      "lifecycle_state": "CANDIDATE",
+      "effect_class": "pure",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "inline": { "op": "policy_evaluate", "policy_snapshot_id": "policy-snapshot-flagship-001" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "inline": { "safe_to_proceed": false, "policy_rule": "HARMFUL_CONTENT_BLOCK" }
+      }
+    },
+    {
+      "span_id": "span-refusal-choose",
+      "parent_span_id": "span-policy-check",
+      "kind": "CHOOSE",
+      "lifecycle_state": "CANDIDATE",
+      "choose_ledger": {
+        "choose_source": "policy",
+        "branch_inputs_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "outcome_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "rejected_alts": ["sha256:5555555555555555555555555555555555555555555555555555555555555555"]
+      },
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "inline": { "branch": "refusal_path" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "inline": { "selected": "refusal_path" }
+      }
+    },
+    {
+      "span_id": "span-refusal-emit",
+      "parent_span_id": "span-refusal-choose",
+      "kind": "TRANSFORM",
+      "lifecycle_state": "CANDIDATE",
+      "effect_class": "pure",
+      "inputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "inline": { "op": "emit_governed_outcome" }
+      },
+      "outputs_ref": {
+        "ref_type": "inline",
+        "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+        "inline": {
+          "reason_code": "REFUSAL_ISSUED",
+          "message": "Request blocked by policy HARMFUL_CONTENT_BLOCK"
+        }
+      }
+    }
+  ]
+}

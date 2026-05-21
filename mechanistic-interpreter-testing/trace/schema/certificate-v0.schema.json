@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aois.local/schemas/certificate-v0.schema.json",
+  "title": "AOIS Frozen Span Certificate v0",
+  "type": "object",
+  "required": [
+    "certificate_version",
+    "trace_id",
+    "replay_envelope_id",
+    "policy_snapshot_id",
+    "span_ids",
+    "inputs_closure_digest",
+    "span_carriers_digest",
+    "replay_outputs_digest",
+    "certificate_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "certificate_version": { "const": "certificate-v0" },
+    "trace_id": { "type": "string" },
+    "replay_envelope_id": { "type": "string" },
+    "policy_snapshot_id": { "type": "string" },
+    "span_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "inputs_closure_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "span_carriers_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "replay_outputs_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "certificate_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}
