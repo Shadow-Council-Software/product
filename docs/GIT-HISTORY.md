@@ -31,14 +31,14 @@ The **`initial`** branch records all product work in **ordered commit groups (G1
 | **G8** | `2ae7f2f` | AOIS v0 closure | Bytecode stub, expert packets, ADRs, `V0-RELEASE.md`, README golden path, E-014 evidenced |
 | **G9** | `2aae386` | Brainstorming lineage | `_bmad-output/brainstorming/` session + atomic wins backlog |
 | **G10** | `2e2051d` | Enterprise planning | `enterprise/` PRD, UX, LCARS inventory, artifacts art-01–art-08 |
-| **G11** | _(this doc)_ | History manifest | `docs/GIT-HISTORY.md`, `initial` branch README notes |
+| **G11** | `632c1d9` | History manifest | `docs/GIT-HISTORY.md`, `docs/INITIAL-BRANCH.md`, `PRODUCTS.md`, snapshot BMad path |
 
 ## Release branch anchors
 
 | Release branch | Tip commit | Includes groups | Excludes |
 |----------------|------------|-----------------|----------|
-| `release/mechanistic-interpreter-testing/v0` | `2aae386` | G1–G9 | G10 (enterprise) |
-| `release/enterprise/planning-v0` | G10 on `main` | G1 + G10 | G2–G9 mechanistic implementation |
+| `release/mechanistic-interpreter-testing/v0` | `7033f1b` | G1–G9 + release docs | G10 (enterprise) |
+| `release/enterprise/planning-v0` | `22e6545` | G1 + G10 + release docs | G2–G9 mechanistic implementation |
 
 ## Forking new work
 
