@@ -5,3 +5,7 @@
 #
 # [agents.bmad-agent-pm]
 # description = "Prefers short, bulleted PRDs over narrative drafts."
+
+[modules.bmm]
+# Product-scoped planning output. Add a sibling folder per product (e.g. other-product/) and switch this when working on that product.
+planning_artifacts = "{project-root}/mechanistic-interpreter-testing"
