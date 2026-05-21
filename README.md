@@ -8,3 +8,9 @@ Org-level product workspace. Methodology and AI agent skills are provided by [BM
 - **Headless example:** `npx bmad-method install --yes --directory . --modules bmm --tools cursor`
 
 Artifact outputs default to `_bmad-output/` and `docs/` per installer configuration.
+
+## Products (branch-per-product)
+
+Each product lives on its own branch (`product/<slug>`). **`main`** keeps BMAD Method and shared agent skills only.
+
+See **[PRODUCTS.md](./PRODUCTS.md)** for branch table and workflow.
