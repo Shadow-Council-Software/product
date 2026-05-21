@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aois.local/schemas/trace-47-prereg-v0.schema.json",
+  "title": "Trace-47 Preregistration v0",
+  "description": "Pre-registered parameters for counterfactual necessity experiment (AW-030). Must exist before ablation.",
+  "type": "object",
+  "required": [
+    "prereg_version",
+    "protocol_id",
+    "registered_at",
+    "trace_fixture_id",
+    "certificate_fixture_id",
+    "outcome_metric",
+    "theta_nshr",
+    "alpha",
+    "perturbation_families",
+    "controls",
+    "demotion_triggers"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "prereg_version": { "const": "trace-47-prereg-v0" },
+    "protocol_id": { "const": "trace-47-catastrophe-protocol" },
+    "protocol_semver": {
+      "type": "string",
+      "pattern": "^0\\.[0-9]+(-draft)?$"
+    },
+    "registered_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "registered_by": { "type": "string" },
+    "trace_fixture_id": { "type": "string" },
+    "certificate_fixture_id": { "type": "string" },
+    "replay_envelope_id": { "type": "string" },
+    "outcome_metric": {
+      "type": "object",
+      "required": ["metric_id", "description", "flip_definition"],
+      "additionalProperties": false,
+      "properties": {
+        "metric_id": {
+          "enum": [
+            "REFUSAL_LOGIT_DIRECTION",
+            "REASON_CODE_REFUSAL_ISSUED",
+            "COMPARATOR_VERDICT_FR16"
+          ]
+        },
+        "description": { "type": "string", "minLength": 10 },
+        "flip_definition": { "type": "string", "minLength": 10 }
+      }
+    },
+    "theta_nshr": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1.0,
+      "description": "Minimum fraction of perturbations where ablation flips governed outcome"
+    },
+    "alpha": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.2
+    },
+    "perturbation_families": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/perturbation_family" },
+      "allOf": [
+        {
+          "contains": { "properties": { "family_id": { "const": "P1" } } }
+        },
+        {
+          "contains": { "properties": { "family_id": { "const": "P2" } } }
+        },
+        {
+          "contains": { "properties": { "family_id": { "const": "P3" } } }
+        }
+      ]
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/control" }
+    },
+    "demotion_triggers": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/demotion_trigger" }
+    },
+    "certified_span_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" }
+  },
+  "$defs": {
+    "perturbation_family": {
+      "type": "object",
+      "required": ["family_id", "name", "min_variants"],
+      "additionalProperties": false,
+      "properties": {
+        "family_id": { "enum": ["P1", "P2", "P3", "P4"] },
+        "name": { "type": "string" },
+        "min_variants": { "type": "integer", "minimum": 1 },
+        "description": { "type": "string" }
+      }
+    },
+    "control": {
+      "type": "object",
+      "required": ["control_id", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "control_id": {
+          "enum": ["RANDOM-SPAN", "SWAP-CERT", "SHAM-ABLATION"]
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "demotion_trigger": {
+      "type": "object",
+      "required": ["trigger_id", "condition"],
+      "additionalProperties": false,
+      "properties": {
+        "trigger_id": { "type": "string" },
+        "condition": { "type": "string" },
+        "target_tier": { "enum": ["A", "B", "C"] }
+      }
+    }
+  }
+}

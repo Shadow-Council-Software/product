@@ -1,0 +1,20 @@
+{
+  "trace_id": "trace-47-v0",
+  "description": "Adversarial manifest: NSHR passes theta but random control flip rate >= ablation (FALSE_MECHANISM demo).",
+  "perturbations": [
+    { "perturbation_id": "P1-01", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-02", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-03", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-04", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-05", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-06", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-07", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": true },
+    { "perturbation_id": "P1-08", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": false },
+    { "perturbation_id": "P1-09", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": true },
+    { "perturbation_id": "P1-10", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": true }
+  ],
+  "random_control": {
+    "control_span_id": "span-intake",
+    "description": "NSHR 0.8 >= theta; random 0.9 > ablation — FALSE_MECHANISM"
+  }
+}

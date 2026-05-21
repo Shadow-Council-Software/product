@@ -1,0 +1,21 @@
+{
+  "trace_id": "trace-47-v0",
+  "description": "Synthetic perturbation manifest for ablation (AW-032/033). Models whether certified-span ablation flips governed outcome.",
+  "perturbations": [
+    { "perturbation_id": "P1-01", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": false },
+    { "perturbation_id": "P1-02", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": false },
+    { "perturbation_id": "P1-03", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": false },
+    { "perturbation_id": "P1-04", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": false },
+    { "perturbation_id": "P1-05", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": false },
+    { "perturbation_id": "P1-06", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": false },
+    { "perturbation_id": "P1-07", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": false },
+    { "perturbation_id": "P1-08", "family_id": "P1", "ablate_flips_outcome": true, "random_flips_outcome": false },
+    { "perturbation_id": "P1-09", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": true },
+    { "perturbation_id": "P1-10", "family_id": "P1", "ablate_flips_outcome": false, "random_flips_outcome": false }
+  ],
+  "random_control": {
+    "control_span_id": "span-intake",
+    "description": "Non-certified span; flip rate stubbed per perturbation row",
+    "flip_rate_when_certified_does_not_flip": 0.2
+  }
+}
