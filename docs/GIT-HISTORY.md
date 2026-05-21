@@ -1,62 +1,68 @@
 ---
-title: Git commit groups (initial branch)
+title: Git commit groups
 updated: 2026-05-21
-branch: initial
 ---
 
 # Git commit groups
 
-The **`initial`** branch records all product work in **ordered commit groups (G1–G11)** so history is reviewable by topic. **`main`** holds shared BMAD assets only. **`product/*`** is the active development line per product. **`release/*`** is the stable fork point for further feature branches.
+Product work was imported in **ordered commit groups (G1–G11)** on release branches so history stays reviewable by topic. No product is release-ready yet; groups are archival structure on **`release/*`**, not a shipping claim.
 
-## Branch roles
+## Current branch roles
 
 | Branch | Role |
 |--------|------|
-| `main` | Shared BMAD Method, `.agents/skills`, `PRODUCTS.md` |
-| `initial` | Full monorepo snapshot — all groups G1–G11 |
-| `product/<slug>` | Ongoing work for one product (BMad path scoped to that folder) |
-| `release/<slug>/<version>` | Frozen baseline to branch features without cross-product noise |
+| `main` | Shared BMAD Method, `.agents/skills`, repo docs (becomes **`master`** when org-wide promotion starts) |
+| `product/<slug>` | Active development for one product |
+| `release/<slug>/<version>` | Frozen baseline to fork feature branches without cross-product noise |
 
-## Group index (initial branch)
+**Removed:** `initial` (temporary grouped snapshot; deleted after `release/*` existed). **`feature/initial`** is legacy—delete when convenient.
 
-| Group | Commit | Subject | Scope |
-|-------|--------|---------|--------|
-| **G1** | `b9d813b` | Branch-per-product layout | `PRODUCTS.md`, root `README.md` (from `main`) |
-| **G2** | `6dd6022` | Mechanistic PRD foundation | `HANDOVER.md`, `mechanistic-interpreter-testing/prd.md`, evidence matrix, validation report, architecture start, BMad → `mechanistic-interpreter-testing/` |
+## Planned (when a product is ready to ship)
+
+| Branch | Role |
+|--------|------|
+| `master` | Promoted shared assets usable by all products (rename from `main`) |
+| `develop` | Integration line for product work before promotion to `master` |
+| `product/<slug>` | Continues per-product isolation until merge to `develop` |
+
+Until then, stay on **`product/*`** and **`release/*`**; do not open `develop` prematurely.
+
+## Group index
+
+Groups **G2–G9** live on `release/mechanistic-interpreter-testing/v0`. **G10** lives on `release/enterprise/planning-v0`. **G1** is on `main`.
+
+| Group | Original SHA | Subject | Scope |
+|-------|--------------|---------|--------|
+| **G1** | `b9d813b` | Branch-per-product layout | `PRODUCTS.md`, root `README.md` |
+| **G2** | `6dd6022` | Mechanistic PRD foundation | PRD, evidence matrix, validation report, architecture start |
 | **G3** | `0be5001` | Readiness elicitation | `readiness-elicitation-session.md` |
-| **G4** | `6959853` | Architecture & ontology | Glossary, epics, open decisions, claim template, full architecture, university sources, index |
-| **G5** | `53b0217` | Trace v0 core | `trace-v0` / `certificate-v0` schemas, calculator + trace-47 fixtures, `validate_trace.py` |
-| **G6** | `e5e8b1c` | Certificate & replay | `freeze_certificate.py`, binding verify, replay divergence classifier + demo logs |
-| **G7** | `f2e8601` | Trace-47 falsification | Prereg, protocol, ablation scripts/fixtures, NSHR + promotion integrity gates |
-| **G8** | `2ae7f2f` | AOIS v0 closure | Bytecode stub, expert packets, ADRs, `V0-RELEASE.md`, README golden path, E-014 evidenced |
-| **G9** | `2aae386` | Brainstorming lineage | `_bmad-output/brainstorming/` session + atomic wins backlog |
-| **G10** | `2e2051d` | Enterprise planning | `enterprise/` PRD, UX, LCARS inventory, artifacts art-01–art-08 |
-| **G11** | `632c1d9` | History manifest | `docs/GIT-HISTORY.md`, `docs/INITIAL-BRANCH.md`, `PRODUCTS.md`, snapshot BMad path |
+| **G4** | `6959853` | Architecture & ontology | Glossary, epics, open decisions, claim template |
+| **G5** | `53b0217` | Trace v0 core | Schemas, fixtures, `validate_trace.py` |
+| **G6** | `e5e8b1c` | Certificate & replay | Freeze, binding, divergence classifier |
+| **G7** | `f2e8601` | Trace-47 falsification | Prereg, ablation, NSHR gates |
+| **G8** | `2ae7f2f` | AOIS v0 closure | Bytecode stub, expert packets, `V0-RELEASE.md` |
+| **G9** | `2aae386` | Brainstorming lineage | `_bmad-output/brainstorming/` |
+| **G10** | `2e2051d` | Enterprise planning | `enterprise/` PRD, UX, artifacts art-01–art-08 |
+| **G11** | `632c1d9` | History manifest | This file and branch layout docs (snapshot branch, now removed) |
+
+Cherry-picked SHAs on release lines may differ; use `git log --grep="group G"` on the release branch to inspect.
 
 ## Release branch anchors
 
-| Release branch | Tip commit | Includes groups | Excludes |
-|----------------|------------|-----------------|----------|
-| `release/mechanistic-interpreter-testing/v0` | `7033f1b` | G1–G9 + release docs | G10 (enterprise) |
-| `release/enterprise/planning-v0` | `22e6545` | G1 + G10 + release docs | G2–G9 mechanistic implementation |
+| Release branch | Includes groups | Excludes |
+|----------------|-----------------|----------|
+| `release/mechanistic-interpreter-testing/v0` | G1–G9 | G10 (enterprise) |
+| `release/enterprise/planning-v0` | G1 + G10 | G2–G9 |
 
 ## Forking new work
 
 ```bash
-# Mechanistic feature after v0
 git fetch origin
 git checkout -b feature/my-work origin/release/mechanistic-interpreter-testing/v0
-
-# Enterprise feature after planning drop
+# or
 git checkout -b feature/my-work origin/release/enterprise/planning-v0
 ```
 
-## Legacy
+## Verify mechanistic v0
 
-| Branch | Notes |
-|--------|--------|
-| `feature/initial` | Pre-grouped history; superseded by `initial` + `release/*` |
-
-## Verify mechanistic v0 (on release or initial through G8+)
-
-See `mechanistic-interpreter-testing/V0-RELEASE.md`.
+See `mechanistic-interpreter-testing/V0-RELEASE.md` on `release/mechanistic-interpreter-testing/v0` or `product/mechanistic-interpreter-testing`.
