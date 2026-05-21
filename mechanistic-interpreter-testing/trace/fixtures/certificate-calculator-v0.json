@@ -1,0 +1,16 @@
+{
+  "certificate_version": "certificate-v0",
+  "trace_id": "trace-calculator-v0-demo-001",
+  "replay_envelope_id": "envelope-dev-calculator-v0",
+  "policy_snapshot_id": "policy-snapshot-dev-001",
+  "span_ids": [
+    "span-root",
+    "span-parse",
+    "span-tax",
+    "span-format"
+  ],
+  "inputs_closure_digest": "sha256:335fcc1966d51dcf54e57b762688b3b61773fdebec816968066281dce839eb12",
+  "span_carriers_digest": "sha256:7ba37662bcc963258b483586f767f8a166bcf06fa7a6288cd2ce78714c838c61",
+  "replay_outputs_digest": "sha256:9ce59479de2a46900c899f3b6af5496c7739511f3c067c4c5b515ac14faaa8da",
+  "certificate_hash": "sha256:8a8581a583be4e39c4a0091077d527b5ebc68d0cdc78a2b506f08e7ac088ca9b"
+}

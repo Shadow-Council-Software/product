@@ -1,0 +1,16 @@
+{
+  "certificate_version": "certificate-v0",
+  "trace_id": "trace-47-v0",
+  "replay_envelope_id": "envelope-flagship-refusal-v0",
+  "policy_snapshot_id": "policy-snapshot-flagship-001",
+  "span_ids": [
+    "span-intake",
+    "span-policy-check",
+    "span-refusal-choose",
+    "span-refusal-emit"
+  ],
+  "inputs_closure_digest": "sha256:6cfd9ba8be303ced3fbae671483a99f88a0328737e74651bf92ab48b3d4deafa",
+  "span_carriers_digest": "sha256:3bdc67a5316660b35aba2616d2aaa5e7be742f248877ad5a43b12e76393d641e",
+  "replay_outputs_digest": "sha256:1692740d36889b2abaef7ff0d4ce8b3aae8341ce48050aa2305d04210edde1c2",
+  "certificate_hash": "sha256:09be11571ecf88f2e15e43fa81dfa2771e7e9e85093a49d6dbbf71161ec290dc"
+}
