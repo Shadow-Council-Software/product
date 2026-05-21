@@ -1,6 +1,6 @@
 # Session handover — mechanistic interpreter / BMad planning
 
-**Branch:** `product/mechanistic-interpreter-testing` (product-isolated; `main` holds shared BMAD assets only.)
+**Branches:** `product/mechanistic-interpreter-testing` (active work) · `release/mechanistic-interpreter-testing/v0` (frozen v0) · `initial` (full grouped snapshot — see `docs/GIT-HISTORY.md`)
 
 **Date:** 2026-05-04
 
@@ -40,3 +40,5 @@
 
 - **Remote:** `origin` → `git@github.com:Shadow-Council-Software/product.git`
 - **Product branch:** `product/mechanistic-interpreter-testing`
+- **Release baseline:** `release/mechanistic-interpreter-testing/v0`
+- **Full snapshot:** `initial`
