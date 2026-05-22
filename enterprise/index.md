@@ -13,18 +13,22 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 | Document | Role |
 |----------|------|
 | [prd.md](./prd.md) | Product requirements — capability contract (FR/NFR), journeys, gates G1–G5 |
-| [ux-design-specification.md](./ux-design-specification.md) | LCARS UX spec — through Step 06 (design system + hybrid CI gate); Ops overview, alert model |
+| [ux-design-specification.md](./ux-design-specification.md) | LCARS UX spec — **workflow complete** (Steps 01–14) |
+| [ux-design-directions.html](./ux-design-directions.html) | Interactive D1–D6 direction showcase (Step 09) |
 | [tng-interaction-contract.md](./tng-interaction-contract.md) | TNG interaction grammar — copy patterns, outcomes, clearance messaging |
 | [lcars-screen-inventory.md](./lcars-screen-inventory.md) | LCARS screen IA — hero `ops.overview`, station navigation |
 | [matter-research-sources.md](./matter-research-sources.md) | Matter protocol research (PRD input) |
 | [prd-validation-report.md](./prd-validation-report.md) | PRD validation record (Pass, 2026-05-16) |
 | [docs/artifacts/](./docs/artifacts/) | Gate-backed specs ART-01–ART-08 |
+| [docs/fixtures/](./docs/fixtures/) | Visual freeze certificate (Step 08 / DC-7) |
+| [docs/agents/](./docs/agents/) | TNG character agents, senior staff + Party Mode process, positronic factory |
 
 **Planned (not yet created):**
 
-| Document | Role |
-|----------|------|
-| `architecture.md` | Normative technical design |
+| Document | Role | Blocker |
+|----------|------|---------|
+| `architecture.md` | Normative technical design | **D-01** — required before implementation sprint 1 |
+| [research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md](./research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md) | Matter adapter TR — input for architecture (D-12) | Complete 2026-05-19 |
 
 ---
 
@@ -51,10 +55,11 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 
 ### UX / design
 
-1. [ux-design-specification.md](./ux-design-specification.md) — includes **UX Review Council**; **State of the Art Review (May 2026)** for build vs integrate
+1. [ux-design-specification.md](./ux-design-specification.md) — includes **UX Review Council**; Step 09 design direction; [showcase](./ux-design-directions.html)
 2. [lcars-screen-inventory.md](./lcars-screen-inventory.md)
 3. [ART-08](./docs/artifacts/art-08-alert-condition-matrix.md)
-4. [tng-interaction-contract.md](./tng-interaction-contract.md)
+4. [Character agents](./docs/agents/) — Picard staff meeting + positronic schema
+5. [tng-interaction-contract.md](./tng-interaction-contract.md)
 
 ### Implementer / LLM agent
 
