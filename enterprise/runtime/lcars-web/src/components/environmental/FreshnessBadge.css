@@ -1,0 +1,15 @@
+.freshness-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+}
+
+.freshness-badge--fresh {
+  background: #d4edda;
+  color: #155724;
+}
+
+.freshness-badge--stale {
+  background: #f8d7da;
+  color: #721c24;
+}

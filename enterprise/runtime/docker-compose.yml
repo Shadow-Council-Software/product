@@ -22,9 +22,10 @@ services:
       - engine
     profiles: ['default', 'dev']
 
-  # Optional OHF sidecar — enable on Linux rack after W0 live certificate
+  # Pin digest after live W0 — update SHA from rack run (see spike/w0/README.md)
   ohf-sidecar:
     image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    # digest: sha256:REPLACE_AFTER_LIVE_W0
     profiles: ['sidecar']
     ports:
       - '5580:5580'

@@ -19,11 +19,14 @@
     "@fastify/websocket": "^11.0.2",
     "better-sqlite3": "^11.9.1",
     "fastify": "^5.3.3",
+    "ws": "^8.18.2",
+    "@matter-server/ws-client": "^0.7.0",
     "xstate": "^5.19.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.15.21",
+    "@types/ws": "^8.18.1",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
