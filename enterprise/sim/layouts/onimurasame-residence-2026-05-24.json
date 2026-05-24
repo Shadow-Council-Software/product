@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "name": "Onimurasame residence — official scanned floor plan",
+    "units": "meters",
+    "origin": {
+      "label": "Front entrance center (south facade)",
+      "position": [8.534, 0, 0],
+      "documentationRef": "layouts/sources/Scanned_20260524-1944.pdf — owner-provided scan 2026-05-24"
+    },
+    "totalFloorArea": 48.0,
+    "sources": [
+      {
+        "title": "Official house map scan (owner)",
+        "uri": "enterprise/sim/layouts/sources/Scanned_20260524-1944.pdf",
+        "scaleVerified": true,
+        "notes": "Overall envelope 57 ft × 32 ft; room dimensions from labeled plan"
+      }
+    ]
+  },
+  "levels": [
+    { "id": "main", "label": "Main level", "elevation": 0 }
+  ],
+  "rooms": [
+    {
+      "id": "home-office",
+      "label": "Home Office",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [3.048, 0], [3.048, 3.048], [0, 3.048]],
+      "documentationRef": "10' × 10' — southwest corner"
+    },
+    {
+      "id": "living-room",
+      "label": "Living Room",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[13.411, 0], [17.374, 0], [17.374, 2.438], [13.411, 2.438]],
+      "documentationRef": "13' × 8' — southeast, adjacent entry"
+    },
+    {
+      "id": "entry-hall",
+      "label": "Front Entrance / Entry Hall",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[3.048, 0], [13.411, 0], [13.411, 2.438], [3.048, 2.438]],
+      "documentationRef": "Central south entry zone between office and living room"
+    },
+    {
+      "id": "mechanical-room",
+      "label": "Mechanical Room",
+      "floorElevation": 0,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[13.411, 2.438], [17.067, 2.438], [17.067, 4.572], [13.411, 4.572]],
+      "documentationRef": "12' × 7' — east strip between living room and bathroom"
+    },
+    {
+      "id": "shared-bathroom",
+      "label": "Shared Bathroom",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[16.154, 4.572], [17.374, 4.572], [17.374, 6.985], [16.154, 6.985]],
+      "documentationRef": "4' × 8' — east strip"
+    },
+    {
+      "id": "second-bedroom",
+      "label": "Second Bedroom",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[10.363, 3.352], [13.411, 3.352], [13.411, 6.985], [10.363, 6.985]],
+      "documentationRef": "9' × 11' — central-east"
+    },
+    {
+      "id": "hall-to-master",
+      "label": "Hallway to Master & Bath",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[3.048, 3.048], [10.363, 3.048], [10.363, 6.401], [3.048, 6.401]],
+      "documentationRef": "Circulation west-center per plan"
+    },
+    {
+      "id": "kitchen-dining",
+      "label": "Kitchen / Dining Room",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[4.267, 6.401], [7.315, 6.401], [7.315, 9.754], [4.267, 9.754]],
+      "documentationRef": "10' × 13' — north-center-east"
+    },
+    {
+      "id": "master-bedroom",
+      "label": "Master Bedroom",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 6.401], [4.267, 6.401], [4.267, 9.754], [0, 9.754]],
+      "documentationRef": "14' × 11' — northwest"
+    },
+    {
+      "id": "hall-closet",
+      "label": "Hall Closet",
+      "floorElevation": 0,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[15.849, 9.144], [17.374, 9.144], [17.374, 9.754], [15.849, 9.754]],
+      "documentationRef": "5' × 2' — northeast corner"
+    },
+    {
+      "id": "central-hall",
+      "label": "Central Hall",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[7.315, 3.352], [10.363, 3.352], [10.363, 6.401], [7.315, 6.401]],
+      "documentationRef": "Inferred circulation — refine on Unity walkthrough"
+    }
+  ],
+  "stations": [
+    {
+      "stationId": "env.nest.primary",
+      "roomId": "living-room",
+      "label": "Nest Learning Thermostat (simulated)",
+      "position": [15.392, 1.45, 1.219],
+      "rotationY": 180,
+      "matterNodeId": 1,
+      "deviceType": "thermostat",
+      "attributePaths": {
+        "localTemp": "1/513/0",
+        "coolSetpoint": "1/513/17",
+        "heatSetpoint": "1/513/18"
+      },
+      "documentationRef": "Placed on living room south wall — confirm physical location"
+    }
+  ]
+}

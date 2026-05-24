@@ -31,9 +31,9 @@ services:
       - '3002:3002'
     environment:
       SIM_BRIDGE_PORT: '3002'
-      SIM_LAYOUT_PATH: /layout/house-layout.example.json
+      SIM_LAYOUT_PATH: /layout/onimurasame-residence-2026-05-24.json
     volumes:
-      - ../sim/layouts/house-layout.example.json:/layout/house-layout.example.json:ro
+      - ../sim/layouts/onimurasame-residence-2026-05-24.json:/layout/onimurasame-residence-2026-05-24.json:ro
     profiles: ['sim']
 
   engine-sim:

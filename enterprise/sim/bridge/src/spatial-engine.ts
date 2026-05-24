@@ -187,7 +187,9 @@ export class VisualAidStore {
 export function defaultLayoutPath(): string {
   const env = process.env.SIM_LAYOUT_PATH;
   if (env && existsSync(env)) return env;
+  const residence = join(__dirname, '../../layouts/onimurasame-residence-2026-05-24.json');
+  if (existsSync(residence)) return residence;
   const example = join(__dirname, '../../layouts/house-layout.example.json');
   if (existsSync(example)) return example;
-  throw new Error('No layout file — set SIM_LAYOUT_PATH or add layouts/house-layout.example.json');
+  throw new Error('No layout file — set SIM_LAYOUT_PATH or add layouts/onimurasame-residence-2026-05-24.json');
 }

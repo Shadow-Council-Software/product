@@ -38,5 +38,5 @@
 
 ## 6. Operator deliverable (your input)
 
-- [ ] 6.1 Provide floor plan + coordinates → `house-layout.json`
+- [x] 6.1 Provide floor plan + coordinates → `onimurasame-residence-2026-05-24.json`
 - [ ] 6.2 Scale verification walkthrough in Unity
