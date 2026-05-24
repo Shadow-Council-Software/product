@@ -63,7 +63,12 @@ Engine sprint 1 SHALL implement `GET /api/v1/stations`, `GET /api/v1/alerts`, an
 
 ### Requirement: Command endpoint stub
 
-Engine SHALL expose `POST /api/v1/commands/setpoint` returning outcome envelope even when adapter is mock.
+Engine SHALL implement `POST /api/v1/commands/setpoint` with clearance enforcement and MatterAdapterPort write delegation.
+
+#### Scenario: Crew setpoint success
+
+- **WHEN** Crew clearance posts valid setpoint for registered station
+- **THEN** response SHALL include OutcomeType Acknowledged or Pending with receiptId
 
 #### Scenario: Guest denial integration
 
