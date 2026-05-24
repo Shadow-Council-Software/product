@@ -6,39 +6,30 @@ Official owner-provided floor plan ingested **2026-05-24**.
 |-------|--------|
 | **Source PDF** | [sources/Scanned_20260524-1944.pdf](./sources/Scanned_20260524-1944.pdf) |
 | **Layout JSON** | [onimurasame-residence-2026-05-24.json](./onimurasame-residence-2026-05-24.json) |
-| **Envelope** | 57 ft × 32 ft (17.37 m × 9.75 m) |
-| **Origin** | Front entrance center, south facade |
-| **Units in JSON** | meters (converted from feet on plan) |
+| **Envelope** | 57 ft × 32 ft (17.37 m × 9.75 m) main level |
+| **Coverage UX** | [../docs/COVERAGE-UX.md](../docs/COVERAGE-UX.md) |
 
-## Rooms (from labeled plan)
+## Nest / security devices
 
-| Room | Plan size |
-|------|-----------|
-| Home Office | 10′ × 10′ |
-| Living Room | 13′ × 8′ |
-| Master Bedroom | 14′ × 11′ |
-| Kitchen / Dining | 10′ × 13′ |
-| Second Bedroom | 9′ × 11′ |
-| Shared Bathroom | 4′ × 8′ |
-| Mechanical Room | 12′ × 7′ |
-| Hall Closet | 5′ × 2′ |
+| Device | Status | Notes |
+|--------|--------|-------|
+| Nest Doorbell 3rd gen | Installed | Main door (`sec.nest.doorbell.main`) |
+| Nest — basement | Installed | Confirm cam vs Protect model |
+| Nest + rain lights | Planned | Garage top (`sec.nest.garage.floodlight`) |
+| Garage indoor cam | Planned | `sec.nest.garage.indoor` |
+| Full exterior wrap | Planned | Use Unity coverage report to place additional `devices[]` |
 
-Hallways (`entry-hall`, `hall-to-master`, `central-hall`) are inferred from circulation gaps; refine in Unity against the scan overlay.
+## Pending measured input
 
-## Simulated Nest
+- Basement room outline (currently full-footprint placeholder)
+- Garage dimensions and position relative to main house
+- Lot line for accurate `exterior-perimeter` polygon
+- Any additional Nest cam positions as you plan coverage
 
-`env.nest.primary` is placed in the **living room** on the south wall (typical install height 1.45 m). **Confirm** actual thermostat room/wall if different.
-
-## Verification
+## Commands
 
 ```bash
 cd enterprise/sim/bridge
 npm run validate-layout ../layouts/onimurasame-residence-2026-05-24.json
-SIM_LAYOUT_PATH=../layouts/onimurasame-residence-2026-05-24.json npm run dev
+curl http://127.0.0.1:3002/sim/coverage/report
 ```
-
-## Unity
-
-Copy layout to `StreamingAssets/house-layout.json` or set `SIM_LAYOUT_PATH` before starting Sim Bridge.
-
-Scale check: longest exterior wall in Unity should measure **17.37 m** (57 ft).

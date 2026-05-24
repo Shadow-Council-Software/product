@@ -4,7 +4,7 @@
     "name": "Onimurasame residence — official scanned floor plan",
     "units": "meters",
     "origin": {
-      "label": "Front entrance center (south facade)",
+      "label": "Front entrance center (south facade) — Nest Doorbell 3rd gen",
       "position": [8.534, 0, 0],
       "documentationRef": "layouts/sources/Scanned_20260524-1944.pdf — owner-provided scan 2026-05-24"
     },
@@ -14,12 +14,18 @@
         "title": "Official house map scan (owner)",
         "uri": "enterprise/sim/layouts/sources/Scanned_20260524-1944.pdf",
         "scaleVerified": true,
-        "notes": "Overall envelope 57 ft × 32 ft; room dimensions from labeled plan"
+        "notes": "Main level 57 ft × 32 ft; basement/garage extents pending measured supplement"
       }
     ]
   },
+  "coverageGoals": {
+    "perimeterComplete": false,
+    "notes": "Unity harness validates outdoor camera FOV vs house perimeter; gaps drive LCARS security UX"
+  },
   "levels": [
-    { "id": "main", "label": "Main level", "elevation": 0 }
+    { "id": "main", "label": "Main level", "elevation": 0 },
+    { "id": "basement", "label": "Basement", "elevation": -2.7 },
+    { "id": "garage", "label": "Garage level", "elevation": 0 }
   ],
   "rooms": [
     {
@@ -44,7 +50,15 @@
       "floorElevation": 0,
       "ceilingHeight": 2.7,
       "floorPolygon": [[3.048, 0], [13.411, 0], [13.411, 2.438], [3.048, 2.438]],
-      "documentationRef": "Central south entry zone between office and living room"
+      "documentationRef": "Central south entry — Nest Doorbell at main door"
+    },
+    {
+      "id": "exterior-front",
+      "label": "Exterior — front approach",
+      "floorElevation": 0,
+      "ceilingHeight": 0,
+      "floorPolygon": [[2.5, -3], [14.5, -3], [14.5, 0], [2.5, 0]],
+      "documentationRef": "Virtual zone south of entry for doorbell FOV / UX"
     },
     {
       "id": "mechanical-room",
@@ -52,7 +66,7 @@
       "floorElevation": 0,
       "ceilingHeight": 2.4,
       "floorPolygon": [[13.411, 2.438], [17.067, 2.438], [17.067, 4.572], [13.411, 4.572]],
-      "documentationRef": "12' × 7' — east strip between living room and bathroom"
+      "documentationRef": "12' × 7' — east strip"
     },
     {
       "id": "shared-bathroom",
@@ -76,7 +90,7 @@
       "floorElevation": 0,
       "ceilingHeight": 2.7,
       "floorPolygon": [[3.048, 3.048], [10.363, 3.048], [10.363, 6.401], [3.048, 6.401]],
-      "documentationRef": "Circulation west-center per plan"
+      "documentationRef": "Circulation west-center"
     },
     {
       "id": "kitchen-dining",
@@ -108,14 +122,38 @@
       "floorElevation": 0,
       "ceilingHeight": 2.7,
       "floorPolygon": [[7.315, 3.352], [10.363, 3.352], [10.363, 6.401], [7.315, 6.401]],
-      "documentationRef": "Inferred circulation — refine on Unity walkthrough"
+      "documentationRef": "Inferred circulation"
+    },
+    {
+      "id": "basement-main",
+      "label": "Basement (full footprint placeholder)",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+      "documentationRef": "Under main envelope — refine when basement plan provided"
+    },
+    {
+      "id": "garage-interior",
+      "label": "Garage interior (placeholder)",
+      "floorElevation": 0,
+      "ceilingHeight": 3.0,
+      "floorPolygon": [[17.374, 2], [22, 2], [22, 7], [17.374, 7]],
+      "documentationRef": "East of main envelope — dimensions TBD; indoor cam planned"
+    },
+    {
+      "id": "exterior-perimeter",
+      "label": "Exterior perimeter band",
+      "floorElevation": 0,
+      "ceilingHeight": 0,
+      "floorPolygon": [[-2, -4], [19.5, -4], [19.5, 12], [-2, 12], [-2, -4]],
+      "documentationRef": "Unity coverage audit boundary — refine to lot line"
     }
   ],
   "stations": [
     {
       "stationId": "env.nest.primary",
       "roomId": "living-room",
-      "label": "Nest Learning Thermostat (simulated)",
+      "label": "Environmental loop (simulated thermostat)",
       "position": [15.392, 1.45, 1.219],
       "rotationY": 180,
       "matterNodeId": 1,
@@ -125,7 +163,85 @@
         "coolSetpoint": "1/513/17",
         "heatSetpoint": "1/513/18"
       },
-      "documentationRef": "Placed on living room south wall — confirm physical location"
+      "documentationRef": "Matter sim for Environmental LCARS — not owner Nest device list"
+    }
+  ],
+  "devices": [
+    {
+      "deviceId": "sec.nest.doorbell.main",
+      "roomId": "exterior-front",
+      "levelId": "main",
+      "label": "Nest Doorbell (3rd gen)",
+      "deviceType": "doorbell",
+      "deploymentStatus": "installed",
+      "productModel": "Nest Doorbell 3rd gen",
+      "position": [8.534, 1.15, -0.05],
+      "rotationY": 0,
+      "coverage": {
+        "horizontalFovDeg": 150,
+        "verticalFovDeg": 90,
+        "rangeM": 8,
+        "mountHeightM": 1.15
+      },
+      "uxRole": "sec.entry.doorbell — hero tile on ops.security entry",
+      "documentationRef": "Owner: main door"
+    },
+    {
+      "deviceId": "sec.nest.basement",
+      "roomId": "basement-main",
+      "levelId": "basement",
+      "label": "Nest device — basement",
+      "deviceType": "camera",
+      "deploymentStatus": "installed",
+      "productModel": "Nest (model TBD — cam or Protect)",
+      "position": [8.687, -1.5, 4.877],
+      "rotationY": 90,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 6,
+        "mountHeightM": 2.2
+      },
+      "uxRole": "sec.basement — sublevel monitoring",
+      "documentationRef": "Owner: one Nest in basement; confirm cam vs Protect"
+    },
+    {
+      "deviceId": "sec.nest.garage.floodlight",
+      "roomId": "garage-interior",
+      "levelId": "garage",
+      "label": "Nest Cam with floodlights (planned)",
+      "deviceType": "floodlight_cam",
+      "deploymentStatus": "planned",
+      "productModel": "Nest Cam + dual rain lights (planned mount)",
+      "position": [19.5, 3.2, 4.5],
+      "rotationY": 270,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 15,
+        "mountHeightM": 3.2
+      },
+      "uxRole": "sec.garage.exterior — driveway / side yard coverage planner",
+      "documentationRef": "Owner: planned on garage top with two rain lights"
+    },
+    {
+      "deviceId": "sec.nest.garage.indoor",
+      "roomId": "garage-interior",
+      "levelId": "garage",
+      "label": "Garage indoor cam (planned)",
+      "deviceType": "indoor_cam",
+      "deploymentStatus": "planned",
+      "productModel": "Nest indoor cam (planned)",
+      "position": [19.8, 2.0, 5.5],
+      "rotationY": 180,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 8,
+        "mountHeightM": 2.0
+      },
+      "uxRole": "sec.garage.interior",
+      "documentationRef": "Owner: garage indoor cam planned"
     }
   ]
 }

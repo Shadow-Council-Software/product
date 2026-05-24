@@ -5,9 +5,30 @@ import { createHash } from 'node:crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+export interface LayoutDevice {
+  deviceId: string;
+  roomId: string;
+  levelId: string;
+  label: string;
+  deviceType: string;
+  deploymentStatus: 'installed' | 'planned';
+  productModel?: string;
+  position: [number, number, number];
+  rotationY?: number;
+  coverage?: {
+    horizontalFovDeg: number;
+    verticalFovDeg?: number;
+    rangeM: number;
+    mountHeightM?: number;
+  };
+  uxRole?: string;
+  documentationRef?: string;
+}
+
 export interface HouseLayout {
   schemaVersion: number;
   metadata: { name: string; units: string };
+  coverageGoals?: { perimeterComplete?: boolean; notes?: string };
   rooms: Array<{ id: string; label: string }>;
   stations: Array<{
     stationId: string;
@@ -18,6 +39,7 @@ export interface HouseLayout {
     deviceType?: string;
     attributePaths?: Record<string, string>;
   }>;
+  devices?: LayoutDevice[];
 }
 
 export interface SpatialStationState {
@@ -116,6 +138,70 @@ export class SpatialEngine {
   stateHash(): string {
     const payload = JSON.stringify(this.getStations());
     return createHash('sha256').update(payload).digest('hex').slice(0, 16);
+  }
+
+  getDevices(): LayoutDevice[] {
+    return this.layout?.devices ?? [];
+  }
+
+  /** Simplified 2D perimeter coverage audit for Unity / LCARS UX planning */
+  computeCoverageReport(): {
+    perimeterComplete: boolean;
+    samplePoints: number;
+    coveredPoints: number;
+    coveragePercent: number;
+    gaps: Array<{ x: number; z: number; nearestDeviceId: string | null }>;
+    devices: LayoutDevice[];
+  } {
+    const devices = this.getDevices().filter((d) => d.coverage);
+    const perimeterRoom = this.layout?.rooms.find((r) => r.id === 'exterior-perimeter');
+    const points: Array<[number, number]> = [];
+    if (perimeterRoom && 'floorPolygon' in perimeterRoom) {
+      const poly = (perimeterRoom as { floorPolygon: Array<[number, number]> }).floorPolygon;
+      for (let i = 0; i < poly.length - 1; i++) {
+        const [x1, z1] = poly[i];
+        const [x2, z2] = poly[i + 1];
+        for (let t = 0; t <= 1; t += 0.25) {
+          points.push([x1 + (x2 - x1) * t, z1 + (z2 - z1) * t]);
+        }
+      }
+    } else {
+      points.push([0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]);
+    }
+
+    const gaps: Array<{ x: number; z: number; nearestDeviceId: string | null }> = [];
+    let covered = 0;
+    for (const [x, z] of points) {
+      let hit: string | null = null;
+      for (const d of devices) {
+        if (!d.coverage) continue;
+        const [dx, , dz] = d.position;
+        const dist = Math.hypot(x - dx, z - dz);
+        if (dist > d.coverage.rangeM) continue;
+        const angle = (Math.atan2(z - dz, x - dx) * 180) / Math.PI;
+        const center = d.rotationY ?? 0;
+        const half = d.coverage.horizontalFovDeg / 2;
+        let diff = angle - center;
+        while (diff > 180) diff -= 360;
+        while (diff < -180) diff += 360;
+        if (Math.abs(diff) <= half) {
+          hit = d.deviceId;
+          break;
+        }
+      }
+      if (hit) covered++;
+      else gaps.push({ x, z, nearestDeviceId: null });
+    }
+
+    const coveragePercent = points.length ? Math.round((covered / points.length) * 100) : 0;
+    return {
+      perimeterComplete: coveragePercent >= 95,
+      samplePoints: points.length,
+      coveredPoints: covered,
+      coveragePercent,
+      gaps,
+      devices,
+    };
   }
 
   private tick(): void {

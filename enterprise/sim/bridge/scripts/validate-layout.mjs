@@ -21,11 +21,20 @@ for (const s of layout.stations ?? []) {
   if (!s.stationId || s.matterNodeId == null) errors.push('station missing id or matterNodeId');
 }
 
+for (const d of layout.devices ?? []) {
+  if (!roomIds.has(d.roomId)) errors.push(`device ${d.deviceId} references unknown room ${d.roomId}`);
+  if (!d.deviceId || !d.deviceType || !d.deploymentStatus) errors.push(`device ${d.deviceId ?? '?'} missing required fields`);
+}
+
+const deviceCount = layout.devices?.length ?? 0;
+const installed = (layout.devices ?? []).filter((d) => d.deploymentStatus === 'installed').length;
+const planned = (layout.devices ?? []).filter((d) => d.deploymentStatus === 'planned').length;
+
 if (errors.length) {
   console.error('Layout validation failed:');
   for (const e of errors) console.error(' -', e);
   process.exit(1);
 }
 
-console.log(`✓ Layout valid: ${layout.metadata.name} (${layout.rooms.length} rooms, ${layout.stations.length} stations)`);
+console.log(`✓ Layout valid: ${layout.metadata.name} (${layout.rooms.length} rooms, ${layout.stations.length} stations, ${deviceCount} devices: ${installed} installed, ${planned} planned)`);
 console.log(`  Schema: ${schemaPath}`);

@@ -47,6 +47,18 @@
       "minItems": 1,
       "items": { "$ref": "#/$defs/station" }
     },
+    "devices": {
+      "type": "array",
+      "description": "Security / camera / UX anchors (installed or planned)",
+      "items": { "$ref": "#/$defs/device" }
+    },
+    "coverageGoals": {
+      "type": "object",
+      "properties": {
+        "perimeterComplete": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
     "levels": {
       "type": "array",
       "items": { "$ref": "#/$defs/level" }
@@ -93,7 +105,7 @@
         "rotationY": { "type": "number" },
         "matterNodeId": { "type": "integer" },
         "deviceType": {
-          "enum": ["thermostat", "sensor", "light", "lock", "other"]
+          "enum": ["thermostat", "sensor", "light", "lock", "doorbell", "camera", "floodlight_cam", "other"]
         },
         "attributePaths": {
           "type": "object",
@@ -108,6 +120,34 @@
         "id": { "type": "string" },
         "label": { "type": "string" },
         "elevation": { "type": "number" }
+      }
+    },
+    "device": {
+      "type": "object",
+      "required": ["deviceId", "roomId", "levelId", "label", "deviceType", "deploymentStatus", "position"],
+      "properties": {
+        "deviceId": { "type": "string" },
+        "roomId": { "type": "string" },
+        "levelId": { "type": "string" },
+        "label": { "type": "string" },
+        "deviceType": {
+          "enum": ["doorbell", "camera", "indoor_cam", "floodlight_cam", "thermostat", "sensor", "other"]
+        },
+        "deploymentStatus": { "enum": ["installed", "planned"] },
+        "productModel": { "type": "string" },
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotationY": { "type": "number" },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "horizontalFovDeg": { "type": "number" },
+            "verticalFovDeg": { "type": "number" },
+            "rangeM": { "type": "number" },
+            "mountHeightM": { "type": "number" }
+          }
+        },
+        "uxRole": { "type": "string", "description": "LCARS screen / alert mapping hint" },
+        "documentationRef": { "type": "string" }
       }
     }
   }

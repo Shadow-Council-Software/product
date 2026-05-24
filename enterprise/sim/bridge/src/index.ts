@@ -37,6 +37,13 @@ export async function buildSimBridge() {
 
   app.get('/sim/layout', async () => engine.getLayout());
 
+  app.get('/sim/devices', async () => ({
+    devices: engine.getDevices(),
+    coverageGoals: engine.getLayout()?.coverageGoals ?? null,
+  }));
+
+  app.get('/sim/coverage/report', async () => engine.computeCoverageReport());
+
   app.post<{ Body: { stationId: string; targetC: number } }>(
     '/sim/command/setpoint',
     async (request, reply) => {
