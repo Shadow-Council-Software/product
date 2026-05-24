@@ -2,19 +2,23 @@ import { createActor } from 'xstate';
 import type { FastifyInstance } from 'fastify';
 import { createEventEnvelope, type EventEnvelopeV1 } from '@enterprise/event-envelope';
 import { createOutcome } from '@enterprise/tng-outcomes';
-import type { MatterAdapterPort } from '@enterprise/matter-port';
+import { NEST_PRIMARY_STATION_ID, THERMOSTAT_LOCAL_TEMP, type MatterAdapterPort } from '@enterprise/matter-port';
 import { alertMachine, getPhaseFromState } from '../domain/alert-fsm.js';
+import { ConflictTracker } from '../domain/conflict-tracker.js';
 import { AlertStore } from '../persistence/db.js';
 import { clearancePlugin, requireClearance } from '../middleware/clearance.js';
 import { isBattleStationsGateEnabled } from '../config/security.js';
 
 type Broadcast = (event: EventEnvelopeV1) => void;
 
+const STALE_MS = Number(process.env.FRESHNESS_STALE_MS ?? 15_000);
+
 export async function registerRoutes(
   app: FastifyInstance,
   adapter: MatterAdapterPort,
   store: AlertStore,
-  broadcast: Broadcast
+  broadcast: Broadcast,
+  conflictTracker = new ConflictTracker()
 ): Promise<void> {
   app.addHook('preHandler', clearancePlugin);
 
@@ -31,7 +35,14 @@ export async function registerRoutes(
   });
   actor.start();
 
-  function persistAndBroadcast(eventType: 'AlertPhaseChanged', phase: string, actorName?: string) {
+  function broadcastConflictIfNeeded(): void {
+    const state = conflictTracker.getState();
+    if (state.active) {
+      broadcast(createEventEnvelope('ConflictDetected', state));
+    }
+  }
+
+  function persistAndBroadcast(eventType: 'AlertPhaseChanged', _phase: string, actorName?: string) {
     const ctx = actor.getSnapshot().context;
     store.save({
       phase: ctx.phase,
@@ -48,6 +59,10 @@ export async function registerRoutes(
   }
 
   adapter.subscribe((nodeEvent) => {
+    if (nodeEvent.type === 'attribute_updated') {
+      conflictTracker.recordExternalUpdate('google');
+      broadcastConflictIfNeeded();
+    }
     broadcast(createEventEnvelope('StationUpdated', nodeEvent));
   });
 
@@ -67,6 +82,71 @@ export async function registerRoutes(
       acknowledgedBy: ctx.acknowledgedBy,
     });
   });
+
+  app.get('/api/v1/system/conflict', async (_request, reply) => {
+    return reply.send(conflictTracker.getState());
+  });
+
+  app.post(
+    '/api/v1/system/conflict/reconcile',
+    { preHandler: requireClearance('Captain') },
+    async (request, reply) => {
+      conflictTracker.clear();
+      store.audit('conflict.reconcile', request.clearance, 'cleared');
+      return reply.send(createOutcome('Acknowledged', 'Conflict reconciled'));
+    }
+  );
+
+  app.post(
+    '/api/v1/commands/setpoint',
+    { preHandler: requireClearance('Crew') },
+    async (request, reply) => {
+      const conflict = conflictTracker.getState();
+      if (conflict.active) {
+        return reply.status(409).send(
+          createOutcome('Denied', 'Commands blocked during CONFLICT', {
+            cause: 'conflict_active',
+            remediation: 'Complete ConflictReconcile before commanding',
+          })
+        );
+      }
+      const body = (request.body ?? {}) as {
+        stationId?: string;
+        path?: string;
+        value?: unknown;
+      };
+      const stationId = body.stationId ?? NEST_PRIMARY_STATION_ID;
+      const path = body.path ?? THERMOSTAT_LOCAL_TEMP;
+      const receipt = await adapter.writeAttribute(stationId, path, body.value);
+      if (receipt.outcomeType === 'Acknowledged' || receipt.outcomeType === 'Pending') {
+        conflictTracker.recordWrite('enterprise');
+        broadcast(
+          createEventEnvelope('SetpointCommanded', {
+            stationId,
+            path,
+            value: body.value,
+            receiptId: receipt.receiptId,
+            actor: request.clearance,
+          })
+        );
+        store.audit('command.setpoint', request.clearance, `${stationId} ${path}=${String(body.value)}`);
+      }
+      const outcomeType = receipt.outcomeType ?? 'Pending';
+      return reply.send(
+        createOutcome(outcomeType, `Setpoint ${outcomeType.toLowerCase()}`, {
+          receiptId: receipt.receiptId,
+        })
+      );
+    }
+  );
+
+  if (process.env.ALLOW_TEST_HOOKS === '1') {
+    app.post('/api/v1/test/simulate-conflict', async (_request, reply) => {
+      conflictTracker.simulateConflict();
+      broadcastConflictIfNeeded();
+      return reply.send(conflictTracker.getState());
+    });
+  }
 
   app.post(
     '/api/v1/alerts/escalate',
@@ -120,6 +200,10 @@ export async function registerRoutes(
   );
 
   app.get('/health', async (_request, reply) => {
-    return reply.send({ status: 'ok', adapter: process.env.MATTER_ADAPTER ?? 'mock' });
+    return reply.send({
+      status: 'ok',
+      adapter: process.env.MATTER_ADAPTER ?? 'mock',
+      staleThresholdMs: STALE_MS,
+    });
   });
 }

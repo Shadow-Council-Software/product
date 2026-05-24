@@ -1,0 +1,11 @@
+{
+  "name": "@enterprise/harness-art-01",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --import tsx --test t1-01-bootstrap.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}
