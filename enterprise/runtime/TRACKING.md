@@ -4,7 +4,7 @@ Maps OpenSpec tasks to GitHub issues for token-cost auditing.
 
 | Task ID | Issue | Project item | Status | Story pts | Token est / actual | PR |
 |---------|-------|--------------|--------|-----------|-------------------|-----|
-| Epic | [#1](https://github.com/Shadow-Council-Software/product/issues/1) | _pending project scope_ | In Progress | — | — / — | — |
+| Epic | [#1](https://github.com/Shadow-Council-Software/product/issues/1) | _pending project scope_ | **Closed** | — | TBD / TBD | [#28](https://github.com/Shadow-Council-Software/product/pull/28) |
 | 1.1 | [#2](https://github.com/Shadow-Council-Software/product/issues/2) | _pending_ | Closed | 1 | — / — | — |
 | 1.2 | [#3](https://github.com/Shadow-Council-Software/product/issues/3) | _pending_ | Closed | 1 | — / — | — |
 | 1.3 | [#4](https://github.com/Shadow-Council-Software/product/issues/4) | _pending_ | Closed | 1 | — / — | — |
@@ -30,7 +30,10 @@ Maps OpenSpec tasks to GitHub issues for token-cost auditing.
 | 5.4 | [#24](https://github.com/Shadow-Council-Software/product/issues/24) | _pending_ | Closed | 1 | — / — | — |
 | 5.5 | [#25](https://github.com/Shadow-Council-Software/product/issues/25) | _pending_ | Closed | 1 | — / — | — |
 | 6.1 | [#26](https://github.com/Shadow-Council-Software/product/issues/26) | _pending_ | Closed | 1 | — / — | — |
-| 6.2 | [#27](https://github.com/Shadow-Council-Software/product/issues/27) | _pending_ | Open | 1 | — / — | — |
+| 6.2 | [#27](https://github.com/Shadow-Council-Software/product/issues/27) | _pending_ | **Closed** | 1 | TBD / TBD | [#28](https://github.com/Shadow-Council-Software/product/pull/28) |
+
+**Sprint 1 status:** Complete — archived `2026-05-24-sprint-1-runtime-foundation`
+**Sprint 2 change:** `openspec/changes/sprint-2-live-environmental-loop/`
 
 **Story point total (tasks 1.1–6.2):** 26  
 **Milestone:** [Sprint 1 — Runtime Foundation](https://github.com/Shadow-Council-Software/product/milestone/1)  
