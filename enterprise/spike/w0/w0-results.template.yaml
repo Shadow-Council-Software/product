@@ -1,0 +1,51 @@
+# W0 spike results certificate — ENTERPRISE Main Computer
+# Copy to w0-results.yaml, fill in, then promote to docs/fixtures/ on PASS.
+schemaVersion: "1.0.0"
+product: ENTERPRISE Main Computer
+spike: art-01-w0-pre-architecture
+status: pending # pending | pass | fail | partial
+operator: ""
+date: ""
+host:
+  platform: "" # e.g. linux-rack-of-one
+  dockerImage: ghcr.io/home-assistant-libs/python-matter-server:stable
+  imageDigest: "" # pin after W0-1
+  networkMode: host
+goldenDevice:
+  model: Nest Learning Thermostat 4th gen
+  googleHomePrimary: true
+  threadBorderRouter: "" # e.g. Nest Hub
+commissioning:
+  pathUsed: "" # A1 | A2 | B
+  pathATag: C-A # C-A | C-B | C-F per ART-01
+  nodeId: null
+steps:
+  w0_1_sidecar_ws:
+    pass: false
+    notes: ""
+  w0_2_path_a_t1_01:
+    pass: false
+    v_a1_google_control: false
+    v_a2_fabrics_listed: false
+    v_a3_sidecar_node: false
+    v_a6_temp_within_1f: false
+    notes: ""
+  w0_3_subscription:
+    pass: false
+    eventWithinSeconds: 60
+    notes: ""
+  w0_4_read_attribute:
+    pass: false
+    attributePath: "" # e.g. 1/513/0
+    sidecarRaw: null
+    googleAppTempF: null
+    deltaF: null
+    notes: ""
+automation:
+  verifyScript: enterprise/spike/w0/verify-sidecar.mjs
+  verifyScriptVersion: "1.0.0"
+blockers: []
+architectureUnblock: false # set true when all W0 steps pass
+references:
+  - enterprise/docs/artifacts/art-01-coexistence-pack-v1.md
+  - enterprise/research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md

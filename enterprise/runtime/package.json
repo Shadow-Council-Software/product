@@ -1,0 +1,19 @@
+{
+  "name": "enterprise-runtime",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "engine",
+    "lcars-web"
+  ],
+  "scripts": {
+    "build": "npm run build -w @enterprise/matter-port && npm run build -w @enterprise/event-envelope && npm run build -w @enterprise/tng-outcomes && npm run build -w @enterprise/engine && npm run build -w @enterprise/lcars-web",
+    "dev:engine": "npm run dev -w @enterprise/engine",
+    "dev:lcars": "npm run dev -w @enterprise/lcars-web",
+    "test": "npm run test -w @enterprise/engine",
+    "validate:openspec": "cd .. && openspec validate --all --strict"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

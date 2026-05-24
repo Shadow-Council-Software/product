@@ -1,0 +1,21 @@
+{
+  "name": "@enterprise/w0-spike",
+  "private": true,
+  "type": "module",
+  "description": "ART-01 W0 sidecar verification — WS connect, get_nodes, start_listening, read_attribute",
+  "scripts": {
+    "verify": "node verify-sidecar.mjs",
+    "verify:watch": "node verify-sidecar.mjs --watch 60",
+    "mock-sidecar": "node mock-sidecar-server.mjs",
+    "run-w0": "node run-w0.mjs",
+    "run-w0:simulate": "node run-w0.mjs --simulate --agent",
+    "run-w0:live": "node run-w0.mjs --live"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "@matter-server/ws-client": "^0.7.1",
+    "ws": "^8.20.1"
+  }
+}

@@ -1,0 +1,15 @@
+# W0 spike — OHF Matter Server sidecar (ART-01 §6 W0-1)
+# Run on operator Linux rack with Nest on same LAN. See README for Mac caveats.
+
+services:
+  matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: enterprise-w0-matter-server
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+    network_mode: host
+    volumes:
+      - ./data:/data
+    environment:
+      - TZ=America/Chicago

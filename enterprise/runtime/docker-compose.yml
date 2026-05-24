@@ -1,0 +1,30 @@
+services:
+  engine:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    environment:
+      MATTER_ADAPTER: mock
+      PORT: '3001'
+    profiles: ['default', 'dev']
+
+  lcars-web:
+    build:
+      context: ./lcars-web
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    environment:
+      VITE_ENGINE_URL: http://engine:3001
+    depends_on:
+      - engine
+    profiles: ['default', 'dev']
+
+  # Optional OHF sidecar — enable on Linux rack after W0 live certificate
+  ohf-sidecar:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    profiles: ['sidecar']
+    ports:
+      - '5580:5580'
