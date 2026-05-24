@@ -1,0 +1,50 @@
+@import './tokens/okuda.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--okuda-bridge-dark);
+}
+
+.lcars-app {
+  min-width: 1024px;
+}
+
+.lcars-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--okuda-spacing-base) * 2);
+  background: var(--okuda-bridge-dark);
+  color: var(--okuda-alert-cyan);
+}
+
+.lcars-main {
+  padding: calc(var(--okuda-spacing-base) * 3);
+  min-height: 60vh;
+}
+
+.station-card {
+  display: flex;
+  gap: calc(var(--okuda-spacing-base) * 2);
+  margin-bottom: var(--okuda-spacing-base);
+  font-size: var(--okuda-font-operator-min);
+}
+
+.lcars-btn {
+  border: none;
+  border-radius: var(--okuda-radius-elbow);
+  padding: var(--okuda-spacing-base) calc(var(--okuda-spacing-base) * 2);
+  background: var(--okuda-alert-cyan);
+  color: var(--okuda-bridge-dark);
+  font-size: var(--okuda-font-operator-min);
+  cursor: pointer;
+}
+
+.alert-status {
+  margin-top: calc(var(--okuda-spacing-base) * 2);
+}

@@ -1,0 +1,105 @@
+name: Sprint Task
+description: Granular Sprint 1 task with OpenSpec ID and token audit fields
+title: "[S1][TASK_ID] "
+labels: ["enterprise", "sprint-1", "openspec", "token-audit", "story-points"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use for ENTERPRISE Sprint 1 granular work units. Link to epic #1.
+        See `enterprise/runtime/TRACKING.md` for task ↔ issue mapping.
+  - type: input
+    id: openspec_task_id
+    attributes:
+      label: OpenSpec Task ID
+      description: e.g. 1.1, 2.3, 5.1
+      placeholder: "3.2"
+    validations:
+      required: true
+  - type: dropdown
+    id: wct_contract
+    attributes:
+      label: W-CT Contract
+      options:
+        - none
+        - W-CT-01
+        - W-CT-02
+        - W-CT-03
+    validations:
+      required: true
+  - type: dropdown
+    id: gate
+    attributes:
+      label: Gate
+      options:
+        - none
+        - G1
+        - G2
+        - G3
+        - G4
+        - G5
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - monorepo
+        - engine
+        - lcars-web
+        - packages
+        - openspec
+        - infra
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Copy from tasks.md or define completion criteria
+    validations:
+      required: true
+  - type: textarea
+    id: files_expected
+    attributes:
+      label: Files expected
+      description: Paths touched by this task
+  - type: input
+    id: agent_sessions
+    attributes:
+      label: Agent session IDs (comma-separated)
+      placeholder: "cursor-session-uuid, ..."
+  - type: input
+    id: estimated_tokens
+    attributes:
+      label: Estimated tokens
+      placeholder: "null"
+  - type: input
+    id: actual_tokens
+    attributes:
+      label: Actual tokens (post-completion)
+      placeholder: "null"
+  - type: checkboxes
+    id: token_audit_unit
+    attributes:
+      label: Token audit
+      options:
+        - label: Mark as token-audit unit (1 story point)
+          required: false
+  - type: markdown
+    attributes:
+      value: |
+        ## Parent epic
+        Part of #1
+
+        ## Token audit block (update on close)
+        ```json
+        {
+          "agent_sessions": [],
+          "estimated_tokens": null,
+          "actual_tokens": null,
+          "completed_at": null,
+          "story_points": 1
+        }
+        ```

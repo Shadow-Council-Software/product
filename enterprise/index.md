@@ -19,27 +19,31 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 | [lcars-screen-inventory.md](./lcars-screen-inventory.md) | LCARS screen IA — hero `ops.overview`, station navigation |
 | [matter-research-sources.md](./matter-research-sources.md) | Matter protocol research (PRD input) |
 | [prd-validation-report.md](./prd-validation-report.md) | PRD validation record (Pass, 2026-05-16) |
+| [architecture.md](./architecture.md) | Normative technical design (D-01) — **complete** 2026-05-22 |
+| [research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md](./research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md) | Matter adapter TR (D-12 input) — complete |
 | [docs/artifacts/](./docs/artifacts/) | Gate-backed specs ART-01–ART-08 |
-| [docs/fixtures/](./docs/fixtures/) | Visual freeze certificate (Step 08 / DC-7) |
+| [docs/fixtures/](./docs/fixtures/) | Visual freeze certificate (Step 08 / DC-7); W0 spike certificate when complete |
+| [spike/w0/](./spike/w0/) | **W0 pre-architecture spike** — sidecar Docker + checklist (ART-01 §6) |
 | [docs/agents/](./docs/agents/) | TNG character agents, senior staff + Party Mode process, positronic factory |
+| [openspec/](./openspec/) | **OpenSpec** — deterministic requirements, gate registry, sprint changes |
 
 **Planned (not yet created):**
 
 | Document | Role | Blocker |
 |----------|------|---------|
-| `architecture.md` | Normative technical design | **D-01** — required before implementation sprint 1 |
-| [research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md](./research/technical-matter-adapter-enterprise-mvp-research-2026-05-19.md) | Matter adapter TR — input for architecture (D-12) | Complete 2026-05-19 |
+| `runtime/` implementation monorepo | Engine + LCARS + packages | Scaffold sprint 1 story |
 
 ---
 
 ## Precedence Order (Conflict Resolution)
 
 1. MVP Acceptance Gates **G1–G5**, **Starship MVP ACs**, normative FR/NFR in [prd.md](./prd.md)
-2. Gate artifacts **ART-01–ART-08** where referenced
+2. [openspec/specs/](./openspec/specs/) — deterministic requirements (OpenSpec)
+3. Gate artifacts **ART-01–ART-08** where referenced
 3. [ux-design-specification.md](./ux-design-specification.md) for LCARS layout, alert visual law, Ops overview
 4. [tng-interaction-contract.md](./tng-interaction-contract.md) for user-facing copy and outcome grammar
 5. [lcars-screen-inventory.md](./lcars-screen-inventory.md) for screen IDs and navigation
-6. [architecture.md](./architecture.md) when present
+6. [architecture.md](./architecture.md) — normative technical design
 7. [matter-research-sources.md](./matter-research-sources.md) — domain context
 
 ---
@@ -64,9 +68,12 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 ### Implementer / LLM agent
 
 1. [index.md](./index.md)
-2. [prd.md](./prd.md) — FR44–FR52, FR48–FR52, NFR-UX4–UX6
-3. [docs/artifacts/](./docs/artifacts/)
-4. [architecture.md](./architecture.md) when created
+2. [openspec/AGENTS.md](./openspec/AGENTS.md) — spec conventions, gate tags
+3. [openspec/specs/](./openspec/specs/) — capability requirements (WHEN/THEN)
+4. [openspec/gates.yaml](./openspec/gates.yaml) — G1–G5, W-CT → spec map
+5. [architecture.md](./architecture.md)
+6. [prd.md](./prd.md) — FR44–FR52, FR48–FR52, NFR-UX4–UX6
+7. [docs/artifacts/](./docs/artifacts/)
 
 ---
 

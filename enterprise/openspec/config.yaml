@@ -1,0 +1,24 @@
+schema: spec-driven
+
+context: |
+  ENTERPRISE Main Computer — Hybrid Control Loop MVP (P0).
+  Domain terms: Station, Fabric, OutcomeType, AlertPhase, Clearance, Hybrid Mode.
+  See openspec/project.md and openspec/gates.yaml.
+  Engine owns truth; LCARS renders; sidecar holds Matter credentials only.
+  Stack: Node 24, TypeScript, Fastify engine, Vite React LCARS, SQLite, Matter sidecar Docker.
+
+rules:
+  proposal:
+    - Always list Capabilities with kebab-case spec names matching openspec/specs/
+    - Reference gate IDs (G1–G5) and W-CT contracts when in scope
+    - Link to ../architecture.md for ADRs — do not duplicate ADR text
+  specs:
+    - 'Prefix gate/contract tags in requirement titles: [Gate:G3], [Contract:W-CT-03]'
+    - Use domain vocabulary from specs/domain-vocabulary/spec.md
+    - Every requirement needs at least one #### Scenario with WHEN/THEN
+  design:
+    - Decisions must cite MatterAdapterPort boundary and ADR-MA-01–05
+    - Monorepo path enterprise/runtime/
+  tasks:
+    - Include openspec validate --strict as final task group
+    - Map tasks to W-CT contract tests where applicable
