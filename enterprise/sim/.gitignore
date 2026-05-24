@@ -1,0 +1,4 @@
+captures/
+*.png
+*.jpg
+node_modules/

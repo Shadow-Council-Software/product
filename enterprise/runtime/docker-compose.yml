@@ -22,6 +22,34 @@ services:
       - engine
     profiles: ['default', 'dev']
 
+  # Sim Bridge — digital twin (no Matter hardware)
+  sim-bridge:
+    build:
+      context: ../sim/bridge
+      dockerfile: Dockerfile
+    ports:
+      - '3002:3002'
+    environment:
+      SIM_BRIDGE_PORT: '3002'
+      SIM_LAYOUT_PATH: /layout/house-layout.example.json
+    volumes:
+      - ../sim/layouts/house-layout.example.json:/layout/house-layout.example.json:ro
+    profiles: ['sim']
+
+  engine-sim:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    environment:
+      MATTER_ADAPTER: sim
+      SIM_BRIDGE_URL: http://sim-bridge:3002
+      PORT: '3001'
+    depends_on:
+      - sim-bridge
+    profiles: ['sim']
+
   # Pin digest after live W0 — update SHA from rack run (see spike/w0/README.md)
   ohf-sidecar:
     image: ghcr.io/home-assistant-libs/python-matter-server:stable

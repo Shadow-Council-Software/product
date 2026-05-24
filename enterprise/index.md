@@ -24,6 +24,8 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 | [docs/artifacts/](./docs/artifacts/) | Gate-backed specs ART-01–ART-08 |
 | [docs/fixtures/](./docs/fixtures/) | Visual freeze certificate (Step 08 / DC-7); W0 spike certificate when complete |
 | [spike/w0/](./spike/w0/) | **W0 pre-architecture spike** — sidecar Docker + checklist (ART-01 §6) |
+| [sim/](./sim/) | **Digital twin harness** — Sim Bridge + Unity house viz (no hardware) |
+| [runtime/](./runtime/) | Engine + LCARS monorepo (mock / sim / ohf adapters) |
 | [docs/agents/](./docs/agents/) | TNG character agents, senior staff + Party Mode process, positronic factory |
 | [openspec/](./openspec/) | **OpenSpec** — deterministic requirements, gate registry, sprint changes |
 
@@ -31,7 +33,7 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 
 | Document | Role | Blocker |
 |----------|------|---------|
-| `runtime/` implementation monorepo | Engine + LCARS + packages | Scaffold sprint 1 story |
+| Measured `sim/layouts/house-layout.json` | 100% house parity in Unity | Operator floor plan + coordinates |
 
 ---
 

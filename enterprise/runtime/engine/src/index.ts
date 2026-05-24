@@ -7,7 +7,7 @@ import { registerRoutes } from './api/routes.js';
 import { isEventEnvelopeV1, type EventEnvelopeV1 } from '@enterprise/event-envelope';
 
 export async function buildServer() {
-  const adapterKind = (process.env.MATTER_ADAPTER ?? 'mock') as 'mock' | 'ohf';
+  const adapterKind = (process.env.MATTER_ADAPTER ?? 'mock') as 'mock' | 'ohf' | 'sim';
   const adapter = createMatterAdapter(adapterKind);
   await adapter.connect();
 

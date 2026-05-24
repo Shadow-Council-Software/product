@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shadow-council.dev/enterprise/house-layout.schema.json",
+  "title": "ENTERPRISE House Layout",
+  "description": "Measured floor plan + station anchors for digital twin parity",
+  "type": "object",
+  "required": ["schemaVersion", "metadata", "rooms", "stations"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "metadata": {
+      "type": "object",
+      "required": ["name", "units", "origin"],
+      "properties": {
+        "name": { "type": "string" },
+        "units": { "enum": ["meters", "feet"] },
+        "origin": {
+          "type": "object",
+          "description": "World origin reference (e.g. front door threshold)",
+          "required": ["label", "position"],
+          "properties": {
+            "label": { "type": "string" },
+            "position": { "$ref": "#/$defs/vec3" },
+            "documentationRef": { "type": "string" }
+          }
+        },
+        "totalFloorArea": { "type": "number" },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "uri": { "type": "string" },
+              "scaleVerified": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/room" }
+    },
+    "stations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/station" }
+    },
+    "levels": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/level" }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "vec2": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "room": {
+      "type": "object",
+      "required": ["id", "label", "floorPolygon", "floorElevation"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9.-]+$" },
+        "label": { "type": "string" },
+        "floorElevation": { "type": "number", "description": "Y height of floor in world units" },
+        "ceilingHeight": { "type": "number" },
+        "floorPolygon": {
+          "type": "array",
+          "description": "Closed polygon XZ footprint (Y ignored)",
+          "items": { "$ref": "#/$defs/vec2" },
+          "minItems": 3
+        },
+        "documentationRef": { "type": "string" }
+      }
+    },
+    "station": {
+      "type": "object",
+      "required": ["stationId", "roomId", "position", "matterNodeId"],
+      "properties": {
+        "stationId": { "type": "string" },
+        "roomId": { "type": "string" },
+        "label": { "type": "string" },
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotationY": { "type": "number" },
+        "matterNodeId": { "type": "integer" },
+        "deviceType": {
+          "enum": ["thermostat", "sensor", "light", "lock", "other"]
+        },
+        "attributePaths": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "level": {
+      "type": "object",
+      "required": ["id", "label", "elevation"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "elevation": { "type": "number" }
+      }
+    }
+  }
+}
