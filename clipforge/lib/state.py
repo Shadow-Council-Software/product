@@ -1,23 +1,41 @@
 from __future__ import annotations
 
-from typing import Annotated, TypedDict
+from typing import Annotated, Any, TypedDict
 
 from langgraph.graph.message import add_messages
 
 
 class ClipForgeState(TypedDict, total=False):
-    """LangGraph state for the throatpie compilation POC."""
+    """
+    LangGraph state for editor-simulation jobs.
+
+    Content domain and edit style are entirely config-driven (workflow + steering).
+    """
 
     messages: Annotated[list, add_messages]
-    performer_ids: list[str]
-    target_minutes: float
-    min_dramatic_score: float
-    search_urls: list[str]
-    downloaded_paths: list[str]
-    qualified_clips: list[dict]
-    master_sequence: list[dict]
+    job_id: str
+    workflow_id: str
+    dataset_ids: list[str]
+    steering: dict[str, Any]
+    trigger_mode: str  # manual_local | manual_urls | discovery | hybrid | scheduled
+
+    # Acquisition
+    source_urls: list[str]
+    local_media_paths: list[str]
+    ingested_paths: list[str]
+    discovery_retries: int
+
+    # Analysis + edit plan
+    segment_candidates: list[dict]
+    timeline_plan: list[dict]
+    min_segment_score: float
+    target_duration_minutes: float
+
+    # Output
     output_path: str
-    search_retries: int
     report: str
     dry_run: bool
     errors: list[str]
+
+    # Internal routing hints (not persisted)
+    _discovery_max_retries: int

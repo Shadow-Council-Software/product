@@ -1,0 +1,33 @@
+# Copy to steering.yaml or pass via CLI: clipforge run --steering config/my_job.yaml
+job:
+  name: example_highlight_job
+  workflow_id: highlight_reel
+  dataset_ids:
+    - inbox_local
+  trigger: manual_local  # manual_local | manual_urls | discovery | hybrid | scheduled
+
+directives:
+  # Natural-language brief for LLM-assisted agents (Phase 2+)
+  natural_language: >
+    Simulate a human editor cutting a fast highlight reel: keep only the highest-impact
+    visual and audio peaks, no dead air, consistent energy.
+  target_minutes: 10
+  min_segment_score: 0.75
+  segment_duration_sec: [4, 18]
+  pacing: tight
+  transitions: crossfade
+  ranking:
+    visual_weight: 0.45
+    audio_weight: 0.35
+    metadata_weight: 0.20
+
+discovery:
+  enabled: false
+  queries:
+    - example search query for discovery agent
+  poll_interval_minutes: 120
+  max_retries: 3
+
+sources:
+  # Optional explicit URLs when trigger is manual_urls or hybrid
+  urls: []

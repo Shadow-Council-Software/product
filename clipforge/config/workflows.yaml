@@ -1,0 +1,34 @@
+# Editing styles — content-agnostic. Domain-specific criteria belong in steering directives.
+workflows:
+  - id: compilation_dense
+    edit_style: compilation
+    description: Back-to-back segments, minimal gaps, maximize qualifying moments per minute
+    analysis_profile: intensity_peaks
+    defaults:
+      transitions: cut
+      crossfade_sec: 0.1
+      clip_duration_sec_min: 3
+      clip_duration_sec_max: 12
+      pacing: tight
+
+  - id: highlight_reel
+    edit_style: highlights
+    description: Best moments only, slightly longer breathing room between peaks
+    analysis_profile: intensity_peaks
+    defaults:
+      transitions: crossfade
+      crossfade_sec: 0.3
+      clip_duration_sec_min: 5
+      clip_duration_sec_max: 20
+      pacing: relaxed
+
+  - id: narrative_arc
+    edit_style: narrative
+    description: Ordered story beats — sequencing respects metadata ordering when present
+    analysis_profile: scene_change
+    defaults:
+      transitions: dissolve
+      crossfade_sec: 0.5
+      clip_duration_sec_min: 8
+      clip_duration_sec_max: 45
+      pacing: narrative

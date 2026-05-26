@@ -31,8 +31,8 @@ def get_resolve():
 def build_timeline(
     clip_paths: list[str],
     *,
-    project_name: str = "Throatpie_POC_Auto",
-    timeline_name: str = "Throatpie_Compilation",
+    project_name: str = "ClipForge",
+    timeline_name: str = "ClipForge_Timeline",
     output_dir: Path,
 ) -> None:
     resolve = get_resolve()
@@ -71,6 +71,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="ClipForge Resolve editor")
     parser.add_argument("--clips", nargs="*", default=[])
     parser.add_argument("--output-dir", type=Path, default=Path("data/output"))
+    parser.add_argument("--project-name", default="ClipForge")
+    parser.add_argument("--timeline-name", default="ClipForge_Timeline")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -81,7 +83,12 @@ def main() -> None:
     if not args.clips:
         raise SystemExit("--clips required unless --dry-run")
 
-    build_timeline(args.clips, output_dir=args.output_dir.resolve())
+    build_timeline(
+        args.clips,
+        project_name=args.project_name,
+        timeline_name=args.timeline_name,
+        output_dir=args.output_dir.resolve(),
+    )
 
 
 if __name__ == "__main__":

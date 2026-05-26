@@ -1,0 +1,22 @@
+# Source corpora — any genre. Paths are globs relative to clipforge/ unless absolute.
+datasets:
+  - id: inbox_local
+    label: Local inbox (operator drop folder)
+    local_paths:
+      - data/raw/inbox/*
+    seed_urls: []
+    discovery_queries: []
+
+  - id: demo_stock
+    label: Example stock / test footage dataset
+    local_paths: []
+    seed_urls: []
+    discovery_queries:
+      - site:archive.org stock footage city timelapse
+
+  # Example: curated manifest (Phase 2 — SQLite / JSONL manifests)
+  - id: curated_manifest
+    label: Manifest-driven corpus
+    manifest: data/datasets/curated_manifest.jsonl
+    local_paths: []
+    seed_urls: []

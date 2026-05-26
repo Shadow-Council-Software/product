@@ -1,23 +1,32 @@
-from clipforge.agents.orchestrator import build_graph
+from clipforge.agents.orchestrator import build_graph, run_pipeline
+from clipforge.agents.supervisor import build_initial_state
 
 
 def test_graph_compiles():
-    app = build_graph()
-    assert app is not None
+    assert build_graph() is not None
 
 
-def test_dry_run_pipeline():
-    from clipforge.agents.orchestrator import run_pipeline
-
-    result = run_pipeline(
-        {
-            "performer_ids": ["morgpie"],
-            "target_minutes": 10,
-            "min_dramatic_score": 0.85,
-            "dry_run": True,
-            "search_urls": [],
-            "search_retries": 0,
-            "errors": [],
-        }
+def test_dry_run_local_pipeline():
+    initial = build_initial_state(
+        workflow_id="compilation_dense",
+        dataset_ids=["inbox_local"],
+        trigger="manual_local",
+        dry_run=True,
     )
+    result = run_pipeline(initial)
+    assert result.get("trigger_mode") == "manual_local"
     assert "report" in result or result.get("dry_run") is not False
+
+
+def test_build_initial_state_from_steering_example():
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parent.parent / "config" / "steering.example.yaml"
+    state = build_initial_state(
+        workflow_id="compilation_dense",
+        dataset_ids=["inbox_local"],
+        trigger="manual_local",
+        steering_path=str(path),
+    )
+    assert state["workflow_id"] == "highlight_reel"
+    assert "directives" in state["steering"]

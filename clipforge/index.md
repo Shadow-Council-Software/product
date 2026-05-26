@@ -1,35 +1,34 @@
 # ClipForge — Document Index
 
-**Product:** ClipForge (working name) — multi-agent automated video compilation POC  
-**POC focus:** Throatpie compilations (local-first pipeline)  
+**Product:** ClipForge — multi-agent **editor simulation** (content- and style-agnostic)  
 **Branch:** `product/clipforge`
 
 ---
 
 ## Canonical entry points
 
-| Path | Role |
-|------|------|
-| [README.md](./README.md) | Full handover spec, setup, roadmap |
-| [main.py](./main.py) | CLI entry — LangGraph pipeline |
-| [config/performers.yaml](./config/performers.yaml) | Target performers + search keywords |
-| [config/settings.yaml](./config/settings.yaml) | Pipeline thresholds, paths, Resolve |
-| [agents/](./agents/) | LangGraph agent nodes |
-| [cv/](./cv/) | Reaction / audio analysis modules |
-| [resolve_scripts/](./resolve_scripts/) | DaVinci Resolve Python API scripts |
+| Document | Role |
+|----------|------|
+| [README.md](./README.md) | Overview, quick start, config map |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Editor mapping, triggers, LangGraph flow |
+| [main.py](./main.py) | CLI: `run`, `watch`, `analyze`, `test-resolve` |
+| [config/workflows.yaml](./config/workflows.yaml) | Edit style templates |
+| [config/datasets.yaml](./config/datasets.yaml) | Source corpora |
+| [config/steering.example.yaml](./config/steering.example.yaml) | Per-job editor steering |
+| [agents/](./agents/) | Agent crew |
+| [triggers/](./triggers/) | Trigger modes |
 
 ---
 
-## Quick start
+## Example jobs
 
 ```bash
-cd clipforge
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python main.py --help
-python main.py run --dry-run
-```
+# Human-triggered: local inbox
+python main.py run --dataset inbox_local --trigger manual_local
 
-**Phase 1:** `python main.py test-resolve` (Resolve must be running)  
-**Phase 2:** `python main.py analyze --input path/to/test.mp4`  
-**Phase 3:** `python main.py run --performers morgpie --target-minutes 10`
+# Steering file (NL brief + discovery flags)
+python main.py run --steering config/steering.example.yaml
+
+# Automated loop (discovery trigger)
+python main.py watch --steering config/steering.example.yaml --dry-run
+```

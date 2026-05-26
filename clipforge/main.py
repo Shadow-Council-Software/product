@@ -1,35 +1,40 @@
 #!/usr/bin/env python3
-"""ClipForge POC — LangGraph entry point."""
+"""ClipForge — editor-simulation pipeline (content- and style-agnostic)."""
 from __future__ import annotations
 
 import argparse
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-if str(ROOT) not in sys.path:
+if str(ROOT.parent) not in sys.path:
     sys.path.insert(0, str(ROOT.parent))
 
 from clipforge.agents.orchestrator import run_pipeline
-from clipforge.lib.config import load_settings
+from clipforge.agents.supervisor import build_initial_state
+from clipforge.cv.segment_scorer import score_segments
+from clipforge.triggers import TriggerMode
 
 
 def cmd_run(args: argparse.Namespace) -> int:
-    settings = load_settings()
-    initial = {
-        "performer_ids": args.performers,
-        "target_minutes": args.target_minutes,
-        "min_dramatic_score": args.min_dramatic_score,
-        "dry_run": args.dry_run,
-        "search_urls": args.url or [],
-        "search_retries": 0,
-        "errors": [],
-    }
-    if args.url:
-        initial["search_urls"] = list(args.url)
+    initial = build_initial_state(
+        workflow_id=args.workflow,
+        dataset_ids=args.dataset,
+        trigger=args.trigger,
+        steering_path=args.steering,
+        source_urls=args.url,
+        dry_run=args.dry_run,
+    )
+    if args.target_minutes is not None:
+        initial["target_duration_minutes"] = args.target_minutes
+        initial["steering"]["directives"]["target_minutes"] = args.target_minutes
+    if args.min_score is not None:
+        initial["min_segment_score"] = args.min_score
+        initial["steering"]["directives"]["min_segment_score"] = args.min_score
 
     result = run_pipeline(initial)
-    print(result.get("report") or "Pipeline finished.")
+    print(result.get("report") or "Job finished.")
     if result.get("output_path"):
         print(f"Output: {result['output_path']}")
     if result.get("errors"):
@@ -40,19 +45,38 @@ def cmd_run(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_watch(args: argparse.Namespace) -> int:
+    """
+    Continuous discovery trigger — polls steering.discovery.poll_interval_minutes.
+
+    Runs the same pipeline on an interval (operator daemon / cron substitute).
+    """
+    interval_sec = max(args.interval_minutes, 5) * 60
+    print(f"watch: polling every {interval_sec}s (Ctrl+C to stop)")
+    try:
+        while True:
+            rc = cmd_run(args)
+            if rc != 0:
+                print(f"watch: job exited {rc}", file=sys.stderr)
+            time.sleep(interval_sec)
+    except KeyboardInterrupt:
+        print("watch: stopped")
+    return 0
+
+
 def cmd_test_resolve(_: argparse.Namespace) -> int:
     script = ROOT / "resolve_scripts" / "resolve_editor.py"
     import subprocess
 
-    r = subprocess.run([sys.executable, str(script), "--dry-run"], check=False)
-    return r.returncode
+    return subprocess.run(
+        [sys.executable, str(script), "--dry-run"], check=False
+    ).returncode
 
 
 def cmd_analyze(args: argparse.Namespace) -> int:
-    from clipforge.cv.throat_detector import analyze_video_segments
-
-    segments = analyze_video_segments(
+    segments = score_segments(
         Path(args.input),
+        profile=args.profile,
         min_score=args.min_score,
     )
     print(f"Found {len(segments)} candidate segments")
@@ -62,37 +86,51 @@ def cmd_analyze(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="clipforge", description="ClipForge throatpie POC")
+    p = argparse.ArgumentParser(
+        prog="clipforge",
+        description="Simulate a human video editor: datasets + steering + any trigger",
+    )
     sub = p.add_subparsers(dest="command", required=True)
 
-    run = sub.add_parser("run", help="Execute full LangGraph pipeline")
-    run.add_argument("--performers", nargs="+", default=["morgpie"])
+    run = sub.add_parser("run", help="Run one editor-simulation job")
+    run.add_argument("--workflow", default="compilation_dense")
+    run.add_argument("--dataset", nargs="+", default=["inbox_local"])
+    run.add_argument(
+        "--trigger",
+        default=TriggerMode.MANUAL_LOCAL.value,
+        choices=[m.value for m in TriggerMode],
+    )
+    run.add_argument("--steering", help="Path to steering YAML (see config/steering.example.yaml)")
     run.add_argument("--target-minutes", type=float, default=None)
-    run.add_argument("--min-dramatic-score", type=float, default=None)
+    run.add_argument("--min-score", type=float, default=None)
     run.add_argument("--url", action="append", default=[])
     run.add_argument("--dry-run", action="store_true")
     run.set_defaults(func=cmd_run)
 
+    watch = sub.add_parser("watch", help="Continuous discovery + pipeline loop")
+    watch.add_argument("--interval-minutes", type=int, default=60)
+    watch.add_argument("--workflow", default="compilation_dense")
+    watch.add_argument("--dataset", nargs="+", default=["demo_stock"])
+    watch.add_argument("--trigger", default=TriggerMode.DISCOVERY.value)
+    watch.add_argument("--steering", default=str(ROOT / "config" / "steering.example.yaml"))
+    watch.add_argument("--url", action="append", default=[])
+    watch.add_argument("--dry-run", action="store_true")
+    watch.set_defaults(func=cmd_watch)
+
     tr = sub.add_parser("test-resolve", help="Verify Resolve script wiring")
     tr.set_defaults(func=cmd_test_resolve)
 
-    an = sub.add_parser("analyze", help="Run CV analysis on a single file")
+    an = sub.add_parser("analyze", help="Score segments on one file (no graph)")
     an.add_argument("--input", required=True)
-    an.add_argument("--min-score", type=float, default=0.85)
+    an.add_argument("--profile", default="intensity_peaks")
+    an.add_argument("--min-score", type=float, default=0.75)
     an.set_defaults(func=cmd_analyze)
 
     return p
 
 
 def main() -> int:
-    parser = build_parser()
-    args = parser.parse_args()
-    if args.command == "run" and args.target_minutes is None:
-        args.target_minutes = float(load_settings().get("pipeline", {}).get("target_minutes", 30))
-    if args.command == "run" and args.min_dramatic_score is None:
-        args.min_dramatic_score = float(
-            load_settings().get("pipeline", {}).get("min_dramatic_score", 0.85)
-        )
+    args = build_parser().parse_args()
     return args.func(args)
 
 

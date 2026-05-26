@@ -1,1 +1,3 @@
-"""Computer vision and audio analysis for dramatic segment scoring."""
+from .segment_scorer import score_segments
+
+__all__ = ["score_segments"]
