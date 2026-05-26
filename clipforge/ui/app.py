@@ -97,7 +97,7 @@ def run_compilation(
 
 
 def build_ui() -> gr.Blocks:
-    with gr.Blocks(title="ClipForge Operator", theme=gr.themes.Soft()) as demo:
+    with gr.Blocks(title="ClipForge Operator") as demo:
         gr.Markdown(
             """
 # ClipForge Operator Console
@@ -178,7 +178,12 @@ Peak-based cuts use **Pre-roll** / **Post-roll** seconds around the detected mom
 def main() -> None:
     demo = build_ui()
     demo.queue()
-    demo.launch(server_name="127.0.0.1", server_port=7860, show_error=True)
+    demo.launch(
+        server_name="127.0.0.1",
+        server_port=7860,
+        show_error=True,
+        theme=gr.themes.Soft(),
+    )
 
 
 if __name__ == "__main__":
