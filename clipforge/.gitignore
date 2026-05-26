@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+*.log
+
+# Job artifacts (never commit media)
+data/raw/**
+data/clips/**
+data/output/**
+!data/raw/.gitkeep
+!data/clips/qualified/.gitkeep
+!data/clips/rejected/.gitkeep
+!data/output/.gitkeep
+
+cv/models/*.pth
+cv/models/*.pt
+!cv/models/.gitkeep

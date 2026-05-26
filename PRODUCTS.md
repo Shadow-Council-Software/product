@@ -9,6 +9,7 @@ This monorepo holds **shared methodology on `main`** and **one git branch per pr
 | `main` | _(none — BMAD Method, `.agents/skills`, `docs/`)_ | Shared baseline |
 | `product/mechanistic-interpreter-testing` | `mechanistic-interpreter-testing/` | Active development (from release v0) |
 | `product/enterprise` | `enterprise/` | Active development (from planning release) |
+| `product/clipforge` | `clipforge/` | Active development — Throatpie POC (May 2026) |
 | `release/mechanistic-interpreter-testing/v0` | `mechanistic-interpreter-testing/` | Frozen AOIS v0 baseline |
 | `release/enterprise/planning-v0` | `enterprise/` | Frozen planning baseline |
 

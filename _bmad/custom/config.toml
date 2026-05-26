@@ -1,8 +1,8 @@
 # Team / enterprise overrides for _bmad/config.toml.
-# Committed on product/enterprise — switch branch when changing active product.
+# Committed on product/clipforge — switch branch when changing active product.
 #
 # [agents.bmad-agent-pm]
 # description = "Prefers short, bulleted PRDs over narrative drafts."
 
 [modules.bmm]
-planning_artifacts = "{project-root}/enterprise"
+planning_artifacts = "{project-root}/clipforge"

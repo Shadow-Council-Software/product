@@ -1,0 +1,35 @@
+paths:
+  raw: data/raw
+  clips_qualified: data/clips/qualified
+  clips_rejected: data/clips/rejected
+  output: data/output
+  sqlite: data/jobs.db
+
+pipeline:
+  target_minutes: 30
+  min_clips: 40
+  clip_duration_sec_min: 3
+  clip_duration_sec_max: 12
+  crossfade_sec: 0.2
+  min_dramatic_score: 0.85
+  download_min_height: 1080
+  max_search_retries: 3
+
+analysis:
+  bulge_delta_threshold: 0.15
+  expression_score_threshold: 0.85
+  audio_peak_db_threshold: -12
+  sample_fps: 2
+
+resolve:
+  project_name_prefix: Throatpie_POC_Auto
+  timeline_name: Throatpie_Compilation
+  render_format: mp4
+  render_codec: H.264
+  # Set via env RESOLVE_SCRIPT_API or Resolve install path
+  script_module_path: null
+
+llm:
+  provider: openai  # openai | anthropic | grok
+  model: gpt-4o-mini
+  temperature: 0.2
