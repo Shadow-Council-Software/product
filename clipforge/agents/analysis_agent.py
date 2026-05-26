@@ -72,6 +72,7 @@ def analysis_node(state: ClipForgeState) -> ClipForgeState:
                 visual_threshold=float(analysis_cfg.get("visual_threshold", 0.7)),
                 sample_fps=float(analysis_cfg.get("sample_fps", 2)),
                 ranking_weights=ranking,
+                prefer_face_visible=bool(directives.get("prefer_face_visible")),
             )
             for seg in segments:
                 seg = trim_segment_to_peak_window(

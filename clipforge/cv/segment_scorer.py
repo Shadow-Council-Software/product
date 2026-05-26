@@ -40,6 +40,7 @@ def score_segments(
     visual_threshold: float = 0.7,
     sample_fps: float = 2.0,
     ranking_weights: dict[str, float] | None = None,
+    prefer_face_visible: bool = False,
 ) -> list[dict[str, Any]]:
     """
     Content-agnostic segment detection: sample frames, score motion + visual intensity.
@@ -129,6 +130,9 @@ def score_segments(
             metric = float(cv2.absdiff(gray, cv2.GaussianBlur(gray, (5, 5), 0)).mean())
 
         faces = face_cascade.detectMultiScale(gray, 1.1, 4, minSize=(60, 60))
+        if prefer_face_visible and not len(faces):
+            frame_idx += 1
+            continue
         if len(faces):
             x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
             roi = frame[y : y + h, x : x + w]

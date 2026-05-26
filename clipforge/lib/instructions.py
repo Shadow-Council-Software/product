@@ -35,6 +35,12 @@ def parse_operator_instructions(text: str) -> dict[str, Any]:
             "audio_weight": 0.35,
             "metadata_weight": 0.1,
         }
+    if "face" in t or "expression" in t or "facial" in t:
+        directives.setdefault("ranking", {})
+        directives["ranking"]["visual_weight"] = 0.6
+        directives["ranking"]["audio_weight"] = 0.3
+        directives["ranking"]["metadata_weight"] = 0.1
+        directives["prefer_face_visible"] = True
 
     discovery: dict[str, Any] = {}
     if "search" in t or "discover" in t or "internet" in t or "online" in t:
