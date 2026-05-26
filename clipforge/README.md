@@ -28,6 +28,8 @@ See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for the full editor-mapping a
 cd clipforge
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+# Clip extraction: moviepy 1.x (pinned) or ffmpeg on PATH
+# Full G6 render: DaVinci Resolve + PYTHONPATH to Scripting/Modules
 
 # From repo root
 pytest clipforge/tests -q

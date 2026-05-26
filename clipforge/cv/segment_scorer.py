@@ -146,4 +146,29 @@ def score_segments(
     if window:
         flush_window(frame_idx)
     cap.release()
+
+    if not segments:
+        cap = cv2.VideoCapture(str(video_path))
+        total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0
+        fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+        cap.release()
+        duration = total_frames / fps if fps else 0
+        if duration >= clip_min_sec:
+            span = min(float(clip_max_sec), duration)
+            start = max(0.0, (duration - span) / 2)
+            segments.append(
+                {
+                    "source": str(video_path),
+                    "profile": profile,
+                    "start_sec": start,
+                    "end_sec": start + span,
+                    "duration_sec": span,
+                    "motion_score": motion_threshold,
+                    "visual_score": visual_threshold,
+                    "segment_score": min_score,
+                    "clip_path": None,
+                    "bootstrap": True,
+                }
+            )
+
     return segments

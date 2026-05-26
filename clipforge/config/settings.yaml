@@ -21,6 +21,7 @@ analysis:
   visual_threshold: 0.7
   audio_peak_db_threshold: -12
   sample_fps: 2
+  bootstrap_segment_if_empty: true
 
 resolve:
   project_name_prefix: ClipForge

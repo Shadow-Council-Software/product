@@ -34,7 +34,7 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
         errors = list(state.get("errors") or [])
         errors.append(
             "resolve_agent: timeline_plan has no clip_path entries. "
-            "Wire MoviePy extraction in Phase 2 or provide pre-cut clips."
+            "Install moviepy<2 or ffmpeg for extraction."
         )
         return {**state, "errors": errors}
 
@@ -55,8 +55,25 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
     try:
         subprocess.run(cmd, check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as exc:
+        err_text = (exc.stderr or str(exc)).strip()
+        if "DaVinciResolveScript not found" in err_text or "Resolve" in err_text:
+            job = (state.get("job_id") or "job").replace("/", "_")
+            fallback = out_dir / f"{job}_clips_ready.mp4"
+            if len(clip_paths) == 1:
+                import shutil
+
+                shutil.copy2(clip_paths[0], fallback)
+                return {
+                    **state,
+                    "output_path": str(fallback),
+                    "report": (
+                        f"Resolve unavailable; staged single clip at {fallback} "
+                        "(install Resolve + PYTHONPATH for G6 render)"
+                    ),
+                    "errors": list(state.get("errors") or []),
+                }
         errors = list(state.get("errors") or [])
-        errors.append(f"resolve_agent: {exc.stderr or exc}")
+        errors.append(f"resolve_agent: {err_text}")
         return {**state, "errors": errors}
 
     outputs = sorted(out_dir.glob("*.mp4"), key=lambda p: p.stat().st_mtime)
