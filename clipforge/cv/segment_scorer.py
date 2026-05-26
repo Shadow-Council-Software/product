@@ -69,15 +69,22 @@ def score_segments(
     frame_idx = 0
     prev_metric: float | None = None
     window: list[FrameScores] = []
+    window_frame_indices: list[int] = []
     segments: list[dict[str, Any]] = []
     window_start_frame = 0
 
     def flush_window(end_frame: int) -> None:
-        nonlocal window, window_start_frame, segments
+        nonlocal window, window_start_frame, window_frame_indices, segments
         if not window:
             return
         motion = max(s.motion_delta for s in window)
         visual = max(s.visual_intensity for s in window)
+        peak_idx = max(
+            range(len(window)),
+            key=lambda i: window[i].visual_intensity + window[i].motion_delta,
+        )
+        peak_frame = window_frame_indices[peak_idx]
+        peak_sec = peak_frame / native_fps
         segment_score = vw * visual + (1 - vw) * motion
         start_sec = window_start_frame / native_fps
         end_sec = end_frame / native_fps
@@ -97,6 +104,7 @@ def score_segments(
                     "start_sec": start_sec,
                     "end_sec": end_sec,
                     "duration_sec": duration,
+                    "peak_sec": peak_sec,
                     "motion_score": motion,
                     "visual_score": visual,
                     "segment_score": segment_score,
@@ -104,6 +112,7 @@ def score_segments(
                 }
             )
         window = []
+        window_frame_indices = []
 
     while True:
         ok, frame = cap.read()
@@ -136,10 +145,12 @@ def score_segments(
         if not window:
             window_start_frame = frame_idx
         window.append(scores)
+        window_frame_indices.append(frame_idx)
 
         if (frame_idx - window_start_frame) / native_fps >= clip_max_sec:
             flush_window(frame_idx)
             window_start_frame = frame_idx
+            window_frame_indices = []
 
         frame_idx += 1
 
@@ -166,6 +177,7 @@ def score_segments(
                     "motion_score": motion_threshold,
                     "visual_score": visual_threshold,
                     "segment_score": min_score,
+                    "peak_sec": start + span / 2,
                     "clip_path": None,
                     "bootstrap": True,
                 }

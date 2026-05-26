@@ -14,7 +14,7 @@ if str(ROOT.parent) not in sys.path:
 from clipforge.agents.orchestrator import run_pipeline
 from clipforge.agents.supervisor import build_initial_state
 from clipforge.cv.segment_scorer import score_segments
-from clipforge.lib.acquisition import build_acquisition_context, discover_for_job
+from clipforge.lib.acquisition import build_acquisition_context
 from clipforge.lib.config import datasets_by_ids
 from clipforge.lib.job_report import write_job_report
 from clipforge.lib.validate import validate_job_definition
@@ -192,7 +192,21 @@ def build_parser() -> argparse.ArgumentParser:
     an.add_argument("--min-score", type=float, default=0.75)
     an.set_defaults(func=cmd_analyze)
 
+    ui = sub.add_parser("ui", help="Launch Gradio operator console")
+    ui.add_argument("--port", type=int, default=7860)
+    ui.set_defaults(func=cmd_ui)
+
     return p
+
+
+def cmd_ui(args: argparse.Namespace) -> int:
+    import gradio as gr
+    from clipforge.ui.app import build_ui
+
+    demo = build_ui()
+    demo.queue()
+    demo.launch(server_name="127.0.0.1", server_port=args.port, show_error=True)
+    return 0
 
 
 def main() -> int:

@@ -3,11 +3,22 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import cv2
+
 from clipforge.cv.audio_analyzer import score_audio_segment
 from clipforge.cv.clip_extractor import extract_segment_clip
 from clipforge.cv.segment_scorer import score_segments
+from clipforge.cv.segment_timing import trim_segment_to_peak_window
 from clipforge.lib.config import load_settings, workflow_by_id
 from clipforge.lib.state import ClipForgeState
+
+
+def _video_duration(path: Path) -> float:
+    cap = cv2.VideoCapture(str(path))
+    fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+    frames = cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0
+    cap.release()
+    return frames / fps if fps else 0.0
 
 
 def analysis_node(state: ClipForgeState) -> ClipForgeState:
@@ -31,6 +42,8 @@ def analysis_node(state: ClipForgeState) -> ClipForgeState:
     )
     dur = directives.get("segment_duration_sec", [3, 15])
     clip_min, clip_max = int(dur[0]), int(dur[1])
+    pre_roll = float(directives.get("pre_roll_max_sec", 2.0))
+    post_roll = float(directives.get("post_roll_max_sec", 10.0))
     ranking = directives.get("ranking", {})
     aw = float(ranking.get("audio_weight", 0.3))
     vw = float(ranking.get("visual_weight", 0.5))
@@ -48,6 +61,7 @@ def analysis_node(state: ClipForgeState) -> ClipForgeState:
             errors.append(f"analysis_agent: missing file {raw_path}")
             continue
         try:
+            vdur = _video_duration(path)
             segments = score_segments(
                 path,
                 profile=profile,
@@ -60,6 +74,14 @@ def analysis_node(state: ClipForgeState) -> ClipForgeState:
                 ranking_weights=ranking,
             )
             for seg in segments:
+                seg = trim_segment_to_peak_window(
+                    seg,
+                    video_duration=vdur,
+                    pre_roll_max_sec=pre_roll,
+                    post_roll_max_sec=post_roll,
+                    clip_min_sec=float(clip_min),
+                    clip_max_sec=float(clip_max),
+                )
                 audio_score = score_audio_segment(
                     path,
                     seg["start_sec"],
