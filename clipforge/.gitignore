@@ -10,6 +10,8 @@ venv/
 data/raw/**
 data/clips/**
 data/output/**
+data/jobs/**
+!data/jobs/.gitkeep
 !data/raw/.gitkeep
 !data/clips/qualified/.gitkeep
 !data/clips/rejected/.gitkeep

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from clipforge.cv.audio_analyzer import score_audio_segment
+from clipforge.cv.clip_extractor import extract_segment_clip
 from clipforge.cv.segment_scorer import score_segments
 from clipforge.lib.config import load_settings, workflow_by_id
 from clipforge.lib.state import ClipForgeState
@@ -70,6 +71,21 @@ def analysis_node(state: ClipForgeState) -> ClipForgeState:
                     vw * seg.get("segment_score", 0) + aw * audio_score
                 ) / max(vw + aw, 0.01)
                 if seg["segment_score"] >= min_score:
+                    job_id = state.get("job_id") or "job"
+                    clip_name = f"{job_id}_{path.stem}_{seg['start_sec']:.2f}.mp4"
+                    clip_out = clips_dir / clip_name
+                    try:
+                        seg["clip_path"] = extract_segment_clip(
+                            path,
+                            float(seg["start_sec"]),
+                            float(seg["end_sec"]),
+                            clip_out,
+                        )
+                    except ImportError:
+                        seg["clip_path"] = None
+                    except Exception as exc:  # noqa: BLE001
+                        errors.append(f"analysis_agent: extract {clip_name}: {exc}")
+                        seg["clip_path"] = None
                     sidecar = clips_dir / f"{path.stem}_{seg['start_sec']:.2f}.json"
                     sidecar.write_text(json.dumps(seg, indent=2), encoding="utf-8")
                     candidates.append(seg)

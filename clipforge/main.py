@@ -14,27 +14,37 @@ if str(ROOT.parent) not in sys.path:
 from clipforge.agents.orchestrator import run_pipeline
 from clipforge.agents.supervisor import build_initial_state
 from clipforge.cv.segment_scorer import score_segments
+from clipforge.lib.job_report import write_job_report
+from clipforge.lib.validate import validate_job_definition
 from clipforge.triggers import TriggerMode
 
 
 def cmd_run(args: argparse.Namespace) -> int:
+    validation_errors = validate_job_definition(args.workflow, args.dataset)
+    if validation_errors:
+        for err in validation_errors:
+            print(f"Error: {err}", file=sys.stderr)
+        return 1
+
     initial = build_initial_state(
         workflow_id=args.workflow,
         dataset_ids=args.dataset,
         trigger=args.trigger,
         steering_path=args.steering,
-        source_urls=args.url,
+        source_urls=getattr(args, "url", None) or [],
         dry_run=args.dry_run,
     )
-    if args.target_minutes is not None:
+    if getattr(args, "target_minutes", None) is not None:
         initial["target_duration_minutes"] = args.target_minutes
         initial["steering"]["directives"]["target_minutes"] = args.target_minutes
-    if args.min_score is not None:
+    if getattr(args, "min_score", None) is not None:
         initial["min_segment_score"] = args.min_score
         initial["steering"]["directives"]["min_segment_score"] = args.min_score
 
     result = run_pipeline(initial)
+    report_path = write_job_report(result)
     print(result.get("report") or "Job finished.")
+    print(f"Job report: {report_path}")
     if result.get("output_path"):
         print(f"Output: {result['output_path']}")
     if result.get("errors"):
@@ -51,14 +61,25 @@ def cmd_watch(args: argparse.Namespace) -> int:
 
     Runs the same pipeline on an interval (operator daemon / cron substitute).
     """
-    interval_sec = max(args.interval_minutes, 5) * 60
-    print(f"watch: polling every {interval_sec}s (Ctrl+C to stop)")
+    max_cycles = getattr(args, "max_cycles", None)
+    interval_sec = max(args.interval_minutes, 1) * 60
+    if args.dry_run and interval_sec > 5:
+        interval_sec = 0
+    print(
+        f"watch: interval={interval_sec}s max_cycles={max_cycles or '∞'} (Ctrl+C to stop)"
+    )
+    cycles = 0
     try:
         while True:
             rc = cmd_run(args)
+            cycles += 1
             if rc != 0:
                 print(f"watch: job exited {rc}", file=sys.stderr)
-            time.sleep(interval_sec)
+            if max_cycles and cycles >= max_cycles:
+                print(f"watch: completed {cycles} cycle(s)")
+                return 0
+            if interval_sec > 0:
+                time.sleep(interval_sec)
     except KeyboardInterrupt:
         print("watch: stopped")
     return 0
@@ -115,6 +136,12 @@ def build_parser() -> argparse.ArgumentParser:
     watch.add_argument("--steering", default=str(ROOT / "config" / "steering.example.yaml"))
     watch.add_argument("--url", action="append", default=[])
     watch.add_argument("--dry-run", action="store_true")
+    watch.add_argument(
+        "--max-cycles",
+        type=int,
+        default=None,
+        help="Stop after N cycles (used by tests and bounded daemons)",
+    )
     watch.set_defaults(func=cmd_watch)
 
     tr = sub.add_parser("test-resolve", help="Verify Resolve script wiring")

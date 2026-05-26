@@ -3,6 +3,7 @@ paths:
   clips_qualified: data/clips/qualified
   clips_rejected: data/clips/rejected
   output: data/output
+  jobs: data/jobs
   datasets: data/datasets
   sqlite: data/jobs.db
 

@@ -1,0 +1,46 @@
+# generated: 2026-05-26
+# last_updated: 2026-05-26
+# project: ClipForge
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts/stories
+
+generated: '2026-05-26'
+last_updated: '2026-05-26'
+project: ClipForge
+project_key: clipforge
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts/stories
+
+development_status:
+  epic-1: done
+  1-1-job-definition-cli: done
+  1-2-langgraph-orchestrator-graph: done
+  1-3-job-report-and-dry-run: done
+  1-4-job-id-and-supervisor-observability: done
+  epic-1-retrospective: optional
+
+  epic-2: done
+  2-1-workflow-definitions-loader: done
+  2-2-dataset-path-expansion: done
+  2-3-steering-merge-overrides: done
+  epic-2-retrospective: optional
+
+  epic-3: done
+  3-1-local-ingest-trigger: done
+  3-2-url-download-acquisition: done
+  3-3-discovery-stub-and-hybrid-retry: done
+  3-4-continuous-watch-loop: done
+  epic-3-retrospective: optional
+
+  epic-4: done
+  4-1-segment-analysis-cli: done
+  4-2-audio-visual-scoring-filter: done
+  4-3-segment-sidecar-artifacts: done
+  4-4-timeline-sequencing-plan: done
+  epic-4-retrospective: optional
+
+  epic-5: done
+  5-1-resolve-timeline-handoff: done
+  5-2-render-output-configuration: done
+  5-3-poc-exit-gates-validation: done
+  epic-5-retrospective: optional

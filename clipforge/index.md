@@ -1,53 +1,47 @@
 # ClipForge — Document Index
 
-**Product:** ClipForge — multi-agent **editor simulation** (content- and style-agnostic)  
+**Product:** ClipForge — multi-agent **editor simulation**  
 **Branch:** `product/clipforge`  
-**BMad phase:** Planning complete (PRD); solutioning next
+**BMad status:** Solutioning complete → **Sprint 1 in progress**
 
 ---
 
-## Canonical entry points
+## Planning artifacts (complete)
 
 | Document | Role | Status |
 |----------|------|--------|
-| [product-brief-ClipForge.md](./product-brief-ClipForge.md) | Executive product brief | Complete |
-| [product-brief-ClipForge-distillate.md](./product-brief-ClipForge-distillate.md) | LLM distillate for downstream workflows | Complete |
-| [prd.md](./prd.md) | **Capability contract** — FR/NFR, gates G1–G5, P0→Vision scope | Complete |
-| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Agent graph + editor mapping (draft — promote to `architecture.md`) | Draft |
-| [README.md](./README.md) | Developer quick start | Current |
-| [main.py](./main.py) | CLI: `run`, `watch`, `analyze`, `test-resolve` | Scaffold |
+| [product-brief-ClipForge.md](./product-brief-ClipForge.md) | Executive brief | ✓ |
+| [product-brief-ClipForge-distillate.md](./product-brief-ClipForge-distillate.md) | PRD input distillate | ✓ |
+| [prd.md](./prd.md) | FR/NFR contract, gates G1–G6 | ✓ |
+| [prd-validation-report.md](./prd-validation-report.md) | BMad validation | Pass with notes |
+| [architecture.md](./architecture.md) | Normative technical design (D-01–D-12) | ✓ |
+| [epics.md](./epics.md) | P0 epics 1–5, 18 stories | ✓ |
+| [implementation-readiness-report.md](./implementation-readiness-report.md) | Phase 3 gate | **READY** |
+| [project-context.md](./project-context.md) | AI agent rules | ✓ |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Orientation (non-normative) | ✓ |
 
----
+## Implementation tracking
+
+| Artifact | Path |
+|----------|------|
+| Sprint status | [`../_bmad-output/implementation-artifacts/sprint-status.yaml`](../_bmad-output/implementation-artifacts/sprint-status.yaml) |
+| Code | `agents/`, `main.py`, `cv/`, `lib/` |
+
+## POC gates
+
+| Gate | Verification |
+|------|----------------|
+| G1 | `pytest clipforge/tests/test_poc_gates.py::test_g1_*` |
+| G2 | `test_g2_analyze_returns_segments` |
+| G3 | Local inbox job + sidecars (manual + tests) |
+| G4 | `test_g4_steering_overrides_workflow_defaults` |
+| G5 | `test_g5_watch_three_cycles_dry_run` |
+
+```bash
+pytest clipforge/tests -q
+python clipforge/main.py run --dry-run
+```
 
 ## Configuration
 
-| Path | Role |
-|------|------|
-| [config/workflows.yaml](./config/workflows.yaml) | Edit style templates |
-| [config/datasets.yaml](./config/datasets.yaml) | Source corpora |
-| [config/steering.example.yaml](./config/steering.example.yaml) | Per-job editor steering |
-| [config/settings.yaml](./config/settings.yaml) | Paths, analysis defaults, Resolve |
-
----
-
-## BMad workflow — recommended next steps
-
-| Step | Code | Skill | Output |
-|------|------|-------|--------|
-| Validate PRD | VP | `bmad-validate-prd` | `prd-validation-report.md` |
-| Create Architecture | CA | `bmad-create-architecture` | `architecture.md` (required) |
-| Create Epics & Stories | CE | `bmad-create-epics-and-stories` | `epics.md` / stories |
-| Implementation Readiness | IR | `bmad-check-implementation-readiness` | readiness report |
-| Sprint Planning | SP | `bmad-sprint-planning` | sprint plan |
-
-**Optional:** [CU] Create UX — defer until web UI (Vision); CLI-first POC does not require UX spec.
-
----
-
-## Quick start
-
-```bash
-cd clipforge && python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python main.py run --dry-run
-```
+[config/workflows.yaml](./config/workflows.yaml) · [config/datasets.yaml](./config/datasets.yaml) · [config/steering.example.yaml](./config/steering.example.yaml)
