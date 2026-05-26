@@ -51,6 +51,7 @@ def build_initial_state(
         "min_segment_score": float(directives.get("min_segment_score", 0.75)),
         "target_duration_minutes": float(directives.get("target_minutes", 30)),
         "discovery_retries": 0,
+        "source_refs": [],
         "segment_candidates": [],
         "timeline_plan": [],
         "ingested_paths": [],

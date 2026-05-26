@@ -14,8 +14,11 @@ if str(ROOT.parent) not in sys.path:
 from clipforge.agents.orchestrator import run_pipeline
 from clipforge.agents.supervisor import build_initial_state
 from clipforge.cv.segment_scorer import score_segments
+from clipforge.lib.acquisition import build_acquisition_context, discover_for_job
+from clipforge.lib.config import datasets_by_ids
 from clipforge.lib.job_report import write_job_report
 from clipforge.lib.validate import validate_job_definition
+from clipforge.sources.registry import collect_source_configs, discover_media
 from clipforge.triggers import TriggerMode
 
 
@@ -94,6 +97,33 @@ def cmd_test_resolve(_: argparse.Namespace) -> int:
     ).returncode
 
 
+def cmd_discover(args: argparse.Namespace) -> int:
+    """List discovered source refs without running the full pipeline."""
+    validation_errors = validate_job_definition(args.workflow, args.dataset)
+    if validation_errors:
+        for err in validation_errors:
+            print(f"Error: {err}", file=sys.stderr)
+        return 1
+    state = build_initial_state(
+        workflow_id=args.workflow,
+        dataset_ids=args.dataset,
+        trigger=args.trigger,
+        steering_path=args.steering,
+        source_urls=args.url or [],
+    )
+    steering = state.get("steering") or {}
+    datasets = datasets_by_ids(state.get("dataset_ids") or [])
+    configs = collect_source_configs(datasets, steering)
+    context = build_acquisition_context(state)
+    refs, warnings = discover_media(configs, context)
+    for w in warnings:
+        print(f"Warning: {w}", file=sys.stderr)
+    for r in refs:
+        print(f"{r.type}\t{r.uri}\t{r.label}")
+    print(f"Total: {len(refs)} refs")
+    return 0 if refs or args.allow_empty else 1
+
+
 def cmd_analyze(args: argparse.Namespace) -> int:
     segments = score_segments(
         Path(args.input),
@@ -146,6 +176,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     tr = sub.add_parser("test-resolve", help="Verify Resolve script wiring")
     tr.set_defaults(func=cmd_test_resolve)
+
+    ds = sub.add_parser("discover", help="List media refs from configured sources")
+    ds.add_argument("--workflow", default="compilation_dense")
+    ds.add_argument("--dataset", nargs="+", default=["inbox_local"])
+    ds.add_argument("--trigger", default=TriggerMode.MANUAL_LOCAL.value)
+    ds.add_argument("--steering", default=None)
+    ds.add_argument("--url", action="append", default=[])
+    ds.add_argument("--allow-empty", action="store_true")
+    ds.set_defaults(func=cmd_discover)
 
     an = sub.add_parser("analyze", help="Score segments on one file (no graph)")
     an.add_argument("--input", required=True)

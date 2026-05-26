@@ -1,42 +1,45 @@
 from __future__ import annotations
 
-import glob
-from pathlib import Path
-
+from clipforge.lib.acquisition import build_acquisition_context
 from clipforge.lib.config import datasets_by_ids
 from clipforge.lib.state import ClipForgeState
-
-
-def _expand_paths(patterns: list[str], base: Path) -> list[str]:
-    found: list[str] = []
-    for pattern in patterns:
-        p = Path(pattern)
-        if not p.is_absolute():
-            p = base / pattern
-        found.extend(str(Path(x).resolve()) for x in glob.glob(str(p), recursive=True))
-    return sorted(set(found))
+from clipforge.sources.registry import collect_source_configs, discover_media
+from clipforge.sources.types import SourceRef
 
 
 def ingest_node(state: ClipForgeState) -> ClipForgeState:
-    """Load media from dataset local_paths (human editor 'bin' ingestion)."""
-    base = Path(__file__).resolve().parent.parent
-    dataset_ids = state.get("dataset_ids") or []
-    datasets = datasets_by_ids(dataset_ids)
+    """Ingest local-folder and manifest path entries (no network fetch)."""
+    steering = state.get("steering") or {}
+    datasets = datasets_by_ids(state.get("dataset_ids") or [])
+    configs = collect_source_configs(datasets, steering)
+    local_configs = [
+        c
+        for c in configs
+        if c.get("type") in ("local_folder", "manifest")
+    ]
 
-    paths: list[str] = list(state.get("local_media_paths") or [])
-    for ds in datasets:
-        paths.extend(_expand_paths(ds.get("local_paths") or [], base))
+    context = build_acquisition_context(state)
+    refs, warnings = discover_media(local_configs, context)
 
-    paths = sorted(set(paths))
+    paths: list[str] = []
+    source_refs: list[dict] = list(state.get("source_refs") or [])
+    for r in refs:
+        if r.type == "local_folder":
+            paths.append(r.uri)
+        source_refs.append(r.to_dict())
+
     errors = list(state.get("errors") or [])
-    if not paths and not state.get("dry_run"):
+    for w in warnings:
+        errors.append(f"ingest_agent: {w}")
+    if not paths and not state.get("dry_run") and local_configs:
         errors.append(
-            "ingest_agent: no local media. Add files under data/raw/inbox/ or "
-            "configure dataset local_paths."
+            "ingest_agent: no local media. Check dataset paths or after_date filter."
         )
 
     return {
         **state,
-        "ingested_paths": paths,
+        "ingested_paths": sorted(set(paths)),
         "local_media_paths": paths,
+        "source_refs": source_refs,
+        "errors": errors,
     }

@@ -20,6 +20,7 @@ class ClipForgeState(TypedDict, total=False):
     trigger_mode: str  # manual_local | manual_urls | discovery | hybrid | scheduled
 
     # Acquisition
+    source_refs: list[dict]
     source_urls: list[str]
     local_media_paths: list[str]
     ingested_paths: list[str]

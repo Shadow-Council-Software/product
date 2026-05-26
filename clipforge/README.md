@@ -47,6 +47,9 @@ python clipforge/main.py run \
 # URL-driven job
 python clipforge/main.py run --trigger manual_urls --url 'https://example.com/video.mp4'
 
+# Inspect configured sources (search, URLs, folders, FTP manifest)
+python clipforge/main.py discover --dataset demo_stock --steering clipforge/config/steering.example.yaml
+
 # Continuous discovery (operator daemon)
 python clipforge/main.py watch --trigger discovery --dry-run
 ```

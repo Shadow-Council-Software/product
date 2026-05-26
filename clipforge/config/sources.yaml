@@ -1,0 +1,26 @@
+# Global source adapter defaults (merged with per-dataset sources[] and steering.sources)
+defaults: []
+
+# Adapter types: local_folder | url_list | search | ftp | manifest | http_download (fetch-only)
+#
+# Example dataset block (in datasets.yaml):
+#   sources:
+#     - type: local_folder
+#       paths: [data/raw/inbox/**]
+#       after_date: "2025-01-01"
+#     - type: search
+#       provider: duckduckgo
+#       queries: ["site:archive.org example"]
+#       after_date: "2025-01-01"
+#       max_results: 5
+#     - type: url_list
+#       urls: ["https://example.com/video.mp4"]
+#     - type: ftp
+#       host: ftp.example.com
+#       user: operator
+#       remote_path: /incoming
+#       after_date: "2025-01-01"
+
+sources:
+  yt_dlp_cookies: null  # path to cookies.txt for authenticated downloads
+  ftp_passive: true

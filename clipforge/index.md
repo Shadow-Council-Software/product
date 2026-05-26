@@ -44,4 +44,4 @@ python clipforge/main.py run --dry-run
 
 ## Configuration
 
-[config/workflows.yaml](./config/workflows.yaml) · [config/datasets.yaml](./config/datasets.yaml) · [config/steering.example.yaml](./config/steering.example.yaml)
+[config/workflows.yaml](./config/workflows.yaml) · [config/datasets.yaml](./config/datasets.yaml) · [config/sources.yaml](./config/sources.yaml) · [sources/README.md](./sources/README.md) · [config/steering.example.yaml](./config/steering.example.yaml)

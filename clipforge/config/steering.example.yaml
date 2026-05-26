@@ -4,13 +4,12 @@ job:
   workflow_id: highlight_reel
   dataset_ids:
     - inbox_local
-  trigger: manual_local  # manual_local | manual_urls | discovery | hybrid | scheduled
+  trigger: manual_local
 
 directives:
-  # Natural-language brief for LLM-assisted agents (Phase 2+)
   natural_language: >
     Simulate a human editor cutting a fast highlight reel: keep only the highest-impact
-    visual and audio peaks, no dead air, consistent energy.
+    visual and audio peaks, no dead air.
   target_minutes: 10
   min_segment_score: 0.75
   segment_duration_sec: [4, 18]
@@ -23,11 +22,17 @@ directives:
 
 discovery:
   enabled: false
-  queries:
-    - example search query for discovery agent
+  provider: duckduckgo
+  queries: []
+  after_date: "2025-01-01"
   poll_interval_minutes: 120
   max_retries: 3
 
 sources:
-  # Optional explicit URLs when trigger is manual_urls or hybrid
   urls: []
+  search:
+    provider: duckduckgo
+    queries: []
+    after_date: "2025-01-01"
+    max_results: 10
+  items: []

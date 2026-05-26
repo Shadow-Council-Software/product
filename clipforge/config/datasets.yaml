@@ -1,22 +1,43 @@
-# Source corpora — any genre. Paths are globs relative to clipforge/ unless absolute.
+# Source corpora — use sources[] for pluggable adapters (see config/sources.yaml).
 datasets:
   - id: inbox_local
     label: Local inbox (operator drop folder)
-    local_paths:
-      - data/raw/inbox/*
-    seed_urls: []
-    discovery_queries: []
+    sources:
+      - type: local_folder
+        paths:
+          - data/raw/inbox/**
 
   - id: demo_stock
-    label: Example stock / test footage dataset
-    local_paths: []
-    seed_urls: []
-    discovery_queries:
-      - site:archive.org stock footage city timelapse
+    label: Example stock footage (search + optional URLs)
+    sources:
+      - type: search
+        provider: static
+        queries:
+          - site:archive.org stock footage city timelapse
+        max_results: 5
+      - type: url_list
+        urls: []
 
-  # Example: curated manifest (Phase 2 — SQLite / JSONL manifests)
+  - id: remote_urls
+    label: Explicit URL list only
+    sources:
+      - type: url_list
+        urls: []
+
+  - id: ftp_incoming
+    label: FTP watch folder (configure host)
+    sources:
+      - type: ftp
+        host: ""
+        port: 21
+        user: ""
+        remote_path: /
+        after_date: "2025-01-01"
+        passive: true
+
   - id: curated_manifest
-    label: Manifest-driven corpus
-    manifest: data/datasets/curated_manifest.jsonl
-    local_paths: []
-    seed_urls: []
+    label: JSONL manifest-driven corpus
+    sources:
+      - type: manifest
+        manifest: data/datasets/curated_manifest.jsonl
+        after_date: "2025-01-01"
