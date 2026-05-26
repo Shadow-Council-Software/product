@@ -57,6 +57,7 @@ def run_compilation(
     pre_roll: float,
     post_roll: float,
     discovery_enabled: bool,
+    discovery_provider: str,
     discovery_query: str,
     dry_run: bool,
 ):
@@ -75,6 +76,7 @@ def run_compilation(
         post_roll_max_sec=post_roll,
         dry_run=dry_run,
         discovery_enabled=discovery_enabled,
+        discovery_provider=discovery_provider,
         discovery_queries=queries,
     )
     result = run_job(req)
@@ -140,10 +142,22 @@ Peak-based cuts use **Pre-roll** / **Post-roll** seconds around the detected mom
                 pre_roll = gr.Slider(0, 10, value=2, step=0.5, label="Max pre-roll (sec before peak)")
                 post_roll = gr.Slider(1, 30, value=10, step=0.5, label="Max post-roll (sec after peak)")
                 discovery_enabled = gr.Checkbox(label="Enable discovery / search", value=False)
+                discovery_provider = gr.Dropdown(
+                    [
+                        "auto",
+                        "ytsearch",
+                        "duckduckgo",
+                        "duckduckgo_videos",
+                        "permissive",
+                    ],
+                    value="auto",
+                    label="Search provider",
+                    info="auto = YouTube (yt-dlp) + web video search. permissive = broader URLs for yt-dlp.",
+                )
                 discovery_query = gr.Textbox(
                     label="Discovery queries (one per line)",
                     lines=3,
-                    placeholder="site:archive.org your search terms",
+                    placeholder="your search terms OR site:youtube.com topic OR direct https://...",
                 )
                 dry_run = gr.Checkbox(label="Dry run (no extract/render)", value=False)
                 run_btn = gr.Button("Run compilation", variant="primary", size="lg")
@@ -166,6 +180,7 @@ Peak-based cuts use **Pre-roll** / **Post-roll** seconds around the detected mom
                 pre_roll,
                 post_roll,
                 discovery_enabled,
+                discovery_provider,
                 discovery_query,
                 dry_run,
             ],

@@ -29,10 +29,11 @@ def discovery_node(state: ClipForgeState) -> ClipForgeState:
         remote_configs.append(
             {
                 "type": "search",
-                "provider": discovery_cfg.get("provider", "static"),
+                "provider": discovery_cfg.get("provider", "auto"),
                 "queries": discovery_cfg.get("queries", []),
                 "after_date": discovery_cfg.get("after_date"),
                 "max_results": discovery_cfg.get("max_results", 10),
+                "permissive": discovery_cfg.get("permissive", True),
             }
         )
 

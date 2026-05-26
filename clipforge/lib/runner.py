@@ -25,6 +25,7 @@ class JobRequest:
     post_roll_max_sec: float | None = None
     dry_run: bool = False
     discovery_enabled: bool = False
+    discovery_provider: str = "auto"
     discovery_queries: list[str] = field(default_factory=list)
 
 
@@ -67,6 +68,13 @@ def run_job(request: JobRequest) -> JobResult:
     if request.discovery_enabled:
         steering_overlay["discovery"]["enabled"] = True
         steering_overlay["discovery"]["queries"] = list(request.discovery_queries)
+        steering_overlay["discovery"]["provider"] = request.discovery_provider
+        steering_overlay["sources"]["search"] = {
+            "provider": request.discovery_provider,
+            "queries": list(request.discovery_queries),
+            "after_date": steering_overlay["discovery"].get("after_date"),
+            "max_results": steering_overlay["discovery"].get("max_results", 10),
+        }
     if request.source_urls:
         steering_overlay["sources"]["urls"] = list(request.source_urls)
 

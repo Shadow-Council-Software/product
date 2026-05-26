@@ -8,13 +8,22 @@ datasets:
           - data/raw/inbox/**
 
   - id: demo_stock
-    label: Example stock footage (search + optional URLs)
+    label: Example multi-provider search (YouTube + web video)
     sources:
       - type: search
-        provider: static
+        provider: auto
         queries:
           - site:archive.org stock footage city timelapse
         max_results: 5
+
+  - id: youtube_search
+    label: YouTube-only discovery via yt-dlp
+    sources:
+      - type: search
+        provider: ytsearch
+        queries: []
+        after_date: "2025-01-01"
+        max_results: 15
       - type: url_list
         urls: []
 

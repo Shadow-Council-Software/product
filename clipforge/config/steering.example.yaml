@@ -22,17 +22,21 @@ directives:
 
 discovery:
   enabled: false
-  provider: duckduckgo
+  # Providers: auto | ytsearch | duckduckgo | duckduckgo_videos | permissive | static
+  provider: auto
   queries: []
   after_date: "2025-01-01"
+  max_results: 10
+  permissive: true
   poll_interval_minutes: 120
   max_retries: 3
 
 sources:
   urls: []
   search:
-    provider: duckduckgo
+    provider: auto
     queries: []
     after_date: "2025-01-01"
     max_results: 10
+    permissive: true
   items: []

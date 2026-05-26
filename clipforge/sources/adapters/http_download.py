@@ -9,7 +9,7 @@ from clipforge.sources.types import FetchResult, SourceRef
 
 
 class HttpDownloadAdapter(SourceAdapter):
-    """Fetch remote video via yt-dlp (any site yt-dlp supports)."""
+    """Fetch remote video via yt-dlp (YouTube, Vimeo, and 1000+ other hosts — site-agnostic)."""
 
     type_id = "http_download"
 

@@ -1,6 +1,6 @@
 # ClipForge source adapters
 
-Content-agnostic pluggable acquisition. Configure in `config/datasets.yaml` under `sources:` or in steering under `sources:`.
+Content-agnostic pluggable acquisition. **Download** uses [yt-dlp](https://github.com/yt-dlp/yt-dlp), which supports thousands of sites (YouTube, Vimeo, and many others). ClipForge does not hardcode a content niche — operators configure queries and URLs.
 
 ## Adapter types
 
@@ -8,69 +8,67 @@ Content-agnostic pluggable acquisition. Configure in `config/datasets.yaml` unde
 |------|----------|-------|----------|
 | `local_folder` | Glob paths | Copy (optional) | Inbox, NAS mount, folders |
 | `url_list` | URLs from config | via `http_download` | Curated links |
-| `search` | Queries → URLs | via `http_download` | Web search (`duckduckgo` optional) |
+| `search` | Queries → URLs | via `http_download` | See providers below |
 | `http_download` | — | yt-dlp | Any URL yt-dlp supports |
 | `ftp` | List remote dir | FTP RETR | Shared rushes server |
 | `manifest` | JSONL rows | path or URL | Curated catalogs |
 
-## Date filter
+## Search providers (`type: search`)
 
-Set `after_date: "2025-01-01"` on any adapter to skip older files (mtime for local/FTP; manifest `date` field for JSONL).
+| Provider | Behavior |
+|----------|----------|
+| **auto** (default) | `ytsearch` for general queries; `site:` queries use DuckDuckGo web |
+| **ytsearch** | YouTube search via `yt-dlp ytsearchN:query` + optional `--dateafter` |
+| **duckduckgo_videos** | DuckDuckGo video results (`pip install duckduckgo-search`) |
+| **duckduckgo** | Web search, video-like URLs only |
+| **permissive** | Web search, broader URLs — yt-dlp succeeds or fails per site |
+| **static** | No search; only direct `http(s)` lines in queries |
 
-## Examples
+### Examples
 
-### Local folder (2025+)
-
-```yaml
-sources:
-  - type: local_folder
-    paths: [data/raw/inbox/**, /Volumes/NAS/rushes/**]
-    after_date: "2025-01-01"
-```
-
-### Search (requires optional package)
-
-```bash
-pip install duckduckgo-search
-```
+**YouTube search (2025+):**
 
 ```yaml
 sources:
   - type: search
-    provider: duckduckgo
-    queries: ["your search terms here"]
-    after_date: "2025"
-    max_results: 10
+    provider: ytsearch
+    queries: ["documentary b-roll city"]
+    after_date: "2025-01-01"
+    max_results: 15
 ```
 
-### FTP
+**Specific site via web search:**
 
 ```yaml
 sources:
-  - type: ftp
-    host: ftp.example.com
-    user: operator
-    remote_path: /incoming/video
-    after_date: "2025-01-01"
+  - type: search
+    provider: permissive
+    queries: ["site:example-video-host.com your keywords"]
+    max_results: 10
 ```
 
-Set password via env `FTP_PASSWORD` or `config/sources.yaml` (do not commit secrets).
+**Direct URLs (any yt-dlp-supported host):**
 
-### Manifest JSONL
-
-`data/datasets/curated_manifest.jsonl`:
-
-```json
-{"title": "clip a", "path": "data/raw/inbox/a.mp4", "date": "2025-06-01"}
-{"title": "clip b", "url": "https://example.com/b.mp4", "date": "2025-06-02"}
+```yaml
+sources:
+  - type: url_list
+    urls:
+      - "https://www.youtube.com/watch?v=..."
+      - "https://vimeo.com/..."
 ```
 
-## Extending
+## Date filter
 
-1. Subclass `SourceAdapter` in `sources/adapters/my_source.py`
-2. Register in `sources/adapters/__init__.py` `ADAPTERS` list
-3. Document config keys in this README
+`after_date: "2025-01-01"` on search (yt-dlp `--dateafter`), local folders (mtime), FTP, and manifests.
+
+## UI
+
+Enable **discovery**, pick **Search provider**, enter queries, use trigger `discovery` or `hybrid`.
 
 ## Legal
 
-Operator is responsible for rights to all discovered/downloaded media and for complying with site Terms of Service.
+Operator must have rights to use discovered media and comply with each platform's Terms of Service. yt-dlp may require cookies for some sites (`config/sources.yaml` → `yt_dlp_cookies`).
+
+## Extending
+
+Subclass `SourceAdapter`, register in `sources/adapters/__init__.py`.

@@ -39,6 +39,10 @@ def parse_operator_instructions(text: str) -> dict[str, Any]:
     discovery: dict[str, Any] = {}
     if "search" in t or "discover" in t or "internet" in t or "online" in t:
         discovery["enabled"] = True
+    if "youtube" in t or "youtu.be" in t:
+        discovery["provider"] = "ytsearch"
+    elif discovery.get("enabled"):
+        discovery.setdefault("provider", "auto")
     year = re.search(r"\b(20\d{2})\b", text or "")
     if year:
         discovery["after_date"] = f"{year.group(1)}-01-01"
