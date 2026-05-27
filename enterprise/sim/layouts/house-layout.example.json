@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "name": "Example residence — replace with your house",
+    "units": "meters",
+    "origin": {
+      "label": "Front door threshold",
+      "position": [0, 0, 0],
+      "documentationRef": "REPLACE_WITH_YOUR_DOC_ID"
+    },
+    "totalFloorArea": 85.0,
+    "sources": [
+      {
+        "title": "Architect floor plan — main level",
+        "uri": "file://path/to/your/plan.pdf",
+        "scaleVerified": false
+      }
+    ]
+  },
+  "levels": [
+    { "id": "main", "label": "Main level", "elevation": 0 }
+  ],
+  "rooms": [
+    {
+      "id": "living-room",
+      "label": "Living room",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [6, 0], [6, 5], [0, 5]],
+      "documentationRef": "Room A on plan sheet 1"
+    },
+    {
+      "id": "hallway",
+      "label": "Hallway",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[6, 0], [8, 0], [8, 2], [6, 2]]
+    }
+  ],
+  "stations": [
+    {
+      "stationId": "env.nest.primary",
+      "roomId": "living-room",
+      "label": "Nest Learning Thermostat",
+      "position": [3.0, 1.45, 2.5],
+      "rotationY": 180,
+      "matterNodeId": 1,
+      "deviceType": "thermostat",
+      "attributePaths": {
+        "localTemp": "1/513/0",
+        "coolSetpoint": "1/513/17",
+        "heatSetpoint": "1/513/18"
+      }
+    }
+  ]
+}

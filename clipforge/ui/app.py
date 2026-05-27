@@ -178,25 +178,6 @@ Peak-based cuts use **Pre-roll** / **Post-roll** seconds around the detected mom
                 upload_btn = gr.Button("Save uploads to inbox")
                 upload_status = gr.Textbox(label="Upload status", interactive=False)
                 upload_btn.click(save_uploads, inputs=uploads, outputs=upload_status)
-                preset.change(
-                    apply_preset,
-                    inputs=preset,
-                    outputs=[
-                        instructions,
-                        workflow,
-                        dataset,
-                        trigger,
-                        urls,
-                        target_minutes,
-                        min_score,
-                        pre_roll,
-                        post_roll,
-                        discovery_enabled,
-                        discovery_provider,
-                        discovery_query,
-                        dry_run,
-                    ],
-                )
 
             with gr.Column(scale=1):
                 target_minutes = gr.Slider(
@@ -234,6 +215,25 @@ Peak-based cuts use **Pre-roll** / **Post-roll** seconds around the detected mom
                 )
                 dry_run = gr.Checkbox(label="Dry run (no extract/render)", value=False)
                 run_btn = gr.Button("Run compilation", variant="primary", size="lg")
+                preset.change(
+                    apply_preset,
+                    inputs=preset,
+                    outputs=[
+                        instructions,
+                        workflow,
+                        dataset,
+                        trigger,
+                        urls,
+                        target_minutes,
+                        min_score,
+                        pre_roll,
+                        post_roll,
+                        discovery_enabled,
+                        discovery_provider,
+                        discovery_query,
+                        dry_run,
+                    ],
+                )
 
         with gr.Row():
             status = gr.Markdown(label="Status")

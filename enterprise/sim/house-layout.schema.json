@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shadow-council.dev/enterprise/house-layout.schema.json",
+  "title": "ENTERPRISE House Layout",
+  "description": "Measured floor plan + station anchors for digital twin parity",
+  "type": "object",
+  "required": ["schemaVersion", "metadata", "rooms", "stations"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "metadata": {
+      "type": "object",
+      "required": ["name", "units", "origin"],
+      "properties": {
+        "name": { "type": "string" },
+        "units": { "enum": ["meters", "feet"] },
+        "origin": {
+          "type": "object",
+          "description": "World origin reference (e.g. front door threshold)",
+          "required": ["label", "position"],
+          "properties": {
+            "label": { "type": "string" },
+            "position": { "$ref": "#/$defs/vec3" },
+            "documentationRef": { "type": "string" }
+          }
+        },
+        "totalFloorArea": { "type": "number" },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "uri": { "type": "string" },
+              "scaleVerified": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/room" }
+    },
+    "stations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/station" }
+    },
+    "devices": {
+      "type": "array",
+      "description": "Security / camera / UX anchors (installed or planned)",
+      "items": { "$ref": "#/$defs/device" }
+    },
+    "coverageGoals": {
+      "type": "object",
+      "properties": {
+        "perimeterComplete": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "levels": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/level" }
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Optional photogrammetry mesh (Matterport Matterpak) aligned to survey origin",
+      "required": ["source", "mesh", "alignment"],
+      "properties": {
+        "source": { "enum": ["matterport", "manual"] },
+        "matterportModelId": { "type": "string" },
+        "matterpakBundleId": { "type": "string" },
+        "mesh": { "$ref": "#/$defs/geometryMesh" },
+        "alignment": { "$ref": "#/$defs/geometryAlignment" },
+        "bounds": {
+          "type": "object",
+          "properties": {
+            "min": { "$ref": "#/$defs/vec3" },
+            "max": { "$ref": "#/$defs/vec3" },
+            "extentM": { "$ref": "#/$defs/vec3" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "vec2": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "room": {
+      "type": "object",
+      "required": ["id", "label", "floorPolygon", "floorElevation"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9.-]+$" },
+        "label": { "type": "string" },
+        "floorElevation": { "type": "number", "description": "Y height of floor in world units" },
+        "ceilingHeight": { "type": "number" },
+        "floorPolygon": {
+          "type": "array",
+          "description": "Closed polygon XZ footprint (Y ignored)",
+          "items": { "$ref": "#/$defs/vec2" },
+          "minItems": 3
+        },
+        "documentationRef": { "type": "string" }
+      }
+    },
+    "station": {
+      "type": "object",
+      "required": ["stationId", "roomId", "position", "matterNodeId"],
+      "properties": {
+        "stationId": { "type": "string" },
+        "roomId": { "type": "string" },
+        "label": { "type": "string" },
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotationY": { "type": "number" },
+        "matterNodeId": { "type": "integer" },
+        "deviceType": {
+          "enum": ["thermostat", "sensor", "light", "lock", "doorbell", "camera", "floodlight_cam", "other"]
+        },
+        "attributePaths": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "level": {
+      "type": "object",
+      "required": ["id", "label", "elevation"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "elevation": { "type": "number" }
+      }
+    },
+    "geometryMesh": {
+      "type": "object",
+      "required": ["format", "uri", "transform"],
+      "properties": {
+        "format": { "enum": ["obj", "glb"] },
+        "uri": { "type": "string" },
+        "materialUri": { "type": "string" },
+        "textureUris": { "type": "array", "items": { "type": "string" } },
+        "transform": {
+          "type": "object",
+          "required": ["position", "rotationEulerDeg", "scale"],
+          "properties": {
+            "position": { "$ref": "#/$defs/vec3" },
+            "rotationEulerDeg": { "$ref": "#/$defs/vec3" },
+            "scale": { "$ref": "#/$defs/vec3" }
+          }
+        }
+      }
+    },
+    "geometryAlignment": {
+      "type": "object",
+      "required": ["surveyRef", "manifestUri", "maxWallDeltaM"],
+      "properties": {
+        "surveyRef": { "type": "string" },
+        "manifestUri": { "type": "string" },
+        "maxWallDeltaM": { "type": "number" },
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "parityReportUri": { "type": "string" }
+      }
+    },
+    "device": {
+      "type": "object",
+      "required": ["deviceId", "roomId", "levelId", "label", "deviceType", "deploymentStatus", "position"],
+      "properties": {
+        "deviceId": { "type": "string" },
+        "roomId": { "type": "string" },
+        "levelId": { "type": "string" },
+        "label": { "type": "string" },
+        "deviceType": {
+          "enum": ["doorbell", "camera", "indoor_cam", "floodlight_cam", "thermostat", "sensor", "other"]
+        },
+        "deploymentStatus": { "enum": ["installed", "planned"] },
+        "productModel": { "type": "string" },
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotationY": { "type": "number" },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "horizontalFovDeg": { "type": "number" },
+            "verticalFovDeg": { "type": "number" },
+            "rangeM": { "type": "number" },
+            "mountHeightM": { "type": "number" }
+          }
+        },
+        "uxRole": { "type": "string", "description": "LCARS screen / alert mapping hint" },
+        "documentationRef": { "type": "string" }
+      }
+    }
+  }
+}

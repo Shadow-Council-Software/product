@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shadow-council.dev/enterprise/matterport-alignment.schema.json",
+  "title": "Matterport → ENTERPRISE alignment manifest",
+  "description": "Maps Matterpak mesh coordinates to house-layout world origin (survey truth)",
+  "type": "object",
+  "required": ["schemaVersion", "surveyRef", "matterportModelId", "transform"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "surveyRef": {
+      "type": "string",
+      "description": "URI to authoritative survey (PDF or house-layout.json)"
+    },
+    "matterportModelId": { "type": "string" },
+    "matterpakOrderedAt": { "type": "string", "format": "date-time" },
+    "notes": { "type": "string" },
+    "transform": {
+      "type": "object",
+      "required": ["position", "rotationEulerDeg", "scale"],
+      "properties": {
+        "position": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Translation applied to mesh so survey origin matches layout metadata.origin"
+        },
+        "rotationEulerDeg": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "XYZ euler rotation in degrees (Y = yaw for floor plan north)"
+        },
+        "scale": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Uniform or per-axis scale if Matterpak units differ from meters"
+        }
+      }
+    },
+    "controlPoints": {
+      "type": "array",
+      "description": "Optional 3+ point pairs for verifying alignment (survey vs mesh)",
+      "items": {
+        "type": "object",
+        "required": ["label", "surveyPosition", "meshPosition"],
+        "properties": {
+          "label": { "type": "string" },
+          "surveyPosition": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+          "meshPosition": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+          "toleranceM": { "type": "number", "default": 0.01 }
+        }
+      }
+    },
+    "parityTargets": {
+      "type": "object",
+      "properties": {
+        "maxWallDeltaM": { "type": "number", "default": 0.01 },
+        "maxStationDeltaM": { "type": "number", "default": 0.05 }
+      }
+    }
+  }
+}

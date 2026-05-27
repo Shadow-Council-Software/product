@@ -1,0 +1,24 @@
+{
+  "name": "@enterprise/matterport-ingest",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "matterport-ingest": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "ingest": "tsx src/cli.ts",
+    "discover": "tsx src/cli.ts discover",
+    "parity": "tsx src/cli.ts parity"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/node": "^22.15.21",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}
