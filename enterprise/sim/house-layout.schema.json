@@ -83,6 +83,14 @@
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z0-9.-]+$" },
         "label": { "type": "string" },
+        "levelId": {
+          "type": "string",
+          "description": "Floor id — main | basement | garage | exterior"
+        },
+        "kind": {
+          "enum": ["interior", "gap", "placeholder", "virtual"],
+          "description": "interior=confirmed room; gap=needs owner verify; placeholder=TBD floor; virtual=coverage only"
+        },
         "floorElevation": { "type": "number", "description": "Y height of floor in world units" },
         "ceilingHeight": { "type": "number" },
         "floorPolygon": {

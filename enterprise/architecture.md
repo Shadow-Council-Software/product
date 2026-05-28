@@ -335,6 +335,24 @@ export interface MatterAdapterPort {
 
 ---
 
+## Renderer Ports (Normative — C-SIM-06)
+
+Sim and in-wall LCARS panel rollout depends on five renderer ports defined in [sim-ux-specification.md](./sim-ux-specification.md). These extend the L5 renderer contract; they do **not** duplicate experience-pack tokens or alert FSM ownership (engine remains FSM authority per ADR-MA-05).
+
+| Port | Contract | Owner |
+|------|----------|-------|
+| **`RendererTransportPort`** | Push finalized frame buffers or stream deltas to dumb 2D clients; heartbeat + reconnect semantics | Engine orchestration + panel firmware |
+| **`RendererCapabilitiesDescriptorPort`** | Per-engine manifest: max resolution, color space, touch, audio — published as `renderer-capabilities-descriptor.yaml` | Renderer harness / firmware (Sprint 1: Unity) |
+| **`DistanceAwareCompositePort`** | Scale L3 composites for `viewingDistanceM` (default **3.0** m); no engine-shader TNG hardcoding | Experience pack + renderer adapter |
+| **`PanelAttestationPort`** | Bind `panelId`, `screenId`, `clearanceProfile`, `hostedVerbs`, `nfrUx6Reachable` before attestation | Engine middleware |
+| **`EngineParityCertificatePort`** | Chain `engine-parity.certificate.yaml` → parent [visual-foundation-freeze.certificate.yaml](./docs/fixtures/visual-foundation-freeze.certificate.yaml); CI gate on okudaAudit | CI / release |
+
+**L1 token portability:** Shared renderer token artifacts MAY live under the experience pack as `packages/renderer-tokens/` (La Forge council naming) — same L1 schema as web LCARS; sim/panel renderers consume manifest bindings, not duplicated palette constants.
+
+**Sprint 1 deliverables:** `enterprise/sim/unity/engine-parity.certificate.yaml`, `enterprise/sim/unity/renderer-capabilities-descriptor.yaml`, Unity HealthStrip proof against live `GET /api/v1/alerts` (SIM-AC-01–02).
+
+---
+
 ## Implementation Patterns & Consistency Rules
 
 ### Naming

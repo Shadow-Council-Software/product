@@ -1,0 +1,110 @@
+{
+  "stations": [
+    {
+      "stationId": "env.nest.primary",
+      "roomId": "central-hall",
+      "label": "Nest Learning Thermostat (latest gen)",
+      "position": [8.839, 1.45, 3.45],
+      "rotationY": 180,
+      "matterNodeId": 1,
+      "deviceType": "thermostat",
+      "attributePaths": {
+        "localTemp": "1/513/0",
+        "coolSetpoint": "1/513/17",
+        "heatSetpoint": "1/513/18"
+      },
+      "documentationRef": "Owner: room adjacent to kitchen, facing front of house"
+    }
+  ],
+  "devices": [
+    {
+      "deviceId": "env.nest.thermostat.primary",
+      "roomId": "central-hall",
+      "levelId": "main",
+      "label": "Nest Learning Thermostat (latest gen)",
+      "deviceType": "thermostat",
+      "deploymentStatus": "installed",
+      "productModel": "Nest Learning Thermostat (latest gen)",
+      "position": [8.839, 1.45, 3.45],
+      "rotationY": 180,
+      "uxRole": "env.primary — Environmental LCARS + QuickEnvPin",
+      "documentationRef": "Owner: room right next to kitchen, facing front"
+    },
+    {
+      "deviceId": "sec.nest.doorbell.main",
+      "roomId": "exterior-front",
+      "levelId": "exterior",
+      "label": "Nest Doorbell (3rd gen)",
+      "deviceType": "doorbell",
+      "deploymentStatus": "installed",
+      "productModel": "Nest Doorbell 3rd gen",
+      "position": [8.534, 1.15, -0.05],
+      "rotationY": 0,
+      "coverage": {
+        "horizontalFovDeg": 150,
+        "verticalFovDeg": 90,
+        "rangeM": 8,
+        "mountHeightM": 1.15
+      },
+      "uxRole": "sec.entry.doorbell",
+      "documentationRef": "Owner: main door"
+    },
+    {
+      "deviceId": "sec.nest.basement",
+      "roomId": "basement-main",
+      "levelId": "basement",
+      "label": "Nest device — basement",
+      "deviceType": "camera",
+      "deploymentStatus": "installed",
+      "productModel": "Nest (model TBD)",
+      "position": [8.687, -1.5, 4.877],
+      "rotationY": 90,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 6,
+        "mountHeightM": 2.2
+      },
+      "uxRole": "sec.basement",
+      "documentationRef": "Owner: basement — refine when floor plan added"
+    },
+    {
+      "deviceId": "sec.nest.garage.floodlight",
+      "roomId": "garage-interior",
+      "levelId": "garage",
+      "label": "Nest Cam floodlights (planned)",
+      "deviceType": "floodlight_cam",
+      "deploymentStatus": "planned",
+      "productModel": "Nest Cam + dual rain lights",
+      "position": [19.5, 3.2, 4.5],
+      "rotationY": 270,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 15,
+        "mountHeightM": 3.2
+      },
+      "uxRole": "sec.garage.exterior",
+      "documentationRef": "Planned garage top mount"
+    },
+    {
+      "deviceId": "sec.nest.garage.indoor",
+      "roomId": "garage-interior",
+      "levelId": "garage",
+      "label": "Garage indoor cam (planned)",
+      "deviceType": "indoor_cam",
+      "deploymentStatus": "planned",
+      "productModel": "Nest indoor cam",
+      "position": [19.8, 2.0, 5.5],
+      "rotationY": 180,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 8,
+        "mountHeightM": 2.0
+      },
+      "uxRole": "sec.garage.interior",
+      "documentationRef": "Planned"
+    }
+  ]
+}

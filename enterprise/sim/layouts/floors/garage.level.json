@@ -1,0 +1,21 @@
+{
+  "levelId": "garage",
+  "label": "Garage",
+  "elevation": 0,
+  "envelope": {
+    "floorPolygon": [[17.374, 2], [22, 2], [22, 7], [17.374, 7]],
+    "documentationRef": "Placeholder east of main house — dimensions TBD"
+  },
+  "rooms": [
+    {
+      "id": "garage-interior",
+      "label": "Garage (TBD)",
+      "levelId": "garage",
+      "kind": "placeholder",
+      "floorElevation": 0,
+      "ceilingHeight": 3.0,
+      "floorPolygon": [[17.374, 2], [22, 2], [22, 7], [17.374, 7]],
+      "documentationRef": "Measured garage plan needed for floodlight + indoor cam anchors"
+    }
+  ]
+}

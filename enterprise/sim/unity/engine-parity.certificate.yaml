@@ -1,0 +1,16 @@
+# Unity engine parity certificate — ENTERPRISE Main Computer
+# Chains to visual foundation freeze (UX Step 08 / DC-7). See sim-ux-specification.md § Certificate Parity.
+schemaVersion: "1.0.0"
+engineId: unity
+parentSpec:
+  path: ../../docs/fixtures/visual-foundation-freeze.certificate.yaml
+parentHash: a89353fe57ba7afe88c0e0f529e96efccc91e0192992c63f32de2827ac2f7e29
+gamutProfile: srgb-mvp
+distanceLegibilityM: 3.0
+contrastMatrixResults: {}
+motionTokenRefs:
+  - token: motion.alert.animated-red
+    compliant: pending
+  - token: motion.alert.static-red
+    compliant: pending
+okudaAudit: PENDING

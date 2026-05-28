@@ -11,7 +11,9 @@ The digital twin supports **planning and auditing** Nest camera coverage before 
 | `sec.nest.garage.floodlight` | **Planned** | Garage roof + dual rain lights | Driveway / exterior |
 | `sec.nest.garage.indoor` | **Planned** | Garage interior | Garage indoor |
 
-Environmental Matter sim (`env.nest.primary`) remains separate — LCARS Environmental loop only.
+| `env.nest.thermostat.primary` | **Installed** | Central hall — kitchen-adjacent, faces front | Environmental LCARS + Matter sim (`env.nest.primary`) |
+
+Environmental Matter sim is anchored to the owner **Nest Learning Thermostat (latest gen)** in central hall — not a separate simulated placement.
 
 ## Coverage workflow
 

@@ -1,0 +1,31 @@
+{
+  "levelId": "exterior",
+  "label": "Exterior / coverage",
+  "elevation": 0,
+  "envelope": {
+    "floorPolygon": [[-2, -4], [19.5, -4], [19.5, 12], [-2, 12]],
+    "documentationRef": "Coverage planning band — refine to lot line"
+  },
+  "rooms": [
+    {
+      "id": "exterior-front",
+      "label": "Front approach",
+      "levelId": "exterior",
+      "kind": "virtual",
+      "floorElevation": 0,
+      "ceilingHeight": 0,
+      "floorPolygon": [[2.5, -3], [14.5, -3], [14.5, 0], [2.5, 0]],
+      "documentationRef": "Doorbell FOV zone — south of entry"
+    },
+    {
+      "id": "exterior-perimeter",
+      "label": "Perimeter band",
+      "levelId": "exterior",
+      "kind": "virtual",
+      "floorElevation": 0,
+      "ceilingHeight": 0,
+      "floorPolygon": [[-2, -4], [19.5, -4], [19.5, 12], [-2, 12]],
+      "documentationRef": "Unity coverage audit boundary only — not a walkable floor"
+    }
+  ]
+}

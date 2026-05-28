@@ -1,0 +1,25 @@
+# Renderer capabilities descriptor — Unity harness (SIM-AC-01)
+# Normative manifest for RendererCapabilitiesDescriptorPort. See sim-ux-specification.md.
+schemaVersion: "1.0.0"
+engineId: unity
+engineVersion: "2022.3 LTS"
+renderTarget:
+  maxWidthPx: 1920
+  maxHeightPx: 1080
+  defaultAspectRatio: "16:9"
+  colorSpace: srgb-mvp
+  hdr: false
+input:
+  touch: false
+  pointer: true
+  keyboard: true
+audio:
+  supported: false
+  klaxonPlayback: false
+distanceAwareComposite:
+  defaultViewingDistanceM: 3.0
+  port: DistanceAwareCompositePort
+transport:
+  role: design-surface
+  dumbClientTransport: false
+  note: Production BEZELED-PANEL clients use RendererTransportPort; Unity pushes via render-target capture

@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "id": "survey-site-2026-05-24",
+      "type": "pdf",
+      "path": "Scanned_20260524-1944.pdf",
+      "documentType": "mortgage-site-survey",
+      "levelId": "main",
+      "notes": "EXTERIOR survey only — lot lines, building footprint, driveway, deck. Does NOT contain interior room layout. Use for envelope + site; NOT for kitchen/bedroom polygons.",
+      "alignment": {
+        "scale": 1,
+        "offsetX": 0,
+        "offsetZ": 0,
+        "rotationDeg": 0,
+        "opacity": 0.65
+      }
+    },
+    {
+      "id": "survey-thumb-reference",
+      "type": "image",
+      "path": "Scanned_20260524-1944.thumb.png",
+      "documentType": "derived-thumbnail",
+      "levelId": "main",
+      "notes": "Raster reference for Layout Studio underlay alignment"
+    }
+  ],
+  "photos": [],
+  "interiorPlanPending": true
+}

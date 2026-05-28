@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "name": "Onimurasame residence — official scanned floor plan",
+    "units": "meters"
+  },
+  "rooms": [
+    {
+      "id": "office",
+      "label": "Office",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 3.048,
+          "y": 0
+        },
+        {
+          "x": 3.048,
+          "y": 3.048
+        },
+        {
+          "x": 0,
+          "y": 3.048
+        }
+      ]
+    },
+    {
+      "id": "entry-hall",
+      "label": "Entry",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 3.048,
+          "y": 0
+        },
+        {
+          "x": 13.411,
+          "y": 0
+        },
+        {
+          "x": 13.411,
+          "y": 2.438
+        },
+        {
+          "x": 3.048,
+          "y": 2.438
+        }
+      ]
+    },
+    {
+      "id": "living-room",
+      "label": "Living",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 13.411,
+          "y": 0
+        },
+        {
+          "x": 17.374,
+          "y": 0
+        },
+        {
+          "x": 17.374,
+          "y": 2.438
+        },
+        {
+          "x": 13.411,
+          "y": 2.438
+        }
+      ]
+    },
+    {
+      "id": "hall-to-master",
+      "label": "Hall → Master",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 3.048,
+          "y": 3.048
+        },
+        {
+          "x": 10.363,
+          "y": 3.048
+        },
+        {
+          "x": 10.363,
+          "y": 6.401
+        },
+        {
+          "x": 3.048,
+          "y": 6.401
+        }
+      ]
+    },
+    {
+      "id": "central-hall",
+      "label": "Central Hall",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 7.315,
+          "y": 3.352
+        },
+        {
+          "x": 10.363,
+          "y": 3.352
+        },
+        {
+          "x": 10.363,
+          "y": 6.401
+        },
+        {
+          "x": 7.315,
+          "y": 6.401
+        }
+      ]
+    },
+    {
+      "id": "second-bedroom",
+      "label": "Bedroom 2",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 10.363,
+          "y": 3.352
+        },
+        {
+          "x": 13.411,
+          "y": 3.352
+        },
+        {
+          "x": 13.411,
+          "y": 6.985
+        },
+        {
+          "x": 10.363,
+          "y": 6.985
+        }
+      ]
+    },
+    {
+      "id": "mechanical-room",
+      "label": "Mechanical",
+      "floorElevation": 0,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [
+        {
+          "x": 13.411,
+          "y": 2.438
+        },
+        {
+          "x": 17.067,
+          "y": 2.438
+        },
+        {
+          "x": 17.067,
+          "y": 4.572
+        },
+        {
+          "x": 13.411,
+          "y": 4.572
+        }
+      ]
+    },
+    {
+      "id": "shared-bathroom",
+      "label": "Bath (shared)",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 16.154,
+          "y": 4.572
+        },
+        {
+          "x": 17.374,
+          "y": 4.572
+        },
+        {
+          "x": 17.374,
+          "y": 6.985
+        },
+        {
+          "x": 16.154,
+          "y": 6.985
+        }
+      ]
+    },
+    {
+      "id": "kitchen-dining",
+      "label": "Kitchen / Dining",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 4.267,
+          "y": 6.401
+        },
+        {
+          "x": 7.315,
+          "y": 6.401
+        },
+        {
+          "x": 7.315,
+          "y": 9.754
+        },
+        {
+          "x": 4.267,
+          "y": 9.754
+        }
+      ]
+    },
+    {
+      "id": "master-bedroom",
+      "label": "Master",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        {
+          "x": 0,
+          "y": 6.401
+        },
+        {
+          "x": 4.267,
+          "y": 6.401
+        },
+        {
+          "x": 4.267,
+          "y": 9.754
+        },
+        {
+          "x": 0,
+          "y": 9.754
+        }
+      ]
+    },
+    {
+      "id": "hall-closet",
+      "label": "Closet",
+      "floorElevation": 0,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [
+        {
+          "x": 15.849,
+          "y": 9.144
+        },
+        {
+          "x": 17.374,
+          "y": 9.144
+        },
+        {
+          "x": 17.374,
+          "y": 9.754
+        },
+        {
+          "x": 15.849,
+          "y": 9.754
+        }
+      ]
+    }
+  ],
+  "stations": [
+    {
+      "stationId": "env.nest.primary",
+      "roomId": "central-hall",
+      "label": "Nest Learning Thermostat (latest gen)",
+      "position": {
+        "x": 8.839,
+        "y": 1.45,
+        "z": 3.45
+      },
+      "rotationY": 180,
+      "matterNodeId": 1,
+      "deviceType": "thermostat"
+    }
+  ],
+  "devices": [
+    {
+      "deviceId": "env.nest.thermostat.primary",
+      "roomId": "central-hall",
+      "label": "Nest Learning Thermostat (latest gen)",
+      "deviceType": "thermostat",
+      "position": {
+        "x": 8.839,
+        "y": 1.45,
+        "z": 3.45
+      },
+      "rotationY": 180
+    },
+    {
+      "deviceId": "sec.nest.doorbell.main",
+      "roomId": "exterior-front",
+      "label": "Nest Doorbell (3rd gen)",
+      "deviceType": "doorbell",
+      "position": {
+        "x": 8.534,
+        "y": 1.15,
+        "z": -0.05
+      },
+      "rotationY": 0
+    },
+    {
+      "deviceId": "sec.nest.basement",
+      "roomId": "basement-main",
+      "label": "Nest device — basement",
+      "deviceType": "camera",
+      "position": {
+        "x": 8.687,
+        "y": -1.5,
+        "z": 4.877
+      },
+      "rotationY": 90
+    }
+  ]
+}

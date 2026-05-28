@@ -1,0 +1,20 @@
+{
+  "name": "@enterprise/layout-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n vite,api \"vite\" \"node server.mjs --dev\"",
+    "build": "tsc && vite build",
+    "start": "node server.mjs",
+    "layout-studio": "node server.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^5.3.93"
+  }
+}

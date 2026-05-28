@@ -1,0 +1,9 @@
+{
+  "name": "@enterprise/sim",
+  "private": true,
+  "scripts": {
+    "layout-studio": "node layout-studio/server.mjs",
+    "layout-studio:dev": "npm run dev --prefix layout-studio",
+    "layout-studio:build": "npm run build --prefix layout-studio"
+  }
+}

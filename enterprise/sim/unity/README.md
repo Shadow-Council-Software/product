@@ -11,7 +11,8 @@ Unity **2022.3 LTS** or newer. Import this folder as a project or copy scripts i
 5. Add empty GameObjects:
    - `SimBridgeClient` → attach `SimBridgeClient.cs`
    - `HouseBuilder` → attach `HouseLayoutLoader.cs`
-   - `Main Camera` → attach `VisualAidCapture.cs`
+   - `HealthStripPlate` → attach `HealthStripRenderer.cs`
+   - `Main Camera` → attach `VisualAidCapture.cs` (set `focusRoomId` to `central-hall`)
 
 ## Configuration (Inspector / env)
 
@@ -25,7 +26,26 @@ Unity **2022.3 LTS** or newer. Import this folder as a project or copy scripts i
 
 1. Start Sim Bridge + Engine (`MATTER_ADAPTER=sim`).
 2. Press Play — rooms extrude from layout polygon; thermostat markers appear at station positions.
-3. Captures write to Sim Bridge → agents read `/sim/visual-aid/latest`.
+3. `HealthStripRenderer` polls `GET /api/v1/alerts` — escalate/de-escalate in LCARS web; strip updates ≤1s (SIM-AC-02).
+4. Position camera ~3 m from central-hall plate anchor `[8.839, 1.45, 3.45]` for legibility review (SIM-AC-04).
+5. Captures write to Sim Bridge → agents read `/sim/visual-aid/latest`.
+
+**Quick bootstrap:** Add empty GameObject `Harness` → attach `HarnessAutoBootstrap.cs` only (creates SimBridgeClient, HouseBuilder, HealthStripPlate, camera + VisualAidCapture).
+
+## Sprint 1 proof checklist
+
+| Step | Artifact | Gate |
+|------|----------|------|
+| Capabilities manifest | `renderer-capabilities-descriptor.yaml` | SIM-AC-01 |
+| HealthStrip vs live FSM | `HealthStripRenderer.cs` + engine running | SIM-AC-02 |
+| central-hall anchor | layout `env.nest.primary` @ `[8.839, 1.45, 3.45]` | SIM-AC-03 |
+| Engine parity cert | `engine-parity.certificate.yaml` (`okudaAudit: PENDING` until capture) | C-SIM-04 |
+
+CLI verification (no Unity required for scaffold checks):
+
+```bash
+node enterprise/sim/scripts/verify-sprint1-proof.mjs
+```
 
 ## Packages (recommended)
 

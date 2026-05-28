@@ -1,0 +1,33 @@
+{
+  "levelId": "main",
+  "label": "Main level",
+  "elevation": 0,
+  "status": "pending-interior-trace",
+  "envelope": {
+    "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+    "documentationRef": "Building footprint ~57'×32' from mortgage survey Scanned_20260524-1944.pdf — EXTERIOR ONLY. Interior rooms must be traced collaboratively."
+  },
+  "rooms": [
+    {
+      "id": "central-hall",
+      "label": "Thermostat room (UNTRACED)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[8.5, 3.3], [9.3, 3.3], [9.3, 4.0], [8.5, 4.0]],
+      "documentationRef": "PROVISIONAL anchor only — owner must trace real walls in Layout Studio before parity sign-off"
+    }
+  ],
+  "traceChecklist": {
+    "documentType": "mortgage-site-survey",
+    "address": "9 Coralberry Drive, New Castle County, DE (verify with owner)",
+    "providesInteriorLayout": false,
+    "nextStep": "Owner confirms front orientation, then trace rooms one-by-one in Layout Studio OR provide interior floor plan scan",
+    "requiredForParity": [
+      "Interior floor plan PDF/photo OR room-by-room owner verification",
+      "Photo per ambiguous wall (optional)",
+      "Device anchors confirmed in real rooms (thermostat, doorbell)"
+    ]
+  }
+}

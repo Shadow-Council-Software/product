@@ -5,14 +5,16 @@ Official owner-provided floor plan ingested **2026-05-24**.
 | Field | Value |
 |-------|--------|
 | **Source PDF** | [sources/Scanned_20260524-1944.pdf](./sources/Scanned_20260524-1944.pdf) |
-| **Layout JSON** | [onimurasame-residence-2026-05-24.json](./onimurasame-residence-2026-05-24.json) |
-| **Envelope** | 57 ft × 32 ft (17.37 m × 9.75 m) main level |
-| **Coverage UX** | [../docs/COVERAGE-UX.md](../docs/COVERAGE-UX.md) |
+| **Per-floor edits** | [floors/](./floors/) — **edit here first** |
+| **Merged JSON** | [onimurasame-residence-2026-05-24.json](./onimurasame-residence-2026-05-24.json) (generated) |
+| **Devices** | [devices.registry.json](./devices.registry.json) |
+| **Preview** | `node enterprise/sim/poc/serve-preview.mjs` → http://127.0.0.1:3099 |
 
 ## Nest / security devices
 
 | Device | Status | Notes |
 |--------|--------|-------|
+| Nest Learning Thermostat (latest gen) | Installed | Central hall — adjacent to kitchen, faces front (`env.nest.thermostat.primary` / `env.nest.primary`) |
 | Nest Doorbell 3rd gen | Installed | Main door (`sec.nest.doorbell.main`) |
 | Nest — basement | Installed | Confirm cam vs Protect model |
 | Nest + rain lights | Planned | Garage top (`sec.nest.garage.floodlight`) |
@@ -29,7 +31,11 @@ Official owner-provided floor plan ingested **2026-05-24**.
 ## Commands
 
 ```bash
+# Preview (per-floor tabs)
+node enterprise/sim/poc/serve-preview.mjs
+
+# After editing layouts/floors/*.level.json
+node enterprise/sim/scripts/merge-layout-floors.mjs
 cd enterprise/sim/bridge
 npm run validate-layout ../layouts/onimurasame-residence-2026-05-24.json
-curl http://127.0.0.1:3002/sim/coverage/report
 ```

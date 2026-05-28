@@ -25,6 +25,7 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 | [docs/fixtures/](./docs/fixtures/) | Visual freeze certificate (Step 08 / DC-7); W0 spike certificate when complete |
 | [spike/w0/](./spike/w0/) | **W0 pre-architecture spike** — sidecar Docker + checklist (ART-01 §6) |
 | [sim/](./sim/) | **Digital twin harness** — Sim Bridge + Unity house viz (no hardware) |
+| [sim-ux-specification.md](./sim-ux-specification.md) | Sim & in-wall LCARS panel UX — Unity/Unreal renderer surfaces (companion to UX spec) |
 | [runtime/](./runtime/) | Engine + LCARS monorepo (mock / sim / ohf adapters) |
 | [docs/agents/](./docs/agents/) | TNG character agents, senior staff + Party Mode process, positronic factory |
 | [openspec/](./openspec/) | **OpenSpec** — deterministic requirements, gate registry, sprint changes |
@@ -43,10 +44,11 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 2. [openspec/specs/](./openspec/specs/) — deterministic requirements (OpenSpec)
 3. Gate artifacts **ART-01–ART-08** where referenced
 3. [ux-design-specification.md](./ux-design-specification.md) for LCARS layout, alert visual law, Ops overview
-4. [tng-interaction-contract.md](./tng-interaction-contract.md) for user-facing copy and outcome grammar
-5. [lcars-screen-inventory.md](./lcars-screen-inventory.md) for screen IDs and navigation
-6. [architecture.md](./architecture.md) — normative technical design
-7. [matter-research-sources.md](./matter-research-sources.md) — domain context
+4. [sim-ux-specification.md](./sim-ux-specification.md) for sim/panel renderer surfaces only (Unity/Unreal harness, BACKLIT-PLATE, BEZELED-PANEL)
+5. [tng-interaction-contract.md](./tng-interaction-contract.md) for user-facing copy and outcome grammar
+6. [lcars-screen-inventory.md](./lcars-screen-inventory.md) for screen IDs and navigation
+7. [architecture.md](./architecture.md) — normative technical design
+8. [matter-research-sources.md](./matter-research-sources.md) — domain context
 
 ---
 

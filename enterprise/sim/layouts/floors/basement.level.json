@@ -1,0 +1,21 @@
+{
+  "levelId": "basement",
+  "label": "Basement",
+  "elevation": -2.7,
+  "envelope": {
+    "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+    "documentationRef": "Placeholder — same footprint as main until basement plan provided"
+  },
+  "rooms": [
+    {
+      "id": "basement-main",
+      "label": "Basement (TBD)",
+      "levelId": "basement",
+      "kind": "placeholder",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+      "documentationRef": "Replace with measured rooms — battle bridge, storage, Nest cam location"
+    }
+  ]
+}

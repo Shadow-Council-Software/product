@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ENTERPRISE — floor layout editor view</title>
+  <style>
+    :root {
+      --bg: #0c0e12;
+      --panel: #141820;
+      --border: #2a3344;
+      --text: #e2e8f0;
+      --muted: #8b9bb4;
+      --interior: #1e3a5f;
+      --interior-stroke: #5eb3ff;
+      --gap: #4a3520;
+      --gap-stroke: #ffb347;
+      --placeholder: #2a2a30;
+      --placeholder-stroke: #888;
+      --virtual: #1a2838;
+      --virtual-stroke: #6a8;
+      --envelope: #fff;
+      --accent: #ff9f43;
+      --device: #ffd54f;
+      --station: #00e5ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'SF Pro Text', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+    header {
+      grid-column: 1 / -1;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--panel);
+    }
+    header h1 { margin: 0; font-size: 16px; font-weight: 600; }
+    .tabs { display: flex; gap: 6px; }
+    .tab {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .tab.active {
+      background: var(--interior);
+      border-color: var(--interior-stroke);
+      color: var(--text);
+    }
+    aside {
+      padding: 12px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    aside h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 16px 0 8px; }
+    aside h2:first-child { margin-top: 0; }
+    .room-item {
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .room-item:hover { background: #1a2030; }
+    .room-item.selected { border-color: var(--interior-stroke); background: #1a2840; }
+    .room-item.gap { color: var(--gap-stroke); }
+    .room-item.placeholder { color: var(--muted); font-style: italic; }
+    .legend { display: flex; flex-direction: column; gap: 4px; }
+    .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+    #canvas-wrap { position: relative; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #hint {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      font-size: 11px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #2a2030;
+      color: var(--gap-stroke);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Floor layout</h1>
+    <div class="tabs" id="tabs"></div>
+    <span class="badge" id="status">Loading…</span>
+  </header>
+  <aside>
+    <h2>Rooms on this floor</h2>
+    <div id="room-list"></div>
+    <h2>Legend</h2>
+    <div class="legend">
+      <div><span class="swatch" style="background:var(--interior);border:1px solid var(--interior-stroke)"></span>Interior (confirmed)</div>
+      <div><span class="swatch" style="background:var(--gap);border:1px solid var(--gap-stroke)"></span>Gap — verify with scan</div>
+      <div><span class="swatch" style="background:var(--placeholder);border:1px dashed var(--placeholder-stroke)"></span>Placeholder (TBD)</div>
+      <div><span class="swatch" style="background:var(--virtual);border:1px solid var(--virtual-stroke)"></span>Virtual / coverage</div>
+      <div><span class="swatch" style="background:var(--station)"></span>Station / device</div>
+    </div>
+    <h2>Edit source</h2>
+    <p style="color:var(--muted);margin:0">Edit <code>layouts/floors/&lt;floor&gt;.level.json</code> then run merge script.</p>
+  </aside>
+  <div id="canvas-wrap">
+    <canvas id="c"></canvas>
+    <div id="hint">Front of house = bottom (south). Compare to scan PDF. Orange hatched = gaps to fill in.</div>
+  </div>
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    let floors = [];
+    let currentLevel = 'main';
+    let selectedRoomId = null;
+    let devices = [];
+    let stations = [];
+
+    const KIND_STYLE = {
+      interior: { fill: '#1e3a5f', stroke: '#5eb3ff', dash: [] },
+      gap: { fill: '#4a3520', stroke: '#ffb347', dash: [6, 4] },
+      placeholder: { fill: '#222228', stroke: '#666', dash: [4, 4] },
+      virtual: { fill: '#1a2838', stroke: '#668899', dash: [2, 4] },
+    };
+
+    async function load() {
+      const res = await fetch('/api/layout');
+      const data = await res.json();
+      floors = data.levels ?? [];
+      devices = data.devices ?? [];
+      stations = data.stations ?? [];
+      renderTabs();
+      document.getElementById('status').textContent = data.metadata?.name ?? 'layout';
+      selectFloor(currentLevel);
+    }
+
+    function renderTabs() {
+      const el = document.getElementById('tabs');
+      el.innerHTML = '';
+      for (const f of floors) {
+        const btn = document.createElement('button');
+        btn.className = 'tab' + (f.levelId === currentLevel ? ' active' : '');
+        btn.textContent = f.label;
+        btn.onclick = () => selectFloor(f.levelId);
+        el.appendChild(btn);
+      }
+    }
+
+    function selectFloor(levelId) {
+      currentLevel = levelId;
+      selectedRoomId = null;
+      renderTabs();
+      renderRoomList();
+      draw();
+    }
+
+    function currentFloor() {
+      return floors.find((f) => f.levelId === currentLevel) ?? floors[0];
+    }
+
+    function renderRoomList() {
+      const floor = currentFloor();
+      const list = document.getElementById('room-list');
+      list.innerHTML = '';
+      for (const room of floor?.rooms ?? []) {
+        const div = document.createElement('div');
+        div.className = 'room-item' + (room.kind === 'gap' ? ' gap' : room.kind === 'placeholder' ? ' placeholder' : '');
+        if (room.id === selectedRoomId) div.className += ' selected';
+        div.textContent = room.label;
+        div.title = room.documentationRef ?? room.id;
+        div.onclick = () => { selectedRoomId = room.id; renderRoomList(); draw(); };
+        list.appendChild(div);
+      }
+    }
+
+    function resize() {
+      const wrap = document.getElementById('canvas-wrap');
+      canvas.width = wrap.clientWidth;
+      canvas.height = wrap.clientHeight;
+      draw();
+    }
+
+    function bounds(poly) {
+      let minX = Infinity, minZ = Infinity, maxX = -Infinity, maxZ = -Infinity;
+      for (const p of poly) {
+        minX = Math.min(minX, p[0]); maxX = Math.max(maxX, p[0]);
+        minZ = Math.min(minZ, p[1]); maxZ = Math.max(maxZ, p[1]);
+      }
+      return { minX, minZ, maxX, maxZ };
+    }
+
+    function polyCenter(poly) {
+      let sx = 0, sz = 0;
+      for (const p of poly) { sx += p[0]; sz += p[1]; }
+      return { x: sx / poly.length, z: sz / poly.length };
+    }
+
+    function polyArea(poly) {
+      let a = 0;
+      for (let i = 0; i < poly.length; i++) {
+        const j = (i + 1) % poly.length;
+        a += poly[i][0] * poly[j][1] - poly[j][0] * poly[i][1];
+      }
+      return Math.abs(a / 2);
+    }
+
+    function drawPolygon(poly, tx, ty, style, selected) {
+      ctx.beginPath();
+      ctx.moveTo(tx(poly[0][0]), ty(poly[0][1]));
+      for (let i = 1; i < poly.length; i++) ctx.lineTo(tx(poly[i][0]), ty(poly[i][1]));
+      ctx.closePath();
+      ctx.fillStyle = style.fill;
+      ctx.fill();
+      ctx.setLineDash(style.dash);
+      ctx.strokeStyle = selected ? '#fff' : style.stroke;
+      ctx.lineWidth = selected ? 3 : 1.5;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawLabel(text, x, y, maxW) {
+      const words = text.split(/\s+/);
+      let line = '';
+      let ly = y;
+      ctx.fillStyle = '#e8eef5';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      let fs = 13;
+      ctx.font = `600 ${fs}px system-ui`;
+      while (fs > 8 && ctx.measureText(text).width > maxW) {
+        fs -= 1;
+        ctx.font = `600 ${fs}px system-ui`;
+      }
+      if (words.length > 2 && ctx.measureText(text).width > maxW) {
+        line = words.slice(0, 2).join(' ');
+        ctx.fillText(line, x, ly - fs * 0.55);
+        ctx.fillText(words.slice(2).join(' '), x, ly + fs * 0.55);
+      } else {
+        ctx.fillText(text, x, ly);
+      }
+    }
+
+    function draw() {
+      const floor = currentFloor();
+      if (!floor) return;
+
+      const env = floor.envelope?.floorPolygon ?? [];
+      const rooms = floor.rooms ?? [];
+      const allPolys = [...rooms.map((r) => r.floorPolygon), env].filter((p) => p?.length);
+      let b = { minX: 0, minZ: 0, maxX: 17.374, maxZ: 9.754 };
+      if (allPolys.length) {
+        b = bounds(allPolys.flat());
+        const pad = 1.2;
+        b = { minX: b.minX - pad, minZ: b.minZ - pad, maxX: b.maxX + pad, maxZ: b.maxZ + pad };
+      }
+
+      const padPx = 48;
+      const w = canvas.width - padPx * 2;
+      const h = canvas.height - padPx * 2;
+      const scale = Math.min(w / (b.maxX - b.minX), h / (b.maxZ - b.minZ));
+      const ox = padPx + (w - (b.maxX - b.minX) * scale) / 2;
+      const oy = padPx + (h - (b.maxZ - b.minZ) * scale) / 2;
+      const tx = (x) => ox + (x - b.minX) * scale;
+      const ty = (z) => oy + (b.maxZ - z) * scale; // flip: south (z=0) at bottom
+
+      ctx.fillStyle = '#0c0e12';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (env.length) {
+        drawPolygon(env, tx, ty, { fill: 'transparent', stroke: '#ffffff55', dash: [8, 6] }, false);
+      }
+
+      const sorted = [...rooms].sort((a, b) => polyArea(a.floorPolygon) - polyArea(b.floorPolygon));
+      for (const room of sorted) {
+        const kind = room.kind ?? 'interior';
+        const style = KIND_STYLE[kind] ?? KIND_STYLE.interior;
+        drawPolygon(room.floorPolygon, tx, ty, style, room.id === selectedRoomId);
+        const c = polyCenter(room.floorPolygon);
+        const bb = bounds(room.floorPolygon);
+        const rw = (bb.maxX - bb.minX) * scale;
+        if (rw > 36) drawLabel(room.label, tx(c.x), ty(c.z), rw - 8);
+      }
+
+      const levelDevices = devices.filter((d) => d.levelId === currentLevel);
+      const levelStations = stations.filter((s) => {
+        const room = rooms.find((r) => r.id === s.roomId);
+        return room != null;
+      });
+      for (const s of levelStations) {
+        const p = s.position;
+        if (!p) continue;
+        ctx.beginPath();
+        ctx.arc(tx(p[0]), ty(p[2] ?? p[1]), 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#00e5ff';
+        ctx.fill();
+      }
+      for (const d of levelDevices) {
+        const p = d.position;
+        if (!p) continue;
+        ctx.beginPath();
+        ctx.arc(tx(p[0]), ty(p[2] ?? p[1]), 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffd54f';
+        ctx.fill();
+      }
+
+      // Dimension bar (width)
+      ctx.fillStyle = '#8b9bb4';
+      ctx.font = '11px system-ui';
+      ctx.textAlign = 'center';
+      if (env.length) {
+        const eb = bounds(env);
+        const wM = (eb.maxX - eb.minX).toFixed(2);
+        const wF = ((eb.maxX - eb.minX) / 0.3048).toFixed(1);
+        ctx.fillText(`${wF}' / ${wM} m`, (tx(eb.minX) + tx(eb.maxX)) / 2, ty(eb.minZ) + 20);
+        ctx.fillText('SOUTH (front)', (tx(eb.minX) + tx(eb.maxX)) / 2, ty(eb.minZ) + 34);
+      }
+    }
+
+    window.addEventListener('resize', resize);
+    load().then(resize);
+  </script>
+</body>
+</html>

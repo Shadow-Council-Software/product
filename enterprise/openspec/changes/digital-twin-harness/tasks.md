@@ -40,3 +40,14 @@
 
 - [x] 6.1 Provide floor plan + coordinates → `onimurasame-residence-2026-05-24.json`
 - [ ] 6.2 Scale verification walkthrough in Unity
+
+## 7. Sim UX Sprint 1 (companion spec)
+
+- [x] 7.1 `sim-ux-specification.md` — Party Mode Rounds 1–3
+- [x] 7.2 Renderer ports in `architecture.md` (C-SIM-06)
+- [x] 7.3 `renderer-capabilities-descriptor.yaml` + `engine-parity.certificate.yaml`
+- [x] 7.4 `HealthStripRenderer.cs` + `HarnessAutoBootstrap.cs`
+- [x] 7.5 `verify-sprint1-proof.mjs` CLI gate
+- [ ] 7.6 Unity Play Mode proof — HealthStrip vs live FSM (SIM-AC-02)
+- [ ] 7.7 okudaAudit capture — render target + frame (SIM-AC-05)
+- [ ] 7.8 Okuda council sign-off on sim spec

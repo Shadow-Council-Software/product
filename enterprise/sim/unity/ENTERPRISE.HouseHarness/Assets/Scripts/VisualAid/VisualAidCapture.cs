@@ -12,7 +12,7 @@ namespace Enterprise.Sim
         [SerializeField] private string simBridgeUrl = "http://127.0.0.1:3002";
         [SerializeField] private float captureIntervalSeconds = 5f;
         [SerializeField] private string focusStationId = "env.nest.primary";
-        [SerializeField] private string focusRoomId = "living-room";
+        [SerializeField] private string focusRoomId = "central-hall";
 
         private void Start() => StartCoroutine(CaptureLoop());
 

@@ -64,6 +64,16 @@ Terminal 4 — Unity (see [unity/README.md](./unity/README.md)):
 
 Open `enterprise/sim/unity/ENTERPRISE.HouseHarness` in Unity Hub, press Play.
 
+Sprint 1 scaffold check (CLI):
+
+```bash
+node enterprise/sim/scripts/verify-sprint1-proof.mjs
+```
+
+Panel UX spec: [sim-ux-specification.md](../sim-ux-specification.md).
+
+**Layout authoring:** [layout-studio/README.md](./layout-studio/README.md) — align scan, edit per-floor polygons, compile to Unity. Legacy POC preview: [docs/UNITY-POC.md](./docs/UNITY-POC.md).
+
 ## Layout ingestion (100% parity)
 
 Provide house data as JSON validated against [house-layout.schema.json](./house-layout.schema.json). See [docs/LAYOUT-INGESTION.md](./docs/LAYOUT-INGESTION.md).
@@ -82,5 +92,6 @@ Change: `openspec/changes/digital-twin-harness/`
 
 ## Related
 
+- **Sim UX spec:** [sim-ux-specification.md](../sim-ux-specification.md) — Unity/Unreal renderer surfaces & in-wall LCARS panels
 - Runtime mock adapter: `enterprise/runtime/engine/src/adapters/mock-matter-adapter.ts`
 - W0 spike (real sidecar): `enterprise/spike/w0/` — use only when rack available
