@@ -9,6 +9,8 @@
 
 **Milestone:** [Sprint 2 — Live Environmental loop](https://github.com/Shadow-Council-Software/product/milestone/2)
 
-**OpenSpec change:** `sprint-2-live-environmental-loop` (22/24 code tasks complete; rack W0 pending)
+**OpenSpec change:** `sprint-2-live-environmental-loop` — **software complete** (tasks 1.3–7.4); rack-only 1.1–1.2 open (#30/#31)
+
+**Rack-free continuation:** `/opsx:apply digital-twin-harness` (see `enterprise/openspec/changes/digital-twin-harness/tasks.md`)
 
 **Tests:** 17/17 engine contract tests pass

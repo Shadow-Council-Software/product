@@ -27,11 +27,13 @@ Canonical entry points for planning, requirements, UX, and gate-backed implement
 | [docs/agents/](./docs/agents/) | TNG character agents, senior staff + Party Mode process, positronic factory |
 | [openspec/](./openspec/) | **OpenSpec** — deterministic requirements, gate registry, sprint changes |
 
-**Planned (not yet created):**
+## Implementation (active)
 
-| Document | Role | Blocker |
-|----------|------|---------|
-| `runtime/` implementation monorepo | Engine + LCARS + packages | Scaffold sprint 1 story |
+| Path | Role | OpenSpec change |
+|------|------|-----------------|
+| [runtime/](./runtime/) | Engine + LCARS monorepo (Sprint 1–2) | `sprint-2-live-environmental-loop` — software complete; rack W0 [#30](https://github.com/Shadow-Council-Software/product/issues/30)/[#31](https://github.com/Shadow-Council-Software/product/issues/31) pending |
+| [sim/](./sim/) | Digital twin — Sim Bridge, Unity, Matterport ingest | `digital-twin-harness` — **apply next** (rack substitute) |
+| [spike/w0/](./spike/w0/) | Live W0 spike + certificate | Blocked on operator rack |
 
 ---
 

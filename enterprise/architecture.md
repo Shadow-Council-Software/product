@@ -485,15 +485,23 @@ enterprise/
 
 ## Implementation Handoff
 
-**D-01 status:** Complete — normative architecture for sprint 1.
+**D-01 status:** Complete — normative architecture (2026-05-22).
+
+**Sprint status:**
+
+| Sprint | OpenSpec change | Status |
+|--------|-----------------|--------|
+| 1 | [`archive/2026-05-24-sprint-1-runtime-foundation/`](openspec/changes/archive/2026-05-24-sprint-1-runtime-foundation/) | Archived — runtime monorepo live |
+| 2 | [`sprint-2-live-environmental-loop/`](openspec/changes/sprint-2-live-environmental-loop/) | **Software complete** (tasks 1.3–7.4); rack W0 tasks 1.1–1.2 [#30/#31](https://github.com/Shadow-Council-Software/product/issues/30) pending hardware |
+| Next | [`digital-twin-harness/`](openspec/changes/digital-twin-harness/) | **`/opsx:apply`** — `SimMatterAdapter`, sim demo stack (no rack) |
 
 **Recommended next steps:**
 
-1. **`/opsx:apply sprint-1-runtime-foundation`** — implement tasks in [`openspec/changes/sprint-1-runtime-foundation/`](openspec/changes/sprint-1-runtime-foundation/)
-2. **Live W0 on rack** — confirm Path A on real Nest before sprint 2 merge
-3. **ART-01 CI harness (D-13)** — post-sprint-1
+1. **`/opsx:apply digital-twin-harness`** — tasks in [`openspec/changes/digital-twin-harness/tasks.md`](openspec/changes/digital-twin-harness/tasks.md)
+2. **Live W0 on operator rack** — `enterprise/spike/w0/run-w0.mjs` without `--simulate`; update `w0-spike.certificate.yaml` (Sprint 2 tasks 1.1–1.2)
+3. **Sprint 3 (planned)** — LCARS alert FSM surfaces + `ops.overview` skeleton per UX Step 14 component plan
 
 **Normative specs:** [`openspec/specs/`](openspec/specs/) · **Gates:** [`openspec/gates.yaml`](openspec/gates.yaml)
 
-**Sprint 1 exit criteria:** Engine boots with `MockMatterAdapter`; LCARS renders `BattleStationsConfirm` + `ClearanceOverlay`; W-CT-01–03 green.
+**Dev adapters:** `MATTER_ADAPTER=mock` (CI) · `sim` (Sim Bridge) · `ohf` (live sidecar + Nest LAN)
 
