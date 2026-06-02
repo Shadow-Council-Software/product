@@ -1,0 +1,9 @@
+# Workspace hoisted install (lcars-web + e2e); matches enterprise/platform/runtime/.gitignore
+node_modules/
+dist/
+*.local
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example

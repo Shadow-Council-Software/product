@@ -3,3 +3,7 @@
 .env
 .env.*
 !.env.example
+
+# npm — never commit installed dependencies (regenerate with npm install)
+node_modules/
+**/node_modules/
