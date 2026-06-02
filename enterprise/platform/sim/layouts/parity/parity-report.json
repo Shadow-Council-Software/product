@@ -1,0 +1,156 @@
+{
+  "generatedAt": "2026-05-28T15:30:55.969Z",
+  "requiredRooms": 16,
+  "confirmedMeasurements": 0,
+  "interiorPolygonsReady": 0,
+  "openIssues": 16,
+  "controlDimensionsPending": 2,
+  "evidenceFiles": 0,
+  "parityPercent": 0,
+  "issues": [
+    {
+      "id": "entry-hall",
+      "levelId": "main",
+      "label": "Entry / front door zone",
+      "blockers": [
+        "measurements: pending",
+        "floor: gap, polygon placeholder"
+      ]
+    },
+    {
+      "id": "hall-main",
+      "levelId": "main",
+      "label": "Hallway (entry → living & kitchen)",
+      "blockers": [
+        "measurements: pending",
+        "floor: gap, polygon placeholder"
+      ]
+    },
+    {
+      "id": "living-room",
+      "levelId": "main",
+      "label": "Living room",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "kitchen",
+      "levelId": "main",
+      "label": "Kitchen",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "stairs-ground",
+      "levelId": "main",
+      "label": "Stairs (ground landing)",
+      "blockers": [
+        "measurements: pending",
+        "floor: gap, polygon placeholder"
+      ]
+    },
+    {
+      "id": "bedroom-1",
+      "levelId": "upper",
+      "label": "Bedroom 1",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "bedroom-2",
+      "levelId": "upper",
+      "label": "Bedroom 2",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "bedroom-3",
+      "levelId": "upper",
+      "label": "Bedroom 3 (or office — confirm name)",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "master-bedroom",
+      "levelId": "upper",
+      "label": "Master bedroom",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "bath-hall",
+      "levelId": "upper",
+      "label": "Hall bathroom (shared)",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "master-bath-ensuite",
+      "levelId": "upper",
+      "label": "Master ensuite",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "stairs-upper",
+      "levelId": "upper",
+      "label": "Stairs (upper landing)",
+      "blockers": [
+        "measurements: pending",
+        "floor: gap, polygon placeholder"
+      ]
+    },
+    {
+      "id": "basement-bedroom",
+      "levelId": "basement",
+      "label": "Basement bedroom",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "laundry-room",
+      "levelId": "basement",
+      "label": "Laundry / washing machine room",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    },
+    {
+      "id": "stairs-basement",
+      "levelId": "basement",
+      "label": "Stairs (basement)",
+      "blockers": [
+        "measurements: pending",
+        "floor: gap, polygon placeholder"
+      ]
+    },
+    {
+      "id": "garage-interior",
+      "levelId": "garage",
+      "label": "Garage",
+      "blockers": [
+        "measurements: pending",
+        "floor: placeholder, polygon placeholder"
+      ]
+    }
+  ]
+}

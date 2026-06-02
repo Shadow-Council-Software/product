@@ -1,0 +1,29 @@
+.lcars-panel {
+  position: relative;
+  margin-top: calc(var(--okuda-spacing-base) * 2);
+  padding: calc(var(--okuda-spacing-base) * 3);
+  padding-top: calc(var(--okuda-spacing-base) * 4);
+  border-radius: 0 var(--okuda-radius-elbow) var(--okuda-radius-elbow) var(--okuda-radius-elbow);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.lcars-panel__elbow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.lcars-panel__title {
+  margin: 0 0 calc(var(--okuda-spacing-base) * 2);
+  padding-left: 52px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--okuda-text-primary);
+  letter-spacing: 0.02em;
+}
+
+.lcars-panel__body {
+  color: var(--okuda-text-primary);
+}

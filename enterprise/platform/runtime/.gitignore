@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# SQLite runtime data
+*.db
+*.sqlite
+
+# Playwright / UX reports (generated)
+test-results/
+reports/
+playwright-report/

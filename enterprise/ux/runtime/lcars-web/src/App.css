@@ -1,0 +1,70 @@
+@import './tokens/okuda.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--okuda-bridge-dark);
+}
+
+.lcars-app {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.lcars-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(var(--okuda-spacing-base) * 2);
+  padding: calc(var(--okuda-spacing-base) * 2);
+  background: var(--okuda-bridge-dark);
+  color: var(--okuda-alert-cyan);
+}
+
+.lcars-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  flex: 1;
+  min-width: 0;
+}
+
+.lcars-header label {
+  flex-shrink: 0;
+}
+
+.lcars-main {
+  min-height: 40vh;
+}
+
+.alert-status__phase {
+  margin: calc(var(--okuda-spacing-base) * 2) 0 0;
+  font-size: var(--okuda-font-operator-min);
+  color: var(--okuda-text-primary);
+}
+
+.station-card {
+  display: flex;
+  gap: calc(var(--okuda-spacing-base) * 2);
+  margin-bottom: var(--okuda-spacing-base);
+  font-size: var(--okuda-font-operator-min);
+}
+
+.lcars-btn {
+  border: none;
+  border-radius: var(--okuda-radius-elbow);
+  padding: var(--okuda-spacing-base) calc(var(--okuda-spacing-base) * 2);
+  background: var(--okuda-alert-cyan);
+  color: var(--okuda-bridge-dark);
+  font-size: var(--okuda-font-operator-min);
+  cursor: pointer;
+}
+
+.alert-status {
+  margin-top: calc(var(--okuda-spacing-base) * 2);
+}

@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "units": "meters",
+  "site": {
+    "address": "9 Coralberry Drive",
+    "addressConfirmed": true,
+    "frontFaces": "south",
+    "frontStreet": "Coralberry Drive",
+    "circulationRef": "layouts/parity/site-and-circulation.json",
+    "footprintLengthM": 17.374,
+    "footprintWidthM": 9.754,
+    "floorToFloorM": { "mainToUpper": null, "mainToBasement": null }
+  },
+  "rooms": [
+    {
+      "id": "entry-hall",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "CONFIRMED: south facade on Coralberry Dr — doorbell / origin"
+    },
+    {
+      "id": "hall-main",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "CONFIRMED: to the right when entering; leads to living + kitchen (no L×W yet)"
+    },
+    {
+      "id": "living-room",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "CONFIRMED: via hall-main (east of entry)"
+    },
+    {
+      "id": "kitchen",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "CONFIRMED: via hall-main (east of entry). Nest thermostat wall TBD."
+    },
+    {
+      "id": "stairs-ground",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "CONFIRMED: directly ahead of main door on enter (north of entry); links upper/basement stairs TBD on site"
+    },
+    {
+      "id": "bedroom-1",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bedroom-2",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bedroom-3",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Rename id/label if this room is office or other"
+    },
+    {
+      "id": "master-bedroom",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bath-hall",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Outside bedrooms — hall bath"
+    },
+    {
+      "id": "master-bath-ensuite",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Inside master — may share wall with master-bedroom polygon"
+    },
+    {
+      "id": "stairs-upper",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "basement-bedroom",
+      "levelId": "basement",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "laundry-room",
+      "levelId": "basement",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "stairs-basement",
+      "levelId": "basement",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "garage-interior",
+      "levelId": "garage",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Garage may extend outside main footprint envelope"
+    }
+  ],
+  "controlDimensions": [
+    {
+      "id": "ctrl-footprint-length",
+      "description": "Long axis of house (east-west or per survey)",
+      "measuredM": null,
+      "expectedM": 17.374,
+      "toleranceCm": 2
+    },
+    {
+      "id": "ctrl-footprint-width",
+      "description": "Short axis of house (north-south depth)",
+      "measuredM": null,
+      "expectedM": 9.754,
+      "toleranceCm": 2
+    }
+  ],
+  "evidence": []
+}

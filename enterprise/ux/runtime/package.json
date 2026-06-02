@@ -1,0 +1,17 @@
+{
+  "name": "enterprise-ux-runtime",
+  "private": true,
+  "workspaces": [
+    "lcars-web",
+    "e2e"
+  ],
+  "scripts": {
+    "build": "npm run build -w @enterprise/lcars-web",
+    "dev:lcars": "npm run dev -w @enterprise/lcars-web",
+    "test:ux": "npm run test:ux -w @enterprise/e2e",
+    "test:ux:report": "npm run report -w @enterprise/e2e"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

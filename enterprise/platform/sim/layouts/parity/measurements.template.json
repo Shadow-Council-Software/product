@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "units": "meters",
+  "instructions": "Copy to measurements.json and fill confirmed values. Run: node scripts/apply-measurements.mjs then node scripts/check-parity.mjs",
+  "site": {
+    "addressConfirmed": false,
+    "frontFaces": "south",
+    "footprintLengthM": 17.374,
+    "footprintWidthM": 9.754,
+    "floorToFloorM": { "mainToUpper": null, "mainToBasement": null }
+  },
+  "rooms": [
+    {
+      "id": "entry-hall",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "living-room",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "kitchen",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Nest thermostat wall — note which wall in notes"
+    },
+    {
+      "id": "stairs-ground",
+      "levelId": "main",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bedroom-1",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bedroom-2",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bedroom-3",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Rename id/label if this room is office or other"
+    },
+    {
+      "id": "master-bedroom",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "bath-hall",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Outside bedrooms — hall bath"
+    },
+    {
+      "id": "master-bath-ensuite",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Inside master — may share wall with master-bedroom polygon"
+    },
+    {
+      "id": "stairs-upper",
+      "levelId": "upper",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "basement-bedroom",
+      "levelId": "basement",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "laundry-room",
+      "levelId": "basement",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "stairs-basement",
+      "levelId": "basement",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": ""
+    },
+    {
+      "id": "garage-interior",
+      "levelId": "garage",
+      "status": "pending",
+      "geometry": { "type": "rect", "cornerX": null, "cornerZ": null, "lengthM": null, "widthM": null },
+      "ceilingHeightM": null,
+      "doors": [],
+      "notes": "Garage may extend outside main footprint envelope"
+    }
+  ],
+  "controlDimensions": [
+    {
+      "id": "ctrl-footprint-length",
+      "description": "Long axis of house (east-west or per survey)",
+      "measuredM": null,
+      "expectedM": 17.374,
+      "toleranceCm": 2
+    },
+    {
+      "id": "ctrl-footprint-width",
+      "description": "Short axis of house (north-south depth)",
+      "measuredM": null,
+      "expectedM": 9.754,
+      "toleranceCm": 2
+    }
+  ],
+  "evidence": []
+}

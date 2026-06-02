@@ -1,0 +1,14 @@
+{
+  "name": "@enterprise/sim",
+  "private": true,
+  "scripts": {
+    "layout-studio": "node layout-studio/server.mjs",
+    "layout-studio:dev": "npm run dev --prefix layout-studio",
+    "layout-studio:build": "npm run build --prefix layout-studio",
+    "parity:check": "node scripts/check-parity.mjs",
+    "parity:apply": "node scripts/apply-measurements.mjs",
+    "layout:merge": "node scripts/merge-layout-floors.mjs",
+    "layout:unity": "node scripts/convert-layout-for-unity.mjs",
+    "layout:compile": "node scripts/merge-layout-floors.mjs && node scripts/convert-layout-for-unity.mjs"
+  }
+}

@@ -1,0 +1,39 @@
+schemaVersion: "1.0.0"
+workspace: enterprise-ux
+purpose: Production / LCARS UX council — primary stakeholders for visual and screen IA
+
+chair: gene-roddenberry
+visualLaw: michael-okuda
+continuity: denise-okuda
+
+stakeholders:
+  - id: michael-okuda
+    name: Michael Okuda
+    icon: "🖖"
+    title: LCARS information design
+    domains: [geometry, alert_as_behavior, screen_ia, svg_primitives]
+    veto: LCARS layout and motion law
+
+  - id: denise-okuda
+    name: Denise Okuda
+    icon: "✨"
+    title: Production / experiential continuity
+    domains: [triax, baselines_1280x720, department_palette, offline_hatch]
+    veto: Viewfinder continuity and Playwright visual gates
+
+  - id: gene-roddenberry
+    name: Gene Roddenberry
+    icon: "🌟"
+    title: Vision
+    domains: [captain_not_passenger, house_as_vessel, operator_assumption]
+    veto: Dystopian or passenger-trap UX
+
+partyMode:
+  process: process-party-mode.md
+  voiceLaw: VOICE-LAW.md
+  strictSpec: ../../lcars-ui-authoritative-spec.md
+
+engineeringLiaison:
+  workspace: enterprise-platform
+  chair: enterprise-agent-picard
+  whenToInvoke: API contracts, FSM semantics, security clearance — not pixel law

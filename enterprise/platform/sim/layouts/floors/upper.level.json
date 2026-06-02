@@ -1,0 +1,90 @@
+{
+  "levelId": "upper",
+  "label": "Top floor (2nd floor)",
+  "elevation": 2.7,
+  "status": "pending-owner-measurements",
+  "envelope": {
+    "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+    "documentationRef": "Same footprint as main until upper-specific plan provided"
+  },
+  "rooms": [
+    {
+      "id": "bedroom-1",
+      "label": "Bedroom 1 (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Fill via layouts/parity/measurements.json + apply-measurements.mjs or Layout Studio"
+    },
+    {
+      "id": "bedroom-2",
+      "label": "Bedroom 2 (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Pending measurements"
+    },
+    {
+      "id": "bedroom-3",
+      "label": "Bedroom 3 (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Pending measurements — confirm room name with owner"
+    },
+    {
+      "id": "master-bedroom",
+      "label": "Master bedroom (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Pending measurements"
+    },
+    {
+      "id": "bath-hall",
+      "label": "Hall bathroom (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Outside bedrooms — pending measurements"
+    },
+    {
+      "id": "master-bath-ensuite",
+      "label": "Master ensuite (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Inside master — pending measurements"
+    },
+    {
+      "id": "stairs-upper",
+      "label": "Stairs landing (unmeasured)",
+      "levelId": "upper",
+      "kind": "gap",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Align with stairs-ground on main level"
+    }
+  ],
+  "traceChecklist": {
+    "ownerConfirmed": false,
+    "requiredEvidence": [
+      "Per-room length × width from tape or interior plan",
+      "Ceiling height per floor",
+      "Door positions between upper rooms and hall bath"
+    ]
+  }
+}

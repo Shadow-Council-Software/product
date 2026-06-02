@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "address": "9 Coralberry Drive",
+  "addressConfirmed": true,
+  "frontFaces": "Coralberry Drive (south facade)",
+  "units": "meters",
+  "coordinateSystem": {
+    "origin": "Front entrance center, south facade (Nest doorbell)",
+    "xAxis": "East",
+    "zAxis": "North",
+    "yAxis": "Up"
+  },
+  "buildingFootprint": {
+    "lengthM": 17.374,
+    "widthM": 9.754,
+    "source": "layouts/sources/Scanned_20260524-1944.pdf",
+    "note": "Exterior mortgage survey — interior rooms traced separately"
+  },
+  "levels": [
+    {
+      "id": "main",
+      "label": "Ground floor (1st floor)",
+      "elevation": 0,
+      "ownerDescription": "Living room and kitchen (+ entry/circulation as needed)"
+    },
+    {
+      "id": "upper",
+      "label": "Top floor (2nd floor)",
+      "elevation": 2.7,
+      "ownerDescription": "Three bedrooms, hall bathroom, master ensuite inside master bedroom"
+    },
+    {
+      "id": "basement",
+      "label": "Basement",
+      "elevation": -2.7,
+      "ownerDescription": "Extra bedroom and washing machine / laundry room"
+    },
+    {
+      "id": "garage",
+      "label": "Garage",
+      "elevation": 0,
+      "ownerDescription": "Detached or attached garage — dimensions TBD"
+    },
+    {
+      "id": "exterior",
+      "label": "Exterior / site",
+      "elevation": 0,
+      "ownerDescription": "Lot, doorbell zone, coverage band — from site survey"
+    }
+  ],
+  "requiredRooms": [
+    { "id": "entry-hall", "levelId": "main", "label": "Entry / front door zone", "category": "circulation" },
+    { "id": "hall-main", "levelId": "main", "label": "Hallway (entry → living & kitchen)", "category": "circulation" },
+    { "id": "living-room", "levelId": "main", "label": "Living room", "category": "living" },
+    { "id": "kitchen", "levelId": "main", "label": "Kitchen", "category": "living" },
+    { "id": "stairs-ground", "levelId": "main", "label": "Stairs (ground landing)", "category": "circulation" },
+
+    { "id": "bedroom-1", "levelId": "upper", "label": "Bedroom 1", "category": "sleeping" },
+    { "id": "bedroom-2", "levelId": "upper", "label": "Bedroom 2", "category": "sleeping" },
+    { "id": "bedroom-3", "levelId": "upper", "label": "Bedroom 3 (or office — confirm name)", "category": "sleeping" },
+    { "id": "master-bedroom", "levelId": "upper", "label": "Master bedroom", "category": "sleeping" },
+    { "id": "bath-hall", "levelId": "upper", "label": "Hall bathroom (shared)", "category": "bath" },
+    { "id": "master-bath-ensuite", "levelId": "upper", "label": "Master ensuite", "category": "bath" },
+    { "id": "stairs-upper", "levelId": "upper", "label": "Stairs (upper landing)", "category": "circulation" },
+
+    { "id": "basement-bedroom", "levelId": "basement", "label": "Basement bedroom", "category": "sleeping" },
+    { "id": "laundry-room", "levelId": "basement", "label": "Laundry / washing machine room", "category": "utility" },
+    { "id": "stairs-basement", "levelId": "basement", "label": "Stairs (basement)", "category": "circulation" },
+
+    { "id": "garage-interior", "levelId": "garage", "label": "Garage", "category": "garage" }
+  ],
+  "optionalRooms": [
+    { "id": "pantry", "levelId": "main", "label": "Pantry / closet", "category": "storage" },
+    { "id": "half-bath-main", "levelId": "main", "label": "Powder room (if on ground floor)", "category": "bath" },
+    { "id": "mechanical-room", "levelId": "basement", "label": "Mechanical / utility (if separate from laundry)", "category": "utility" }
+  ],
+  "devicesToAnchor": [
+    { "deviceId": "sec.nest.doorbell.main", "levelId": "exterior", "roomHint": "exterior-front" },
+    { "deviceId": "env.nest.thermostat.primary", "levelId": "main", "roomHint": "kitchen or adjacent — owner confirms" },
+    { "deviceId": "sec.nest.basement", "levelId": "basement", "roomHint": "basement-bedroom or laundry" }
+  ]
+}

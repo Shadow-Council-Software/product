@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "name": "ENTERPRISE UX (LCARS)",
+      "path": "enterprise/ux"
+    },
+    {
+      "name": "ENTERPRISE Shared",
+      "path": "enterprise/shared"
+    },
+    {
+      "name": "ENTERPRISE Platform (liaison)",
+      "path": "enterprise/platform"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true
+    }
+  }
+}

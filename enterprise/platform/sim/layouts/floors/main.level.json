@@ -1,0 +1,75 @@
+{
+  "levelId": "main",
+  "label": "Ground floor (1st floor)",
+  "elevation": 0,
+  "status": "circulation-confirmed-measurements-pending",
+  "envelope": {
+    "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+    "documentationRef": "Building footprint from mortgage survey Scanned_20260524-1944.pdf — EXTERIOR ONLY"
+  },
+  "rooms": [
+    {
+      "id": "entry-hall",
+      "label": "Entry (unmeasured)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner 2026-05-28: front door faces Coralberry Dr (south). Nest doorbell at entry."
+    },
+    {
+      "id": "hall-main",
+      "label": "Hallway (unmeasured)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner 2026-05-28: to the right when entering; leads to living room and kitchen"
+    },
+    {
+      "id": "living-room",
+      "label": "Living room (unmeasured)",
+      "levelId": "main",
+      "kind": "placeholder",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner 2026-05-28: via hall-main (east of entry). L×W deferred."
+    },
+    {
+      "id": "kitchen",
+      "label": "Kitchen (unmeasured)",
+      "levelId": "main",
+      "kind": "placeholder",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner 2026-05-28: via hall-main (east of entry). Nest wall TBD. L×W deferred."
+    },
+    {
+      "id": "stairs-ground",
+      "label": "Stairs (unmeasured)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner 2026-05-28: directly ahead of main door on enter (north). Upper/basement tie-in TBD on site."
+    }
+  ],
+  "traceChecklist": {
+    "documentType": "mortgage-site-survey",
+    "providesInteriorLayout": false,
+    "nextStep": "Fill layouts/parity/measurements.json or trace in Layout Studio",
+    "ownerConfirmed": [
+      "9 Coralberry Drive — front faces Coralberry Dr (south)",
+      "Enter → stairs ahead (north), hall to right (east) → living + kitchen"
+    ],
+    "requiredForParity": [
+      "Living room, kitchen, hall-main, entry, stairs — L×W (deferred on site)",
+      "Thermostat room + wall confirmed"
+    ]
+  }
+}

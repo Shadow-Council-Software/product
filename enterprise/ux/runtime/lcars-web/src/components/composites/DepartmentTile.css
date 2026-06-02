@@ -1,0 +1,66 @@
+.dept-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: calc(var(--okuda-spacing-base) * 2);
+  border: none;
+  border-radius: var(--okuda-radius-elbow);
+  min-height: 88px;
+  text-align: left;
+  cursor: pointer;
+  background: var(--okuda-white-panel);
+  color: var(--okuda-text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.dept-tile--nominal {
+  border-left: 6px solid #00aa44;
+}
+
+.dept-tile--advisory {
+  border-left: 6px solid var(--okuda-environmental-amber);
+}
+
+.dept-tile--conflict {
+  border-left: 6px solid var(--okuda-alert-red);
+}
+
+.dept-tile--offline {
+  cursor: not-allowed;
+  background: repeating-linear-gradient(
+    -45deg,
+    #e8e4dc,
+    #e8e4dc 6px,
+    #d4d0c8 6px,
+    #d4d0c8 12px
+  );
+  color: var(--okuda-text-operator);
+}
+
+.dept-tile__label {
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dept-tile__state {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dept-tile__detail {
+  font-size: var(--okuda-font-operator-min);
+  color: var(--okuda-text-operator);
+}
+
+.dept-tile__roadmap {
+  font-size: 10px;
+  font-style: italic;
+}
+
+.dept-tile:disabled {
+  opacity: 0.95;
+}

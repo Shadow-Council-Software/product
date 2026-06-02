@@ -1,0 +1,25 @@
+---
+description: ENTERPRISE UX workspace — LCARS-only changes; Production council stakeholders
+globs:
+  - "**/*"
+---
+
+# ENTERPRISE UX workspace
+
+You are working in **enterprise/ux/** — the LCARS operator console workspace.
+
+## Before any UI change
+
+1. Read `enterprise/ux/AGENTS.md`
+2. Read `enterprise/ux/lcars-ui-authoritative-spec.md` (STRICT)
+3. Run `enterprise/ux/scripts/ux-verify.ps1` before claiming done
+
+## Stakeholders
+
+Michael Okuda, Denise Okuda, Gene Roddenberry — Party Mode per `docs/agents/process-party-mode.md`.
+
+## Boundaries
+
+- **Do not** edit `enterprise/platform/runtime/engine` from this workspace
+- Engine API is consumed via HTTP/WS only
+- Vector/SVG chrome is the target end state; no generic dashboard UI

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "confirmedAt": "2026-05-28",
+  "site": {
+    "address": "9 Coralberry Drive",
+    "addressConfirmed": true,
+    "frontFacesStreet": "Coralberry Drive",
+    "frontCardinal": "south",
+    "origin": "Front entrance center (south facade) — Nest Doorbell 3rd gen",
+    "surveyPdf": "layouts/sources/Scanned_20260524-1944.pdf"
+  },
+  "circulation": {
+    "main": {
+      "confirmed": true,
+      "enterFrom": "south",
+      "ownerNarrative": "Enter from front door on Coralberry Dr. Stairs are directly ahead. To the right, a hallway leads to the living room and the kitchen.",
+      "facingWhenInside": "north into house",
+      "zones": [
+        {
+          "roomId": "entry-hall",
+          "role": "Front door threshold and immediate interior"
+        },
+        {
+          "roomId": "stairs-ground",
+          "role": "Main stair — directly ahead of entry (north of door)"
+        },
+        {
+          "roomId": "hall-main",
+          "role": "Hallway to the right of entry; leads to living room and kitchen"
+        },
+        {
+          "roomId": "living-room",
+          "role": "Reached via hall-main (east side of entry zone)"
+        },
+        {
+          "roomId": "kitchen",
+          "role": "Reached via hall-main (east side of entry zone)"
+        }
+      ],
+      "adjacency": [
+        {
+          "from": "entry-hall",
+          "to": "stairs-ground",
+          "whenStandingIn": "entry facing into house",
+          "relation": "straight ahead (north)"
+        },
+        {
+          "from": "entry-hall",
+          "to": "hall-main",
+          "whenStandingIn": "entry facing into house",
+          "relation": "to the right (east)"
+        },
+        {
+          "from": "hall-main",
+          "to": "living-room",
+          "relation": "hallway leads to living room"
+        },
+        {
+          "from": "hall-main",
+          "to": "kitchen",
+          "relation": "hallway leads to kitchen"
+        },
+        {
+          "from": "stairs-ground",
+          "to": "stairs-upper",
+          "relation": "vertical — same stair stack to upper floor"
+        },
+        {
+          "from": "stairs-ground",
+          "to": "stairs-basement",
+          "relation": "vertical — confirm on site (typical main stair serves upper; basement stair TBD)"
+        }
+      ]
+    }
+  },
+  "deferred": {
+    "tier1Measurements": "Owner will measure L×W per room on site after desk Q&A",
+    "tier2": "Interior plans, door widths, device walls, photos",
+    "tier3": "Garage measure, Matterport basement mesh, Layout Studio fine trace"
+  }
+}

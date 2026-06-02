@@ -1,0 +1,48 @@
+.alert-banner {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--okuda-spacing-base) * 2);
+  font-size: var(--okuda-font-operator-min);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.alert-banner--hidden {
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.alert-banner--yellow {
+  background: var(--okuda-alert-amber);
+  color: var(--okuda-bridge-dark);
+  animation: alert-pulse-slow 2.5s ease-in-out infinite;
+}
+
+.alert-banner--red {
+  background: var(--okuda-alert-red);
+  color: var(--okuda-white-panel);
+  animation: alert-pulse-fast 1.2s ease-in-out infinite;
+}
+
+@keyframes alert-pulse-slow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.08);
+  }
+}
+
+@keyframes alert-pulse-fast {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.88;
+  }
+}

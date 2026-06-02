@@ -1,0 +1,781 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "name": "Onimurasame residence — official scanned floor plan",
+    "units": "meters",
+    "origin": {
+      "label": "Front entrance center (south facade) — Nest Doorbell 3rd gen",
+      "position": [
+        8.534,
+        0,
+        0
+      ],
+      "documentationRef": "layouts/sources/Scanned_20260524-1944.pdf — owner-provided scan 2026-05-24"
+    },
+    "totalFloorArea": 48,
+    "sources": [
+      {
+        "title": "Official house map scan (owner)",
+        "uri": "enterprise/sim/layouts/sources/Scanned_20260524-1944.pdf",
+        "scaleVerified": true,
+        "notes": "Per-floor edits in layouts/floors/*.level.json — merge with merge-layout-floors.mjs"
+      }
+    ]
+  },
+  "coverageGoals": {
+    "perimeterComplete": false,
+    "notes": "Edit exterior.level.json for lot line; main.level.json for interior parity"
+  },
+  "levels": [
+    {
+      "id": "basement",
+      "label": "Basement",
+      "elevation": -2.7,
+      "envelope": {
+        "floorPolygon": [
+          [
+            0,
+            0
+          ],
+          [
+            17.374,
+            0
+          ],
+          [
+            17.374,
+            9.754
+          ],
+          [
+            0,
+            9.754
+          ]
+        ],
+        "documentationRef": "Placeholder footprint — refine when basement plan or Matterport mesh aligned"
+      }
+    },
+    {
+      "id": "exterior",
+      "label": "Exterior / coverage",
+      "elevation": 0,
+      "envelope": {
+        "floorPolygon": [
+          [
+            -2,
+            -4
+          ],
+          [
+            19.5,
+            -4
+          ],
+          [
+            19.5,
+            12
+          ],
+          [
+            -2,
+            12
+          ]
+        ],
+        "documentationRef": "Coverage planning band — refine to lot line"
+      }
+    },
+    {
+      "id": "garage",
+      "label": "Garage",
+      "elevation": 0,
+      "envelope": {
+        "floorPolygon": [
+          [
+            17.374,
+            2
+          ],
+          [
+            22,
+            2
+          ],
+          [
+            22,
+            7
+          ],
+          [
+            17.374,
+            7
+          ]
+        ],
+        "documentationRef": "Placeholder east of main house — dimensions TBD"
+      }
+    },
+    {
+      "id": "main",
+      "label": "Ground floor (1st floor)",
+      "elevation": 0,
+      "envelope": {
+        "floorPolygon": [
+          [
+            0,
+            0
+          ],
+          [
+            17.374,
+            0
+          ],
+          [
+            17.374,
+            9.754
+          ],
+          [
+            0,
+            9.754
+          ]
+        ],
+        "documentationRef": "Building footprint from mortgage survey Scanned_20260524-1944.pdf — EXTERIOR ONLY"
+      }
+    },
+    {
+      "id": "upper",
+      "label": "Top floor (2nd floor)",
+      "elevation": 2.7,
+      "envelope": {
+        "floorPolygon": [
+          [
+            0,
+            0
+          ],
+          [
+            17.374,
+            0
+          ],
+          [
+            17.374,
+            9.754
+          ],
+          [
+            0,
+            9.754
+          ]
+        ],
+        "documentationRef": "Same footprint as main until upper-specific plan provided"
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "basement-bedroom",
+      "label": "Basement bedroom (unmeasured)",
+      "levelId": "basement",
+      "kind": "placeholder",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner: extra bedroom — pending measurements; Nest cam anchor here when traced"
+    },
+    {
+      "id": "laundry-room",
+      "label": "Laundry / washing (unmeasured)",
+      "levelId": "basement",
+      "kind": "placeholder",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner: washing machine room — pending measurements"
+    },
+    {
+      "id": "stairs-basement",
+      "label": "Stairs (unmeasured)",
+      "levelId": "basement",
+      "kind": "gap",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Align with stairs-ground"
+    },
+    {
+      "id": "exterior-front",
+      "label": "Front approach",
+      "levelId": "exterior",
+      "kind": "virtual",
+      "floorElevation": 0,
+      "ceilingHeight": 0,
+      "floorPolygon": [
+        [
+          2.5,
+          -3
+        ],
+        [
+          14.5,
+          -3
+        ],
+        [
+          14.5,
+          0
+        ],
+        [
+          2.5,
+          0
+        ]
+      ],
+      "documentationRef": "Doorbell FOV zone — south of entry"
+    },
+    {
+      "id": "exterior-perimeter",
+      "label": "Perimeter band",
+      "levelId": "exterior",
+      "kind": "virtual",
+      "floorElevation": 0,
+      "ceilingHeight": 0,
+      "floorPolygon": [
+        [
+          -2,
+          -4
+        ],
+        [
+          19.5,
+          -4
+        ],
+        [
+          19.5,
+          12
+        ],
+        [
+          -2,
+          12
+        ]
+      ],
+      "documentationRef": "Unity coverage audit boundary only — not a walkable floor"
+    },
+    {
+      "id": "garage-interior",
+      "label": "Garage (TBD)",
+      "levelId": "garage",
+      "kind": "placeholder",
+      "floorElevation": 0,
+      "ceilingHeight": 3,
+      "floorPolygon": [
+        [
+          17.374,
+          2
+        ],
+        [
+          22,
+          2
+        ],
+        [
+          22,
+          7
+        ],
+        [
+          17.374,
+          7
+        ]
+      ],
+      "documentationRef": "Measured garage plan needed for floodlight + indoor cam anchors"
+    },
+    {
+      "id": "entry-hall",
+      "label": "Entry (unmeasured)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner 2026-05-28: front door faces Coralberry Dr (south). Nest doorbell at entry."
+    },
+    {
+      "id": "hall-main",
+      "label": "Hallway (unmeasured)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner 2026-05-28: to the right when entering; leads to living room and kitchen"
+    },
+    {
+      "id": "living-room",
+      "label": "Living room (unmeasured)",
+      "levelId": "main",
+      "kind": "placeholder",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner 2026-05-28: via hall-main (east of entry). L×W deferred."
+    },
+    {
+      "id": "kitchen",
+      "label": "Kitchen (unmeasured)",
+      "levelId": "main",
+      "kind": "placeholder",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner 2026-05-28: via hall-main (east of entry). Nest wall TBD. L×W deferred."
+    },
+    {
+      "id": "stairs-ground",
+      "label": "Stairs (unmeasured)",
+      "levelId": "main",
+      "kind": "gap",
+      "floorElevation": 0,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Owner 2026-05-28: directly ahead of main door on enter (north). Upper/basement tie-in TBD on site."
+    },
+    {
+      "id": "bedroom-1",
+      "label": "Bedroom 1 (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Fill via layouts/parity/measurements.json + apply-measurements.mjs or Layout Studio"
+    },
+    {
+      "id": "bedroom-2",
+      "label": "Bedroom 2 (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Pending measurements"
+    },
+    {
+      "id": "bedroom-3",
+      "label": "Bedroom 3 (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Pending measurements — confirm room name with owner"
+    },
+    {
+      "id": "master-bedroom",
+      "label": "Master bedroom (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Pending measurements"
+    },
+    {
+      "id": "bath-hall",
+      "label": "Hall bathroom (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Outside bedrooms — pending measurements"
+    },
+    {
+      "id": "master-bath-ensuite",
+      "label": "Master ensuite (unmeasured)",
+      "levelId": "upper",
+      "kind": "placeholder",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Inside master — pending measurements"
+    },
+    {
+      "id": "stairs-upper",
+      "label": "Stairs landing (unmeasured)",
+      "levelId": "upper",
+      "kind": "gap",
+      "floorElevation": 2.7,
+      "ceilingHeight": 2.7,
+      "floorPolygon": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          0
+        ],
+        [
+          0.05,
+          0.05
+        ],
+        [
+          0,
+          0.05
+        ]
+      ],
+      "documentationRef": "Align with stairs-ground on main level"
+    }
+  ],
+  "stations": [
+    {
+      "stationId": "env.nest.primary",
+      "roomId": "central-hall",
+      "label": "Nest Learning Thermostat (latest gen)",
+      "position": [
+        8.839,
+        1.45,
+        3.45
+      ],
+      "rotationY": 180,
+      "matterNodeId": 1,
+      "deviceType": "thermostat",
+      "attributePaths": {
+        "localTemp": "1/513/0",
+        "coolSetpoint": "1/513/17",
+        "heatSetpoint": "1/513/18"
+      },
+      "documentationRef": "Owner: room adjacent to kitchen, facing front of house"
+    }
+  ],
+  "devices": [
+    {
+      "deviceId": "env.nest.thermostat.primary",
+      "roomId": "central-hall",
+      "levelId": "main",
+      "label": "Nest Learning Thermostat (latest gen)",
+      "deviceType": "thermostat",
+      "deploymentStatus": "installed",
+      "productModel": "Nest Learning Thermostat (latest gen)",
+      "position": [
+        8.839,
+        1.45,
+        3.45
+      ],
+      "rotationY": 180,
+      "uxRole": "env.primary — Environmental LCARS + QuickEnvPin",
+      "documentationRef": "Owner: room right next to kitchen, facing front"
+    },
+    {
+      "deviceId": "sec.nest.doorbell.main",
+      "roomId": "exterior-front",
+      "levelId": "exterior",
+      "label": "Nest Doorbell (3rd gen)",
+      "deviceType": "doorbell",
+      "deploymentStatus": "installed",
+      "productModel": "Nest Doorbell 3rd gen",
+      "position": [
+        8.534,
+        1.15,
+        -0.05
+      ],
+      "rotationY": 0,
+      "coverage": {
+        "horizontalFovDeg": 150,
+        "verticalFovDeg": 90,
+        "rangeM": 8,
+        "mountHeightM": 1.15
+      },
+      "uxRole": "sec.entry.doorbell",
+      "documentationRef": "Owner: main door"
+    },
+    {
+      "deviceId": "sec.nest.basement",
+      "roomId": "basement-bedroom",
+      "levelId": "basement",
+      "label": "Nest device — basement",
+      "deviceType": "camera",
+      "deploymentStatus": "installed",
+      "productModel": "Nest (model TBD)",
+      "position": [
+        8.687,
+        -1.5,
+        4.877
+      ],
+      "rotationY": 90,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 6,
+        "mountHeightM": 2.2
+      },
+      "uxRole": "sec.basement",
+      "documentationRef": "Owner: basement — refine when floor plan added"
+    },
+    {
+      "deviceId": "sec.nest.garage.floodlight",
+      "roomId": "garage-interior",
+      "levelId": "garage",
+      "label": "Nest Cam floodlights (planned)",
+      "deviceType": "floodlight_cam",
+      "deploymentStatus": "planned",
+      "productModel": "Nest Cam + dual rain lights",
+      "position": [
+        19.5,
+        3.2,
+        4.5
+      ],
+      "rotationY": 270,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 15,
+        "mountHeightM": 3.2
+      },
+      "uxRole": "sec.garage.exterior",
+      "documentationRef": "Planned garage top mount"
+    },
+    {
+      "deviceId": "sec.nest.garage.indoor",
+      "roomId": "garage-interior",
+      "levelId": "garage",
+      "label": "Garage indoor cam (planned)",
+      "deviceType": "indoor_cam",
+      "deploymentStatus": "planned",
+      "productModel": "Nest indoor cam",
+      "position": [
+        19.8,
+        2,
+        5.5
+      ],
+      "rotationY": 180,
+      "coverage": {
+        "horizontalFovDeg": 130,
+        "verticalFovDeg": 80,
+        "rangeM": 8,
+        "mountHeightM": 2
+      },
+      "uxRole": "sec.garage.interior",
+      "documentationRef": "Planned"
+    }
+  ]
+}

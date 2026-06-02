@@ -1,0 +1,37 @@
+.vessel-status {
+  padding: calc(var(--okuda-spacing-base) * 2);
+  font-size: var(--okuda-font-operator-min);
+  color: var(--okuda-environmental-amber);
+}
+
+.vessel-status__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--okuda-spacing-base) * 3);
+  margin-bottom: var(--okuda-spacing-base);
+}
+
+.vessel-status__condition {
+  font-weight: 700;
+  color: var(--okuda-alert-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vessel-status__clearance {
+  color: var(--okuda-white-panel);
+}
+
+.vessel-status__site {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--okuda-alert-cyan);
+  margin-bottom: 4px;
+}
+
+.vessel-status__hybrid {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--okuda-status-orange);
+}

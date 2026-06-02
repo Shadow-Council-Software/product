@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "ENTERPRISE Platform",
+      "path": "enterprise/platform"
+    },
+    {
+      "name": "ENTERPRISE Shared",
+      "path": "enterprise/shared"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true
+    }
+  }
+}

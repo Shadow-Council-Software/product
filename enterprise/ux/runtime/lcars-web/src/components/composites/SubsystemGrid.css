@@ -1,0 +1,40 @@
+.subsystem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: calc(var(--okuda-spacing-base) * 2);
+}
+
+.subsystem-grid > :nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.subsystem-grid > :nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.subsystem-grid > :nth-child(3) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.subsystem-grid > :nth-child(4) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.subsystem-grid > :nth-child(5) {
+  grid-column: 2 / span 2;
+  grid-row: 2;
+}
+
+@media (max-width: 1100px) {
+  .subsystem-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .subsystem-grid > :nth-child(5) {
+    grid-column: 1 / span 2;
+  }
+}

@@ -5,4 +5,5 @@
 # description = "Prefers short, bulleted PRDs over narrative drafts."
 
 [modules.bmm]
+# Product hub; specialized Cursor workspaces: enterprise/ux, enterprise/platform (see enterprise/WORKSPACES.md)
 planning_artifacts = "{project-root}/enterprise"

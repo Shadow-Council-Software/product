@@ -1,0 +1,17 @@
+{
+  "name": "enterprise-platform-runtime",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "engine"
+  ],
+  "scripts": {
+    "build": "npm run build -w @enterprise/matter-port && npm run build -w @enterprise/event-envelope && npm run build -w @enterprise/tng-outcomes && npm run build -w @enterprise/engine",
+    "dev:engine": "npm run dev -w @enterprise/engine",
+    "test": "npm run test -w @enterprise/engine",
+    "validate:openspec": "cd ../openspec && openspec validate --all --strict"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

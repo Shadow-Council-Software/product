@@ -1,0 +1,47 @@
+.ops-overview__header {
+  margin-bottom: calc(var(--okuda-spacing-base) * 3);
+}
+
+.ops-overview__title {
+  margin: 0 0 4px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--okuda-text-primary);
+}
+
+.ops-overview__subtitle {
+  margin: 0;
+  font-size: var(--okuda-font-operator-min);
+  color: var(--okuda-text-operator);
+}
+
+.ops-overview__quick-env {
+  margin-bottom: calc(var(--okuda-spacing-base) * 3);
+  max-width: 15%;
+  min-width: 160px;
+}
+
+.ops-overview__section-title {
+  margin: calc(var(--okuda-spacing-base) * 3) 0 calc(var(--okuda-spacing-base) * 2);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--okuda-text-operator);
+}
+
+.ops-overview__station-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--okuda-font-operator-min);
+}
+
+.ops-overview__station-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}

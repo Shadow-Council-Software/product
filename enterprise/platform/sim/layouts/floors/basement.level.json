@@ -1,0 +1,42 @@
+{
+  "levelId": "basement",
+  "label": "Basement",
+  "elevation": -2.7,
+  "status": "pending-owner-measurements",
+  "envelope": {
+    "floorPolygon": [[0, 0], [17.374, 0], [17.374, 9.754], [0, 9.754]],
+    "documentationRef": "Placeholder footprint — refine when basement plan or Matterport mesh aligned"
+  },
+  "rooms": [
+    {
+      "id": "basement-bedroom",
+      "label": "Basement bedroom (unmeasured)",
+      "levelId": "basement",
+      "kind": "placeholder",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner: extra bedroom — pending measurements; Nest cam anchor here when traced"
+    },
+    {
+      "id": "laundry-room",
+      "label": "Laundry / washing (unmeasured)",
+      "levelId": "basement",
+      "kind": "placeholder",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Owner: washing machine room — pending measurements"
+    },
+    {
+      "id": "stairs-basement",
+      "label": "Stairs (unmeasured)",
+      "levelId": "basement",
+      "kind": "gap",
+      "floorElevation": -2.7,
+      "ceilingHeight": 2.4,
+      "floorPolygon": [[0, 0], [0.05, 0], [0.05, 0.05], [0, 0.05]],
+      "documentationRef": "Align with stairs-ground"
+    }
+  ]
+}

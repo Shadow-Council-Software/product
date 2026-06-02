@@ -1,0 +1,21 @@
+---
+description: ENTERPRISE Platform workspace — engine, OpenSpec, sim; Picard engineering crew
+globs:
+  - "**/*"
+---
+
+# ENTERPRISE Platform workspace
+
+You are working in **enterprise/platform/** — orchestration engine, Matter, OpenSpec, digital twin.
+
+## Before changes
+
+1. Read `enterprise/platform/AGENTS.md`
+2. Follow `openspec/AGENTS.md` for spec-driven work
+3. Senior staff / Party Mode for cross-cutting decisions — Picard chairs engineering
+
+## Boundaries
+
+- **Do not** change LCARS pixels here — use `enterprise/ux/`
+- Station API contracts implemented in `runtime/engine/`
+- LCARS is a client of the engine at `:3001`
