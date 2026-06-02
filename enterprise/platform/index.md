@@ -5,8 +5,9 @@
 | Entry | Link |
 |-------|------|
 | Agent charter | [AGENTS.md](./AGENTS.md) |
+| **Engine implementation map** | [docs/engine-technical-architecture.md](./docs/engine-technical-architecture.md) |
 | PRD | [prd.md](./prd.md) |
-| Architecture | [architecture.md](./architecture.md) |
+| Architecture (D-01) | [architecture.md](./architecture.md) |
 | OpenSpec | [openspec/](./openspec/) |
 | Engine | [runtime/engine/](./runtime/engine/) |
 | Digital twin | [sim/](./sim/) |

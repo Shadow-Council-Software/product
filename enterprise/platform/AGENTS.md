@@ -28,6 +28,7 @@ Roster: [docs/agents/engineering-roster.yaml](./docs/agents/engineering-roster.y
 |-----|---------|
 | [prd.md](./prd.md) | FR/NFR, gates G1–G5 |
 | [architecture.md](./architecture.md) | Technical design D-01 |
+| [docs/engine-technical-architecture.md](./docs/engine-technical-architecture.md) | **Engine modules, layers, deterministic rules** |
 | [openspec/](./openspec/) | Deterministic specs |
 | [docs/artifacts/](./docs/artifacts/) | ART-01–ART-08 |
 | [sim/](./sim/) | Digital twin + Unity harness |

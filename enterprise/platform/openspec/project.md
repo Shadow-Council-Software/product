@@ -13,7 +13,8 @@
 | Matter | OHF sidecar (Docker), `@matter-server/ws-client`, `MatterAdapterPort` |
 | Deploy | Docker Compose on operator Linux rack |
 
-Monorepo target: `enterprise/runtime/` (not yet scaffolded).
+Monorepo: `enterprise/platform/runtime/` (engine + packages). LCARS: `enterprise/ux/runtime/`.  
+Engine implementation map: [`../docs/engine-technical-architecture.md`](../docs/engine-technical-architecture.md).
 
 ## Domain language (use in all specs)
 
