@@ -1,0 +1,25 @@
+name: mechanistic-interpreter-testing CI
+
+on:
+  push:
+    paths:
+      - "mechanistic-interpreter-testing/**"
+      - ".github/workflows/mit-ci.yml"
+  pull_request:
+    paths:
+      - "mechanistic-interpreter-testing/**"
+      - ".github/workflows/mit-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mechanistic-interpreter-testing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest jsonschema
+      - run: pytest -q
