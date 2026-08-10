@@ -40,7 +40,15 @@ def _need_more_segments(state: ClipForgeState) -> str:
     retries = int(state.get("discovery_retries") or 0)
     plan = state.get("timeline_plan") or []
     target = float(state.get("target_duration_minutes") or 30)
-    needed = int((target * 60) / 5)
+    # CF-FR-22: compare sequenced duration (sum of actual segment durations)
+    # against the steering target, not a segment count with an assumed average.
+    plan_sec = sum(
+        float(
+            s.get("duration_sec")
+            or (float(s.get("end_sec") or 0) - float(s.get("start_sec") or 0))
+        )
+        for s in plan
+    )
     discovery_on = (state.get("steering") or {}).get("discovery", {}).get("enabled", False)
     trigger = state.get("trigger_mode", "")
     can_retry = trigger in (
@@ -48,7 +56,7 @@ def _need_more_segments(state: ClipForgeState) -> str:
         TriggerMode.HYBRID.value,
     ) and discovery_on
 
-    if len(plan) >= needed or retries >= max_retries or not can_retry:
+    if plan_sec >= target * 60 or retries >= max_retries or not can_retry:
         return "resolve"
     return "discover_again"
 

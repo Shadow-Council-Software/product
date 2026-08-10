@@ -57,7 +57,7 @@ def build_timeline(
     render_settings = {
         "SelectAllFrames": True,
         "TargetDir": str(output_dir),
-        "CustomName": "throatpie_compilation",
+        "CustomName": f"{project_name}_compilation",
         "Format": "mp4",
         "Codec": "H.264",
     }

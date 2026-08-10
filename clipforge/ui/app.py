@@ -142,7 +142,7 @@ def build_ui() -> gr.Blocks:
 Describe your edit in **Instructions**. Drop source videos in **Upload**, or paste **URLs**.
 Peak-based cuts use **Pre-roll** / **Post-roll** seconds around the detected moment.
 
-**Search:** you provide queries and URLs. ClipForge uses yt-dlp + generic reaction scoring — no built-in niche or performer lists.
+**Search:** you provide queries and URLs. ClipForge uses yt-dlp + content-agnostic scoring — no built-in niche or subject lists.
             """
         )
         with gr.Row():

@@ -125,10 +125,14 @@ def cmd_discover(args: argparse.Namespace) -> int:
 
 
 def cmd_analyze(args: argparse.Namespace) -> int:
+    from clipforge.lib.config import load_settings
+
+    analysis_cfg = load_settings().get("analysis", {})
     segments = score_segments(
         Path(args.input),
         profile=args.profile,
         min_score=args.min_score,
+        bootstrap_if_empty=bool(analysis_cfg.get("bootstrap_segment_if_empty", False)),
     )
     print(f"Found {len(segments)} candidate segments")
     for seg in segments[:10]:
@@ -192,7 +196,13 @@ def build_parser() -> argparse.ArgumentParser:
     an.add_argument("--min-score", type=float, default=0.75)
     an.set_defaults(func=cmd_analyze)
 
-    ui = sub.add_parser("ui", help="Launch Gradio operator console")
+    ui = sub.add_parser(
+        "ui",
+        help=(
+            "Launch Gradio operator console (EXPERIMENTAL — out of POC scope; "
+            "starts a local web server, see CF-NFR-S2)"
+        ),
+    )
     ui.add_argument("--port", type=int, default=7860)
     ui.set_defaults(func=cmd_ui)
 

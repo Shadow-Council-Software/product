@@ -19,7 +19,7 @@ def sequencing_node(state: ClipForgeState) -> ClipForgeState:
     """
     Build timeline_plan — simulates editor assembly order.
 
-    narrative_arc workflow preserves source order when segment_order is set (Phase 2).
+    narrative_arc workflow preserves source order when segment_order is set (P2 Growth).
     """
     steering = state.get("steering") or {}
     directives = steering.get("directives", {})

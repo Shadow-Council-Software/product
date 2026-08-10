@@ -3,7 +3,6 @@ from __future__ import annotations
 import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 from clipforge.cv.compile_output import concatenate_clips
@@ -12,7 +11,11 @@ from clipforge.lib.state import ClipForgeState
 
 
 def resolve_node(state: ClipForgeState) -> ClipForgeState:
-    """Render timeline: Resolve when available, else concatenate clips to one MP4."""
+    """Render timeline via DaVinci Resolve (sole NLE backend per architecture D-04).
+
+    A non-Resolve fallback (local concat / file copy) exists but is disabled
+    unless settings resolve.allow_non_resolve_fallback is true.
+    """
     settings = load_settings()
     resolve_cfg = settings.get("resolve", {})
     out_dir = Path(settings["paths"]["output"])
@@ -21,13 +24,11 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if state.get("dry_run"):
-        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-        job = (state.get("job_id") or "job").replace("/", "_")
-        fake = out_dir / f"{job}_dry_run_{ts}.mp4"
+        # No output is produced in dry-run; report carries the dry_run marker.
         return {
             **state,
-            "output_path": str(fake),
-            "report": "dry_run: skipped Resolve render",
+            "output_path": None,
+            "report": "dry_run: skipped Resolve render (no output produced)",
         }
 
     plan = state.get("timeline_plan") or []
@@ -69,6 +70,25 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
         }
     except subprocess.CalledProcessError as exc:
         err_text = (exc.stderr or str(exc)).strip()
+
+    if not resolve_cfg.get("allow_non_resolve_fallback", False):
+        errors = list(state.get("errors") or [])
+        errors.append(
+            "resolve_agent: DaVinci Resolve render failed and non-Resolve fallback "
+            "is disabled (architecture D-04: Resolve is the sole NLE backend). "
+            f"Resolve error: {err_text or 'unknown'}. "
+            "See resolve_scripts/README.md for setup, or set "
+            "resolve.allow_non_resolve_fallback: true in config/settings.yaml "
+            "to allow a non-professional local concat fallback."
+        )
+        return {**state, "errors": errors}
+
+    print(
+        "WARNING resolve_agent: Resolve unavailable — using non-Resolve fallback "
+        "(resolve.allow_non_resolve_fallback is enabled). Output is NOT rendered "
+        "by the professional NLE path (D-04).",
+        file=sys.stderr,
+    )
 
     # Fallback: local concatenation (full compilation MP4)
     try:

@@ -73,6 +73,9 @@ def analysis_node(state: ClipForgeState) -> ClipForgeState:
                 sample_fps=float(analysis_cfg.get("sample_fps", 2)),
                 ranking_weights=ranking,
                 prefer_face_visible=bool(directives.get("prefer_face_visible")),
+                bootstrap_if_empty=bool(
+                    analysis_cfg.get("bootstrap_segment_if_empty", False)
+                ),
             )
             for seg in segments:
                 seg = trim_segment_to_peak_window(
