@@ -140,17 +140,23 @@ Train or hand-specify **independent** span proposal `C_alt` on same Trace-47:
 4. Model/policy digest drift > envelope → **expire certificate** (Mary checklist).
 5. Six-month replay: NSHR drops below θ → **retroactive demotion** with audit trail (FR25).
 
-## 9. Acceptance criteria (epic-level)
+## 9. Acceptance criteria (epic-level; v0 status = fixture scope only)
+
+> **Status note (reconciling `status: complete-v0` frontmatter):** the frontmatter
+> `complete-v0` refers to the **protocol document** being closed for the v0 release,
+> not to these acceptance criteria being met. Checked items below are demonstrated
+> only at fixture scope (synthetic traces, stub VM, manifest-driven ablation) and are
+> Tier B evidence. Unchecked items remain open for v1.
 
 ### Epic 1 — Mechanistic interpretation runtime
 
 - [ ] FR6–FR7: IR + reason codes emitted for `A_ref`.
-- [ ] FR54: On Phase C fail, structured non-promotable with remediation `NECESSITY_GATE_FAILED`.
+- [x] FR54: On Phase C fail, structured non-promotable with remediation `NECESSITY_GATE_FAILED`. *(fixture-scope, Tier B — `nshr_promotion_gate.py` emits the structured reason code and exits 1)*
 - [ ] Trace completeness (FR35) recorded on every Phase C run.
 
 ### Epic 2 — Assurance gates
 
-- [ ] FR16–FR18: Promotion blocked when NSHR < θ even if Phase A green.
+- [x] FR16–FR18: Promotion blocked when NSHR < θ even if Phase A green. *(fixture-scope, Tier B — gate exits 1 on the sample CSV)*
 - [ ] FR50: Promotion bundle includes preregistration id + NSHR report + comparator version.
 - [ ] FR22: Mutation oracles must include **necessity-class** mutants (span ablation mutants), not syntax-only.
 

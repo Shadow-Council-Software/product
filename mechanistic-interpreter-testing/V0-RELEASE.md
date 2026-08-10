@@ -54,6 +54,18 @@ python3 experiments/scripts/validate_prereg.py experiments/fixtures/trace-47-pre
 python3 trace/scripts/lower_and_run.py trace/fixtures/trace-calculator-v0.json
 python3 experiments/scripts/run_ablation.py --out /tmp/t47.csv
 python3 experiments/scripts/nshr_promotion_gate.py --csv /tmp/t47.csv; test $? -eq 1
+python3 experiments/scripts/promotion_integrity_gate.py \
+  --trace trace/fixtures/trace-47-v0.json \
+  --cert trace/fixtures/certificate-trace-47-v0.json \
+  --ablation-csv experiments/fixtures/T47-ABLATION-pass.csv \
+  --prereg experiments/fixtures/trace-47-prereg.example.json
+python3 trace/scripts/lower_and_run.py trace/fixtures/trace-47-v0.json
+```
+
+Or run the pytest suite, which wraps all of the above plus tamper/regression tests:
+
+```bash
+cd mechanistic-interpreter-testing && pytest
 ```
 
 ## Brainstorming lineage

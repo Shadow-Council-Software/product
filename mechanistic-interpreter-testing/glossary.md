@@ -75,7 +75,7 @@ _Status: **approved for v0 fixture scope** (2026-05-21). Global ontology decisio
 
 1. **Calculator pipeline (SOLID):** OBSERVE request → TRANSFORM parse → TRANSFORM tax → TRANSFORM format. See `trace/fixtures/trace-calculator-v0.json`.
 2. **Policy router (CHOOSE):** CHOOSE with `choose_source: policy` on `tenant_id`; bounded fan-out.
-3. **Retrieval gate (LIQUID candidate):** OBSERVE retrieval + CHOOSE on score; may stay CANDIDATE until replay-stable across envelope.
+3. **Retrieval gate (lifecycle CANDIDATE):** OBSERVE retrieval + CHOOSE on score; may stay CANDIDATE until replay-stable across envelope. (The SOLID/LIQUID/GAS phase metaphor is deliberately undefined in v0 — see OD-002 in `docs/open-decisions-trace-v0.md`.)
 
 ### Carrier vs attachment (AW-004)
 

@@ -19,12 +19,19 @@ Machine-facing instruction set for orchestration-scale lowering (calculator + re
 | `0x12` | `FORMAT_RESP` | `span_id` | `display` string from totals | Yes |
 | `0x13` | `POLICY_EVAL` | `span_id` | `safe_to_proceed`, `policy_rule` | Yes |
 | `0x14` | `EMIT_OUTCOME` | `span_id` | `reason_code`, `message` | Yes |
-| `0x20` | `LOAD_CONST` | `key`, `value` | Load literal into VM state | Yes |
-| `0x30` | `LINK_SPAN` | `span_id` | Provenance edge only (no-op exec) | Yes |
-| `0xFE` | `ASSERT_HASH` | `digest` | Fail OUTPUT_DRIFT if state hash mismatch | Yes |
 | `0xFF` | `HALT` | — | Stop; return governed outcome | Yes |
 
-**Reserved:** `0x03` DELEGATE, `0x04` COMMIT (v1).
+## Reserved (v1, not implemented)
+
+These opcodes are specified for v1 but **not implemented** in `bytecode_vm.py`; the stub VM raises `unknown op` if they appear in a program.
+
+| Code | Name | Args | Intended semantics |
+|------|------|------|--------------------|
+| `0x03` | `DELEGATE` | — | Delegation span lowering |
+| `0x04` | `COMMIT` | — | Commit span lowering |
+| `0x20` | `LOAD_CONST` | `key`, `value` | Load literal into VM state |
+| `0x30` | `LINK_SPAN` | `span_id` | Provenance edge only (no-op exec) |
+| `0xFE` | `ASSERT_HASH` | `digest` | Fail OUTPUT_DRIFT if state hash mismatch |
 
 ## Calculator span → opcode mapping
 
