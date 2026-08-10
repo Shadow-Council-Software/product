@@ -130,6 +130,8 @@ def lower_trace47_trace(
             elif op_name == "emit_governed_outcome":
                 instructions.append({"op": OP_EMIT_OUTCOME, "span_id": sid})
                 instructions.append({"op": OP_HALT, "span_id": sid})
+            else:
+                raise ValueError(f"unsupported transform {op_name}")
         elif kind == "CHOOSE":
             src = (span.get("choose_ledger") or {}).get("choose_source", "policy")
             instructions.append({"op": OP_CHOOSE, "span_id": sid, "source": src})

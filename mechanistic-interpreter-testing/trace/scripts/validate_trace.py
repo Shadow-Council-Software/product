@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
-"""Validate AOIS trace v0 fixtures (AW-011). Stdlib only."""
+"""Validate AOIS trace v0 fixtures (AW-011). Stdlib only.
+
+Usage: validate_trace.py <trace.json> [--strict-digests]
+
+--strict-digests additionally recomputes sha256 over the canonical JSON of
+each inline payload and compares it with the declared content_ref digest.
+It is opt-in because v0 fixtures carry synthetic placeholder digests.
+"""
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -45,7 +53,19 @@ def collect_validation_errors(data: Any) -> list[str]:
     return [line.replace("ERROR: ", "") for line in buf.getvalue().splitlines() if line.strip()]
 
 
-def check_content_ref(obj: Any, path: str, required: bool = True) -> bool:
+def _canonical_json(obj: Any) -> bytes:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode(
+        "utf-8"
+    )
+
+
+def inline_content_digest(inline: Any) -> str:
+    return "sha256:" + hashlib.sha256(_canonical_json(inline)).hexdigest()
+
+
+def check_content_ref(
+    obj: Any, path: str, required: bool = True, *, strict_digests: bool = False
+) -> bool:
     if obj is None:
         if required:
             err(f"{path}: missing content_ref")
@@ -68,10 +88,71 @@ def check_content_ref(obj: Any, path: str, required: bool = True) -> bool:
     if extra:
         err(f"{path}: unexpected keys {sorted(extra)}")
         ok = False
+    if strict_digests and "inline" in obj and isinstance(obj.get("digest"), str):
+        actual = inline_content_digest(obj["inline"])
+        if actual != obj["digest"]:
+            err(
+                f"{path}: inline content digest mismatch "
+                f"(declared {obj['digest']}, computed {actual})"
+            )
+            ok = False
     return ok
 
 
-def validate_span(span: Any, index: int, span_ids: set[str]) -> bool:
+ATTACHMENT_ALLOWED = frozenset({"attachment_id", "media_type", "digest", "note"})
+
+
+def validate_attachment(att: Any, path: str) -> bool:
+    """Mirror schema $defs/attachment: attachment_id + media_type required,
+    optional digest/note, additionalProperties false."""
+    if not isinstance(att, dict):
+        err(f"{path}: invalid attachment")
+        return False
+    ok = True
+    for key in ("attachment_id", "media_type"):
+        if not isinstance(att.get(key), str):
+            err(f"{path}: missing or non-string {key}")
+            ok = False
+    if "digest" in att:
+        ok = check_digest(att["digest"], f"{path}.digest") and ok
+    if "note" in att and not isinstance(att["note"], str):
+        err(f"{path}: note must be string")
+        ok = False
+    extra = set(att) - ATTACHMENT_ALLOWED
+    if extra:
+        err(f"{path}: unexpected keys {sorted(extra)}")
+        ok = False
+    return ok
+
+
+RUN_ENVELOPE_ALLOWED = frozenset({"model_identity_hash", "toolchain_hash", "seed"})
+
+
+def validate_run_envelope(envelope: Any) -> bool:
+    """Mirror schema $defs/run_envelope: string-valued known keys only,
+    additionalProperties false."""
+    if envelope is None:
+        return True
+    if not isinstance(envelope, dict):
+        err("root.run_envelope: must be object")
+        return False
+    ok = True
+    for key, value in envelope.items():
+        if key not in RUN_ENVELOPE_ALLOWED:
+            continue
+        if not isinstance(value, str):
+            err(f"root.run_envelope.{key}: must be string")
+            ok = False
+    extra = set(envelope) - RUN_ENVELOPE_ALLOWED
+    if extra:
+        err(f"root.run_envelope: unexpected keys {sorted(extra)}")
+        ok = False
+    return ok
+
+
+def validate_span(
+    span: Any, index: int, span_ids: set[str], *, strict_digests: bool = False
+) -> bool:
     path = f"spans[{index}]"
     if not isinstance(span, dict):
         err(f"{path}: must be object")
@@ -106,8 +187,18 @@ def validate_span(span: Any, index: int, span_ids: set[str]) -> bool:
         err(f"{path}: invalid lifecycle_state")
         ok = False
 
-    ok = check_content_ref(span.get("inputs_ref"), f"{path}.inputs_ref") and ok
-    ok = check_content_ref(span.get("outputs_ref"), f"{path}.outputs_ref") and ok
+    ok = (
+        check_content_ref(
+            span.get("inputs_ref"), f"{path}.inputs_ref", strict_digests=strict_digests
+        )
+        and ok
+    )
+    ok = (
+        check_content_ref(
+            span.get("outputs_ref"), f"{path}.outputs_ref", strict_digests=strict_digests
+        )
+        and ok
+    )
 
     if kind == "CHOOSE":
         cl = span.get("choose_ledger")
@@ -147,10 +238,9 @@ def validate_span(span: Any, index: int, span_ids: set[str]) -> bool:
         if not isinstance(attachments, list):
             err(f"{path}: attachments must be array")
             ok = False
-        for j, att in enumerate(attachments):
-            if not isinstance(att, dict) or "attachment_id" not in att:
-                err(f"{path}.attachments[{j}]: invalid attachment")
-                ok = False
+        else:
+            for j, att in enumerate(attachments):
+                ok = validate_attachment(att, f"{path}.attachments[{j}]") and ok
 
     allowed = {
         "span_id",
@@ -173,7 +263,7 @@ def validate_span(span: Any, index: int, span_ids: set[str]) -> bool:
     return ok
 
 
-def validate_trace_root(data: Any) -> bool:
+def validate_trace_root(data: Any, *, strict_digests: bool = False) -> bool:
     if not isinstance(data, dict):
         err("root must be object")
         return False
@@ -198,9 +288,11 @@ def validate_trace_root(data: Any) -> bool:
         err("root: spans must be non-empty array")
         return False
 
+    ok = validate_run_envelope(data.get("run_envelope")) and ok
+
     span_ids: set[str] = set()
     for i, span in enumerate(spans):
-        ok = validate_span(span, i, span_ids) and ok
+        ok = validate_span(span, i, span_ids, strict_digests=strict_digests) and ok
 
     # Tree: one root (parent_span_id null), parents exist
     roots = [s for s in spans if isinstance(s, dict) and s.get("parent_span_id") is None]
@@ -238,17 +330,21 @@ def validate_trace_root(data: Any) -> bool:
 
 
 def main() -> int:
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <trace.json>", file=sys.stderr)
+    args = sys.argv[1:]
+    strict_digests = "--strict-digests" in args
+    args = [a for a in args if a != "--strict-digests"]
+    if len(args) != 1:
+        print(f"Usage: {sys.argv[0]} <trace.json> [--strict-digests]", file=sys.stderr)
         return 2
-    path = Path(sys.argv[1])
+    path = Path(args[0])
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as e:
         err(str(e))
         return 1
-    if validate_trace_root(data):
-        print(f"OK: {path} validates against AOIS trace v0 rules")
+    if validate_trace_root(data, strict_digests=strict_digests):
+        suffix = " (strict digests)" if strict_digests else ""
+        print(f"OK: {path} validates against AOIS trace v0 rules{suffix}")
         return 0
     return 1
 

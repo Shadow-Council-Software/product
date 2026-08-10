@@ -11,7 +11,6 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
-from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -26,7 +25,6 @@ from classify_replay_divergence import (  # noqa: E402
 from validate_trace import collect_validation_errors, validate_trace_root  # noqa: E402
 
 CERTIFICATE_VERSION = "certificate-v0"
-ATTACHMENT_KEYS = frozenset({"attachments"})
 
 
 def _canonical_json(obj: Any) -> bytes:
