@@ -2,7 +2,8 @@
 """
 AW-022 evidence generator: three injected replay failures with classified reason codes.
 
-Writes trace/fixtures/replay-divergence-test-log.jsonl
+Writes out/replay-divergence-test-log.jsonl (untracked; a reference copy is
+committed at trace/fixtures/replay-divergence-test-log.jsonl).
 """
 
 from __future__ import annotations
@@ -24,7 +25,7 @@ from validate_trace import collect_validation_errors
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 CALCULATOR = FIXTURES / "trace-calculator-v0.json"
-LOG_OUT = FIXTURES / "replay-divergence-test-log.jsonl"
+LOG_OUT = Path(__file__).resolve().parents[2] / "out" / "replay-divergence-test-log.jsonl"
 
 
 def scenario_schema_drift() -> dict:
@@ -74,6 +75,7 @@ def main() -> int:
         return 1
 
     lines = [json.dumps(e, sort_keys=True) for e in entries]
+    LOG_OUT.parent.mkdir(parents=True, exist_ok=True)
     LOG_OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
     for line in lines:
         print(line)

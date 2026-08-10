@@ -16,7 +16,7 @@ from verify_certificate_binding import (  # noqa: E402
 )
 
 FIXTURES = ROOT / "trace" / "fixtures"
-LOG_OUT = FIXTURES / "swap-cert-test-log.jsonl"
+LOG_OUT = ROOT / "out" / "swap-cert-test-log.jsonl"
 
 SCENARIOS = [
     {
@@ -68,6 +68,7 @@ def run_scenario(spec: dict) -> dict:
 def main() -> int:
     results = [run_scenario(s) for s in SCENARIOS]
     lines = [json.dumps(r, sort_keys=True) for r in results]
+    LOG_OUT.parent.mkdir(parents=True, exist_ok=True)
     LOG_OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     for line in lines:

@@ -15,7 +15,10 @@ python3 trace/scripts/validate_trace.py trace/fixtures/trace-calculator-invalid-
 
 # AW-022: generate classified replay divergence log
 python3 trace/scripts/run_replay_divergence_demo.py
-# -> trace/fixtures/replay-divergence-test-log.jsonl
+# -> out/replay-divergence-test-log.jsonl (untracked; reference copy in trace/fixtures/)
+
+# Strict inline-digest verification (opt-in; v0 fixtures use placeholder digests, so this fails on them by design)
+python3 trace/scripts/validate_trace.py <trace-with-real-digests.json> --strict-digests
 
 # AW-036: SWAP-CERT binding check
 python3 trace/scripts/verify_certificate_binding.py trace/fixtures/trace-47-v0.json \

@@ -25,17 +25,19 @@ python3 trace/scripts/verify_certificate_binding.py \
 
 ### 2. Replay + integrity (10 min)
 
+Demo logs are written to the untracked `out/` directory (reference copies are committed under `trace/fixtures/`).
+
 ```bash
-python3 trace/scripts/run_replay_divergence_demo.py
-python3 experiments/scripts/run_swap_cert_demo.py
+python3 trace/scripts/run_replay_divergence_demo.py    # -> out/replay-divergence-test-log.jsonl
+python3 experiments/scripts/run_swap_cert_demo.py      # -> out/swap-cert-test-log.jsonl
 ```
 
 ### 3. Trace-47 promotion (10 min)
 
 ```bash
 cd experiments/scripts
-python3 run_ablation.py --out ../fixtures/T47-ABLATION-sample.csv
-python3 nshr_promotion_gate.py --csv ../fixtures/T47-ABLATION-sample.csv   # expect exit 1
+python3 run_ablation.py --out ../../out/T47-ABLATION-sample.csv
+python3 nshr_promotion_gate.py --csv ../../out/T47-ABLATION-sample.csv   # expect exit 1
 python3 promotion_integrity_gate.py \
   --trace ../../trace/fixtures/trace-47-v0.json \
   --cert ../../trace/fixtures/certificate-trace-47-v0.json \

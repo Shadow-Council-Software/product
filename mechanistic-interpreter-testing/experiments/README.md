@@ -23,29 +23,31 @@ python3 trace/scripts/validate_trace.py trace/fixtures/trace-47-v0.json
 python3 trace/scripts/freeze_certificate.py trace/fixtures/trace-47-v0.json \
   --write trace/fixtures/certificate-trace-47-v0.json
 
-# 2. Ablation CSV (AW-032/033)
+# 2. Ablation CSV (AW-032/033) — generated CSVs go to untracked out/
+# (warns PREREG_NONCONFORMANT: v0 manifest is P1-only vs prereg P1/P2/P3 minimums;
+#  add --strict-prereg to make that blocking, exit 3)
 cd experiments/scripts
-python3 run_ablation.py --out ../fixtures/T47-ABLATION-sample.csv
+python3 run_ablation.py --out ../../out/T47-ABLATION-sample.csv
 
 # 3. Promotion gate (AW-035) — expect exit 1 on sample (NSHR 0.4 < 0.7)
-python3 nshr_promotion_gate.py --csv ../fixtures/T47-ABLATION-sample.csv
+python3 nshr_promotion_gate.py --csv ../../out/T47-ABLATION-sample.csv
 
 # Pass scenario (NSHR 0.8)
-python3 run_ablation.py --scenario pass --out ../fixtures/T47-ABLATION-pass.csv
-python3 nshr_promotion_gate.py --csv ../fixtures/T47-ABLATION-pass.csv
+python3 run_ablation.py --scenario pass --out ../../out/T47-ABLATION-pass.csv
+python3 nshr_promotion_gate.py --csv ../../out/T47-ABLATION-pass.csv
 
 # FALSE_MECHANISM scenario (random dominates)
 python3 run_ablation.py --perturbations ../fixtures/trace-47-perturbations-random-wins.json \
-  --out ../fixtures/T47-ABLATION-random-wins.csv
-python3 nshr_promotion_gate.py --csv ../fixtures/T47-ABLATION-random-wins.csv
+  --out ../../out/T47-ABLATION-random-wins.csv
+python3 nshr_promotion_gate.py --csv ../../out/T47-ABLATION-random-wins.csv
 ```
 
 | Fixture | Purpose |
 |---------|---------|
 | `trace/fixtures/trace-47-v0.json` | Synthetic refusal trace (AW-034) |
-| `experiments/fixtures/p1-paraphrases.json` | P1 variants (AW-031) |
-| `experiments/fixtures/T47-ABLATION-sample.csv` | NSHR fail demo |
-| `experiments/fixtures/T47-ABLATION-pass.csv` | NSHR pass demo |
+| `experiments/fixtures/p1-paraphrases.json` | P1 variants — illustrative only, not wired into ablation (see AW-031) |
+| `experiments/fixtures/T47-ABLATION-sample.csv` | NSHR fail demo (committed reference output) |
+| `experiments/fixtures/T47-ABLATION-pass.csv` | NSHR pass demo (committed reference output) |
 
 ## Certificate binding (AW-036)
 
@@ -55,7 +57,7 @@ python3 trace/scripts/verify_certificate_binding.py \
   trace/fixtures/certificate-trace-47-v0.json
 
 python3 experiments/scripts/run_swap_cert_demo.py
-# -> trace/fixtures/swap-cert-test-log.jsonl
+# -> out/swap-cert-test-log.jsonl (untracked; reference copy in trace/fixtures/)
 
 # Combined binding + NSHR (binding first)
 python3 experiments/scripts/promotion_integrity_gate.py \
