@@ -23,14 +23,14 @@ Pull remote rushes    →   download_agent
 Review selects        →   analysis_agent (segment_scorer + audio)
 Build rough cut       →   sequencing_agent (timeline_plan)
 Online in NLE         →   resolve_agent (DaVinci Resolve API)
-Producer notes        →   steering.directives.natural_language (LLM Phase 2)
+Producer notes        →   steering.directives.natural_language (LLM P2 Growth)
 ```
 
 ## Trigger modes
 
 1. **manual_local** — Operator drops files into `data/raw/inbox/`; pipeline ingests only.
 2. **manual_urls** — Explicit URLs in CLI or steering; discovery → download.
-3. **discovery** — Automated search/feeds (stub: seeds + queries; LangChain tools Phase 2).
+3. **discovery** — Automated search/feeds (stub: seeds + queries; LangChain tools P1 Growth).
 4. **hybrid** — Local dataset plus ongoing discovery (retry loop when timeline is short).
 5. **scheduled** — Same as above, invoked on a cadence (`clipforge watch` or system cron).
 
@@ -64,6 +64,9 @@ flowchart TD
 
 ## Out of scope (POC)
 
-- Web UI, billing, cloud workers
-- Full LLM shot selection (steering NL is stored; tools Phase 2)
-- Automatic clip file extraction to disk (Resolve needs `clip_path`; MoviePy Phase 2)
+Phase labels follow the PRD's P0–P4 taxonomy (canonical).
+
+- Web UI, billing, cloud workers (P3–P4 Vision)
+- Full LLM shot selection (steering NL is stored; LLM interpretation P2 Growth)
+
+**Note:** clip file extraction to disk is **implemented** (`cv/clip_extractor.py`, ffmpeg preferred with MoviePy fallback, wired from `analysis_agent`), despite being originally scoped to P1 Growth.

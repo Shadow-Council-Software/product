@@ -78,14 +78,14 @@ clipforge/
 ├── config/
 ├── data/raw/inbox/   # Operator drop folder
 ├── docs/
-└── main.py           # run | watch | analyze | test-resolve
+└── main.py           # run | watch | analyze | test-resolve | discover | ui (experimental)
 ```
 
 ---
 
 ## Tech stack
 
-Python 3.11+, LangGraph, LangChain (LLM tools Phase 2), yt-dlp, OpenCV, Librosa, MoviePy (extraction Phase 2), DaVinci Resolve scripting API, SQLite jobs (Phase 2).
+Python 3.11+, LangGraph, yt-dlp, OpenCV, Librosa, ffmpeg/MoviePy (clip extraction — implemented), DaVinci Resolve scripting API (19+). Growth: LangChain LLM tools (P2), SQLite jobs (P1). Pinned deps: `requirements.txt` (POC) + `requirements-optional.txt` (non-POC extras).
 
 ---
 
@@ -99,8 +99,11 @@ Python 3.11+, LangGraph, LangChain (LLM tools Phase 2), yt-dlp, OpenCV, Librosa,
 
 ## Roadmap
 
-1. **Phase 1** — Local ingest + Resolve dry-run + segment scoring on sample files  
-2. **Phase 2** — MoviePy clip extraction, LLM steering tools, manifest/SQLite datasets  
-3. **Phase 3** — Discovery tools, agent marketplace profiles, cloud workers  
+Phase taxonomy follows the PRD (P0–P4, canonical — see [prd.md](./prd.md) Project Scoping):
+
+1. **P0 — POC (current)** — Editor simulation loop: local ingest, segment scoring, sequencing, Resolve dry-run. Clip extraction is already implemented in code (`cv/clip_extractor.py`), ahead of its original P1 scoping.
+2. **P1 — Growth** — SQLite job store, manifest datasets, discovery LangChain tools, operator review CLI, 24h watch soak
+3. **P2 — Growth** — LLM steering interpretation, additional analysis profiles, batch queue, render presets
+4. **P3–P4 — Vision** — Web UI, agent marketplace, cloud workers, multi-NLE, autonomous fleet
 
 Product index: [index.md](./index.md)

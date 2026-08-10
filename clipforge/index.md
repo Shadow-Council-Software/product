@@ -2,7 +2,7 @@
 
 **Product:** ClipForge — multi-agent **editor simulation**  
 **Branch:** `product/clipforge`  
-**BMad status:** Solutioning complete → **Sprint 1 in progress**
+**BMad status:** Solutioning complete → **sprint tracking reset 2026-08-10** — the earlier "all stories done" sprint status was not credible (no story files existed); see [`sprint-status.yaml`](../_bmad-output/implementation-artifacts/sprint-status.yaml) for honest per-story statuses (needs-review / implemented-unverified / todo)
 
 ---
 
@@ -16,7 +16,7 @@
 | [prd-validation-report.md](./prd-validation-report.md) | BMad validation | Pass with notes |
 | [architecture.md](./architecture.md) | Normative technical design (D-01–D-12) | ✓ |
 | [epics.md](./epics.md) | P0 epics 1–5, 18 stories | ✓ |
-| [implementation-readiness-report.md](./implementation-readiness-report.md) | Phase 3 gate | **READY** |
+| [implementation-readiness-report.md](./implementation-readiness-report.md) | Phase 3 gate | READY — **under revision** (see 2026-08-10 addendum) |
 | [project-context.md](./project-context.md) | AI agent rules | ✓ |
 | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Orientation (non-normative) | ✓ |
 

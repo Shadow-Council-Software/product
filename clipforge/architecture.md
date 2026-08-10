@@ -33,7 +33,7 @@ _Normative technical design for the editor-simulation platform. Implementation a
 
 ### Requirements Overview
 
-**Functional requirements:** The PRD defines **57 POC/Growth functional requirements** (CF-FR-01–45) plus **12 Vision requirements** (CF-FR-G1–G12). P0 (Editor Simulation Loop) concentrates on:
+**Functional requirements:** The PRD defines **45 numbered POC/Growth functional requirements** (CF-FR-01–45) plus **12 Vision requirements** (CF-FR-G1–G12) — 57 FRs total. P0 (Editor Simulation Loop) concentrates on:
 
 | Domain | Key FRs | Architectural implication |
 |--------|---------|---------------------------|
@@ -46,7 +46,7 @@ _Normative technical design for the editor-simulation platform. Implementation a
 | **Compliance & ops** | CF-FR-38–41 | Fail-closed on zero media; discovery opt-in |
 | **Growth** | CF-FR-42–45 | SQLite job store; review CLI; LangChain discovery tools |
 
-**Non-functional requirements:** **22 NFRs** drive hard choices:
+**Non-functional requirements:** **18 NFRs** drive hard choices:
 
 | Category | POC-critical NFRs | Architecture driver |
 |----------|-------------------|---------------------|
@@ -65,7 +65,7 @@ _Normative technical design for the editor-simulation platform. Implementation a
 | **Local-first POC** | PRD + domain | All rushes, clips, outputs on operator disk |
 | **Resolve quality authority** | PRD | NLE renders final pixels; ClipForge produces timeline plan |
 | **CLI-only MVP surface** | PRD | No REST/Web UI until Vision |
-| **Clip extraction gap** | Brownfield scaffold | `clip_path` null in POC; MoviePy Growth (G6) |
+| **Clip extraction** | Brownfield scaffold | Implemented in `cv/clip_extractor.py` (ffmpeg preferred, MoviePy fallback), wired from `analysis_agent`; originally scoped P1 (Growth, G6) |
 | **Discovery stub** | POC scope | Seed URLs + queries; LangChain tools Growth |
 | **Python 3.11+** | README | LangGraph, OpenCV, Librosa stack |
 
@@ -76,7 +76,7 @@ _Normative technical design for the editor-simulation platform. Implementation a
 3. **Rights-safe acquisition** — discovery disabled unless steering enables
 4. **Stateful retry loop** — hybrid/discovery re-enter graph when timeline under target
 5. **Sidecar artifacts** — segment JSON per source file for audit and review
-6. **Dry-run semantics** — graph executes; Resolve and destructive writes skipped
+6. **Dry-run semantics** — graph executes; analysis returns early (no segments scored, so `timeline_plan` stays empty); Resolve and destructive writes skipped; no `output_path` is emitted (job report carries `dry_run: true`)
 7. **Agent isolation** — nodes mutate `ClipForgeState` only; no cross-import side effects
 8. **NLE adapter boundary** — render plane behind port; Resolve is first adapter
 
@@ -99,12 +99,12 @@ _Normative technical design for the editor-simulation platform. Implementation a
 | **D-01** | **LangGraph `StateGraph`** is the sole job orchestrator; graph compiled in `agents/orchestrator.py` | Stateful retries, conditional routing, agent observability; aligns with PRD CF-FR-02 | POC |
 | **D-02** | **YAML config plane** — `workflows.yaml`, `datasets.yaml`, `steering.*.yaml`, `settings.yaml` — drives all behavior | Configuration is the product; CF-FR-07–16, CF-NFR-M1 | POC |
 | **D-03** | **`ClipForgeState` TypedDict** (`lib/state.py`) is the canonical job schema; LangGraph `add_messages` for supervisor log | Single source of truth per job; typed agent contracts | POC |
-| **D-04** | **DaVinci Resolve** is the sole NLE backend for POC via subprocess to `resolve_scripts/resolve_editor.py` | Professional finish authority; CF-NFR-I1; G3/G6 gates | POC |
+| **D-04** | **DaVinci Resolve** is the sole NLE backend for POC via subprocess to `resolve_scripts/resolve_editor.py`. A non-Resolve fallback (local concat/copy) exists in `resolve_agent` but is **disabled by default**; it runs only when `settings.resolve.allow_non_resolve_fallback: true`, with a prominent stderr warning | Professional finish authority; CF-NFR-I1; G3/G6 gates | POC |
 | **D-05** | **Heuristic CV profiles** (`intensity_peaks`, `scene_change`) in `cv/segment_scorer.py` for POC; profile id from workflow | Meets CF-NFR-P1 without model training; plug-in contract Growth | POC |
 | **D-06** | **File-based artifacts** for POC — segment sidecars as JSON under `data/clips/`; **SQLite** (`data/jobs.db`) for job records Growth | Local-first audit; CF-FR-27 POC, CF-FR-42 Growth | POC → Growth |
-| **D-07** | **CLI-only surface** — `main.py` commands: `run`, `watch`, `analyze`, `test-resolve` | PRD MVP surface; no inbound network CF-NFR-S2 | POC |
+| **D-07** | **CLI-only surface** — `main.py` commands: `run`, `watch`, `analyze`, `test-resolve`. (`discover` and experimental `ui` also exist in code but are unspecced — see "Implemented-but-unspecced surfaces") | PRD MVP surface; no inbound network CF-NFR-S2 | POC |
 | **D-08** | **yt-dlp** for remote download; **discovery stub** (seed URLs + steering queries) POC; **LangChain tools** for web search Growth | CF-FR-20–21; full discovery CF-FR-45 deferred | POC → Growth |
-| **D-09** | **MoviePy (or FFmpeg)** segment extraction populates `clip_path` before resolve — not in POC | Resolve requires on-disk clips; G6 Growth gate | Growth |
+| **D-09** | **FFmpeg (or MoviePy)** segment extraction populates `clip_path` before resolve. Originally scoped P1 (Growth); **already implemented** in brownfield code (`cv/clip_extractor.py` via `analysis_agent`) | Resolve requires on-disk clips; G6 Growth gate | P1 label; implemented in P0 code |
 | **D-10** | **Local data hierarchy** under `settings.yaml` paths: `raw`, `clips_qualified`, `clips_rejected`, `output`, `datasets` | Operator-owned media residency; domain local-first | POC |
 | **D-11** | **Supervisor observability** via `messages[]` in state POC; **structured JSON logs** per agent transition Growth | CF-FR-06, CF-NFR-O1/O2 | POC → Growth |
 | **D-12** | **`NleAdapterPort`** abstracts NLE handoff; Resolve adapter first; Premiere/FCP adapters Vision | CF-FR-G6 multi-NLE; no core fork per NLE | Growth → Vision |
@@ -201,9 +201,9 @@ stateDiagram-v2
   ingest --> discovery: hybrid
   ingest --> analysis: not hybrid
 
-  discovery --> download: source_urls present
-  discovery --> analysis: no urls, ingested_paths exist
-  discovery --> [*]: no urls, no media
+  discovery --> download: source_urls present OR dry_run
+  discovery --> analysis: no urls, not dry_run, ingested_paths exist
+  discovery --> [*]: no urls, not dry_run, no media
 
   download --> analysis
 
@@ -290,6 +290,8 @@ Adding a workflow SHALL require only a new YAML row (D-02, CF-NFR-M1).
 | `hybrid` | ingest → discovery → … | Local first; retry loop |
 | `scheduled` | Same as configured trigger | `clipforge watch` interval |
 
+> Note: `scheduled` is implemented (`triggers/__init__.py`) but **pending FR definition** — no CF-FR currently specifies it (see PRD open items).
+
 ---
 
 ## Agent Boundaries
@@ -311,8 +313,8 @@ Each agent is a **pure LangGraph node**: `(ClipForgeState) → ClipForgeState`. 
 1. Agents SHALL append to `errors[]` rather than raise uncaught exceptions (CF-NFR-R1).
 2. Agents SHALL NOT embed content-domain logic (CF-FR-39).
 3. Agents SHALL read analysis profile id from merged workflow config, not hardcode (D-05).
-4. `resolve_agent` SHALL fail with actionable message when `clip_path` missing (POC gap documented).
-5. Growth: `analysis_agent` SHALL populate `clip_path` via extraction step before resolve (D-09).
+4. `resolve_agent` SHALL fail with actionable message when `clip_path` missing.
+5. `analysis_agent` populates `clip_path` via extraction (`cv/clip_extractor.py`, D-09 — implemented); `clip_path` is null when neither ffmpeg nor MoviePy is available.
 
 ---
 
@@ -345,9 +347,17 @@ def score_segments(
     visual_threshold: float = 0.7,
     sample_fps: float = 2.0,
     ranking_weights: dict[str, float] | None = None,
+    prefer_face_visible: bool = False,
+    bootstrap_if_empty: bool = False,
 ) -> list[dict[str, Any]]:
     ...
 ```
+
+> `bootstrap_if_empty` mirrors `settings.analysis.bootstrap_segment_if_empty`
+> (default **false**). When enabled and no organic segments are found, one
+> synthetic segment is fabricated at exactly `min_score` and marked
+> `bootstrap: true`. Bootstrap segments SHALL NOT be used as evidence that
+> gates G2/G3 pass.
 
 ### Segment record schema (normative)
 
@@ -359,7 +369,8 @@ Each returned segment dict SHALL include:
 | `profile` | str | yes | Profile id used |
 | `start_sec`, `end_sec`, `duration_sec` | float | yes | Time range in source |
 | `motion_score`, `visual_score`, `segment_score` | float | yes | Combined score after audio merge in agent |
-| `clip_path` | str \| null | yes | null POC; populated Growth (D-09) |
+| `clip_path` | str \| null | yes | Populated by extraction (D-09, implemented); null if ffmpeg/MoviePy unavailable |
+| `bootstrap` | bool | no | Present and true only for synthetic segments fabricated when `analysis.bootstrap_segment_if_empty: true` (default false); bootstrap segments SHALL NOT count as gate G2/G3 evidence |
 
 ### Audio analyzer contract
 
@@ -446,11 +457,12 @@ class NleAdapterPort(Protocol):
 ### POC resolve flow (normative)
 
 1. `resolve_node` loads `settings.resolve` render config.
-2. If `dry_run`: emit fake output path; skip subprocess.
+2. If `dry_run`: skip subprocess; report dry-run with **no** `output_path` (report carries `dry_run: true`).
 3. Collect `clip_path` from each `timeline_plan` item.
 4. If any missing: append error with MoviePy setup guidance (CF-FR-37).
 5. Invoke `resolve_editor.py --clips … --output-dir … --project-name …`.
 6. Set `output_path` to newest MP4 in output dir.
+7. If the Resolve subprocess fails: fail loudly with an actionable error (D-04). Only when `settings.resolve.allow_non_resolve_fallback: true` does the agent fall back to local concat/copy, logging a prominent stderr warning.
 
 ---
 
@@ -504,7 +516,7 @@ SQLite schema (Growth, minimal):
 | **Surface** | CLI | CLI + `jobs list/inspect/approve` | FastAPI + Gradio web UI |
 | **Config** | YAML files | + manifest datasets JSONL | LLM populates steering from NL brief |
 | **CV** | Heuristic OpenCV | ONNX/custom profiles | Learning loop from renders |
-| **Clip extraction** | Not implemented (`clip_path` null) | MoviePy/FFmpeg (G6) | Same |
+| **Clip extraction** | Implemented (`cv/clip_extractor.py`, ffmpeg/MoviePy) | G6 render verification | Same |
 | **Discovery** | Stub (seeds/queries) | LangChain search tools | Budget caps, always-on |
 | **NLE** | Resolve subprocess | Resolve in-process option | Multi-NLE via `NleAdapterPort` |
 | **Persistence** | JSON sidecars | SQLite job store | Shared dataset registry |
@@ -526,6 +538,17 @@ SQLite schema (Growth, minimal):
 ### Explicitly out of scope (POC)
 
 Web UI, REST API, multi-tenant SaaS, agent marketplace, cloud GPU fabric, multi-NLE, LLM steering execution, automatic publishing, full web discovery.
+
+### Implemented-but-unspecced surfaces (warning)
+
+> **Warning:** the following surfaces exist in the brownfield code but are absent
+> from this document's component model and from the PRD's POC scope. They are
+> retained pending a re-baseline; do not treat them as specified behavior.
+
+| Surface | Location | Status |
+|---------|----------|--------|
+| `clipforge ui` (Gradio operator console) | `main.py`, `ui/app.py` | Implemented, unspecced; contradicts "CLI-only POC" and CF-NFR-S2 (no inbound network services) — CLI help marks it EXPERIMENTAL / out of POC scope; binds to 127.0.0.1 only |
+| `clipforge discover` + `sources/` package (search/URL/folder/FTP adapters) | `main.py`, `sources/` | Implemented, unspecced; not in the agent component model above; pending FR/decision coverage |
 
 ---
 
@@ -569,11 +592,13 @@ Web UI, REST API, multi-tenant SaaS, agent marketplace, cloud GPU fabric, multi-
 
 | Item | Owner | When |
 |------|-------|------|
-| MoviePy clip extraction wiring | Growth sprint | G6 |
+| G6 end-to-end Resolve render verification (extraction implemented; render unverified) | Growth sprint | G6 |
 | SQLite job store module | Growth sprint | CF-FR-42 |
 | LangChain discovery tools | Growth sprint | CF-FR-45 |
 | Profile registry module extraction | Growth sprint | CF-NFR-M2 |
 | LLM steering interpreter | P2 Growth | CF-FR-G1 |
+| FR definition for `scheduled` trigger mode (implemented, unspecced) | PM | Re-baseline |
+| Spec coverage for `discover` command, `sources/` package, and experimental `ui` | PM + Architect | Re-baseline |
 
 ---
 

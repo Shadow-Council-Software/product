@@ -5,6 +5,7 @@ stepsCompleted:
   - step-03-create-stories
 inputDocuments:
   - './prd.md'
+  - './architecture.md'
   - './docs/ARCHITECTURE.md'
 workflowType: epics-and-stories
 productName: ClipForge
@@ -100,7 +101,7 @@ This document decomposes the **P0 Editor Simulation Loop** from the ClipForge PR
 - LangGraph `StateGraph` pipeline per `docs/ARCHITECTURE.md`
 - CLI-only MVP surface; no web UI
 - Heuristic CV profiles for POC; discovery stub (seeds + queries)
-- Clip file extraction deferred (Phase 1); Resolve dry-run acceptable for POC exit
+- Clip file extraction originally deferred to P1 (Growth) but already implemented in brownfield code (`cv/clip_extractor.py`); Resolve dry-run acceptable for POC exit
 
 ### UX Design Requirements
 
@@ -111,9 +112,9 @@ None for P0 (CLI only).
 | FR IDs | Epic |
 |--------|------|
 | CF-FR-01–06 | Epic 1 |
-| CF-FR-07–16, CF-FR-09 | Epic 2 |
+| CF-FR-07–12, CF-FR-16 | Epic 2 |
 | CF-FR-13, CF-FR-17–23, CF-FR-40–41 | Epic 3 |
-| CF-FR-24–33, CF-FR-27–28 | Epic 4 |
+| CF-FR-24–33 | Epic 4 |
 | CF-FR-34–37, CF-FR-29 (doc), CF-FR-38–39 | Epic 5 |
 | CF-FR-14–15 | Epic 2, 4 (steering-driven behavior) |
 
@@ -150,7 +151,7 @@ So that I can run the editor-simulation loop without editing code.
 - **Given** valid `workflows.yaml` and `datasets.yaml`, **when** I run `clipforge run --workflow <id> --dataset <id> --trigger manual_local`, **then** a job definition is accepted and passed to the orchestrator (**CF-FR-01**).
 - **Given** an optional `--steering <path>`, **when** the job starts, **then** the steering file path is loaded into job state (**CF-FR-01**).
 - **Given** `clipforge --help`, **when** I view subcommands, **then** `run`, `analyze`, `watch`, and trigger flags are documented (**CF-NFR-U1**).
-- **Given** invalid workflow or dataset id, **when** I run the command, **then** the CLI exits with a clear error before graph execution (**CF-FR-42** precursor).
+- **Given** invalid workflow or dataset id, **when** I run the command, **then** the CLI exits with a clear error before graph execution (**CF-FR-01** validation; error clarity per **CF-NFR-O1**).
 
 **Technical notes**
 
@@ -191,7 +192,7 @@ So that I can validate pipelines safely and audit outcomes.
 
 - **Given** `--dry-run`, **when** `clipforge run` completes, **then** no destructive render or destructive download side effects occur (**CF-FR-04**, **G1**).
 - **Given** a completed job (dry-run or live), **when** the graph finishes, **then** a job report includes errors (if any), segment counts, and output path when applicable (**CF-FR-03**, **G1**).
-- **Given** dry-run success, **when** I inspect emitted state artifacts, **then** `timeline_plan` and agent messages are present for downstream gates (**G1**, **G3** prep).
+- **Given** dry-run success, **when** I inspect emitted state artifacts, **then** agent messages and the job report (with `dry_run: true` and no `output_path`) are present; `timeline_plan` is **empty** because dry-run skips analysis, so no segments are scored (**G1**; G3 evidence requires a non-dry-run local job).
 
 **Technical notes**
 
@@ -288,7 +289,7 @@ So that creative briefs and thresholds change behavior without redeploying code.
 
 - Implement merge in `lib/steering.py`; hash steering for future audit (**CF-FR-41**).
 - `config/steering.example.yaml` must keep discovery disabled by default (**CF-NFR-S3**).
-- NL `directives.natural_language` stored but not executed in POC (Phase 2).
+- NL `directives.natural_language` stored but not executed in POC (P2 Growth).
 
 ---
 

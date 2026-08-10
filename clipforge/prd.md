@@ -156,13 +156,13 @@ The problem: finishing video at scale requires repetitive human judgment—revie
 
 | Success / KPI | Journey | FR | NFR / Gate |
 |---------------|---------|-----|------------|
-| Loop proven | 0, 1 | CF-FR-01–08, CF-FR-20–25 | G1, NFR-R1 |
+| Loop proven | 0, 1 | CF-FR-01–04, CF-FR-24–30, CF-FR-34–37 | G1, NFR-R1 |
 | Config drives behavior | 0, 2 | CF-FR-09–12, CF-FR-15 | G4 |
-| Local ingest | 0 | CF-FR-13–14, CF-FR-20–22 | G2, G3 |
-| Resolve render | 0, 4 | CF-FR-23–25 | G3, G6 |
-| Discovery automation | 3 | CF-FR-16–19, CF-FR-30 | G5 |
+| Local ingest | 0 | CF-FR-12–13, CF-FR-24–28, CF-FR-30 | G2, G3 |
+| Resolve render | 0, 4 | CF-FR-34–37, CF-FR-29 (Growth) | G3, G6 |
+| Discovery automation | 3 | CF-FR-16–19, CF-FR-23, CF-FR-30 | G5 |
 | Editor replacement (Vision) | 5, 6 | CF-FR-G1–G12 | — |
-| Rights-safe operation | all | CF-FR-40–42 | NFR-S1–S3 |
+| Rights-safe operation | all | CF-FR-38–41 | NFR-S1–S3 |
 
 ## Product Scope
 
@@ -188,13 +188,13 @@ The problem: finishing video at scale requires repetitive human judgment—revie
 
 Operator drops rushes in `data/raw/inbox/`, copies `steering.example.yaml`, runs `clipforge run --trigger manual_local`. System ingests, scores segments, builds timeline plan, attempts Resolve render (or reports extraction gap).
 
-**Covers:** CF-FR-09–15, CF-FR-20–25, G2–G4
+**Covers:** CF-FR-09–15, CF-FR-24–28, CF-FR-30, CF-FR-34–37, G2–G4
 
 ### Journey 1 — URL batch (POC)
 
 Producer supplies URLs in steering or CLI. Discovery → download → analysis → sequence → resolve.
 
-**Covers:** CF-FR-16–19, CF-FR-20–25
+**Covers:** CF-FR-16–21, CF-FR-24–28, CF-FR-30, CF-FR-34–37
 
 ### Journey 2 — Steering-only creative change (POC)
 
@@ -236,8 +236,8 @@ Operator installs workflow pack + analysis profile from marketplace; agents spec
 
 | ID | Trigger | Response | FR |
 |----|---------|----------|-----|
-| F1 | No media after ingest | Actionable error; skip resolve | CF-FR-13, CF-FR-42 |
-| F2 | Resolve unavailable | Fail with setup guide | CF-FR-25, CF-FR-42 |
+| F1 | No media after ingest | Actionable error; skip resolve | CF-FR-13, CF-FR-40 |
+| F2 | Resolve unavailable | Fail with setup guide | CF-FR-37 |
 | F3 | Timeline under target | Discovery retry (if enabled) | CF-FR-19, CF-FR-22 |
 | F4 | Rights violation flag | Halt job; audit log | CF-FR-40–41 |
 
@@ -300,9 +300,9 @@ Operator installs workflow pack + analysis profile from marketplace; agents spec
 | Segment scoring (heuristic profiles) | ✓ |
 | Timeline sequencing | ✓ |
 | Resolve script + dry-run | ✓ |
-| Clip file extraction to disk | ✗ Phase 1 impl |
-| LLM steering execution | ✗ Phase 2 |
-| Full web discovery | ✗ Phase 2 |
+| Clip file extraction to disk | ✓ implemented in code (`cv/clip_extractor.py`, ffmpeg/MoviePy) — originally scoped P1 (Growth) |
+| LLM steering execution | ✗ P2 (Growth) |
+| Full web discovery | ✗ P1 (Growth) — discovery LangChain tools |
 
 **Exit:** Gates G1–G5 pass; G6 documented path for real render.
 
@@ -389,6 +389,8 @@ Operator installs workflow pack + analysis profile from marketplace; agents spec
 | CF-FR-21 | System SHALL filter downloads by minimum resolution when configured. |
 | CF-FR-22 | System SHALL retry discovery when sequenced duration is below steering target and retries remain. |
 | CF-FR-23 | System SHALL run a continuous watch loop invoking jobs on a configured interval (`scheduled` / discovery). |
+
+> **Open item:** trigger mode `scheduled` exists in the implementation (`triggers/__init__.py`) and architecture docs but no CF-FR defines it as a standalone mode; FR definition pending re-baseline.
 
 ### Analysis & selection
 
