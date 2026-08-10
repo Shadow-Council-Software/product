@@ -15,6 +15,7 @@ import csv
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CSV = ROOT / "experiments" / "fixtures" / "T47-ABLATION-sample.csv"
@@ -47,10 +48,12 @@ def evaluate(
 
     stats = {"nshr": nshr, "random_flip_rate": rand_rate, "theta_nshr": theta}
 
+    # Protocol §8 trigger 2: random-control dominance (RANDOM >= NSHR) is
+    # FALSE_MECHANISM and must be evaluated before the necessity threshold.
+    if rand_rate >= nshr:
+        return 2, REASON_FALSE_MECHANISM, stats
     if nshr < theta:
         return 1, REASON_NECESSITY_GATE_FAILED, stats
-    if rand_rate >= nshr and nshr > 0:
-        return 2, REASON_FALSE_MECHANISM, stats
     return 0, "ELIGIBLE_FOR_PROMOTION", stats
 
 

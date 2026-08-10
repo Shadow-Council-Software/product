@@ -62,5 +62,5 @@
       "target_tier": "B"
     }
   ],
-  "notes": "Preregistered before any ablation run. Fixtures: trace-47-v0.json, certificate-trace-47-v0.json, T47-ABLATION-sample.csv."
+  "notes": "Preregistered before any ablation run. Fixtures: trace-47-v0.json, certificate-trace-47-v0.json, T47-ABLATION-sample.csv. V0 SCOPE CAVEAT: the checked-in perturbation manifest (trace-47-perturbations-v0.json) covers family P1 only (10 variants); the P2 (>=10) and P3 (>=5) minimums above remain the preregistered v1 target and are not yet backed by fixtures. run_ablation.py reports PREREG_NONCONFORMANT against this prereg until the manifest meets all family minimums (use --strict-prereg to make that blocking)."
 }

@@ -11,7 +11,9 @@ import argparse
 import csv
 import json
 import sys
+from collections import Counter
 from pathlib import Path
+from typing import Any
 
 from trace47_outcome import baseline_outcome, outcome_hash, outcome_under_mask
 
@@ -19,7 +21,27 @@ ROOT = Path(__file__).resolve().parents[2]
 TRACE_FIXTURE = ROOT / "trace" / "fixtures" / "trace-47-v0.json"
 PREG_FIXTURE = ROOT / "experiments" / "fixtures" / "trace-47-prereg.example.json"
 PERTURB_FIXTURE = ROOT / "experiments" / "fixtures" / "trace-47-perturbations-v0.json"
-DEFAULT_CSV = ROOT / "experiments" / "fixtures" / "T47-ABLATION-sample.csv"
+DEFAULT_CSV = ROOT / "out" / "T47-ABLATION-sample.csv"
+
+REASON_PREREG_NONCONFORMANT = "PREREG_NONCONFORMANT"
+
+
+def prereg_conformance_shortfalls(
+    prereg: dict[str, Any],
+    perturbations_doc: dict[str, Any],
+) -> list[str]:
+    """Compare manifest family counts against prereg family minimums."""
+    counts = Counter(
+        p.get("family_id") for p in perturbations_doc.get("perturbations", [])
+    )
+    shortfalls: list[str] = []
+    for fam in prereg.get("perturbation_families", []):
+        fid = fam.get("family_id")
+        required = int(fam.get("min_variants", 0))
+        actual = counts.get(fid, 0)
+        if actual < required:
+            shortfalls.append(f"{fid}: manifest has {actual}, prereg requires >= {required}")
+    return shortfalls
 
 
 def run_ablation(
@@ -90,11 +112,27 @@ def main() -> int:
         default="sample",
         help="sample=NSHR 0.4 fail gate; pass=override perturbations for NSHR 0.8",
     )
+    parser.add_argument(
+        "--strict-prereg",
+        action="store_true",
+        help="exit 3 (instead of warning) when the manifest does not meet prereg family minimums",
+    )
     args = parser.parse_args()
 
     trace = json.loads(args.trace.read_text(encoding="utf-8"))
     prereg = json.loads(args.prereg.read_text(encoding="utf-8"))
     perturbations_doc = json.loads(args.perturbations.read_text(encoding="utf-8"))
+
+    shortfalls = prereg_conformance_shortfalls(prereg, perturbations_doc)
+    if shortfalls:
+        print(
+            f"WARNING: {REASON_PREREG_NONCONFORMANT} — perturbation manifest does not "
+            f"meet prereg family minimums: {'; '.join(shortfalls)}",
+            file=sys.stderr,
+        )
+        if args.strict_prereg:
+            print(f"BLOCKED: {REASON_PREREG_NONCONFORMANT}", file=sys.stderr)
+            return 3
 
     if args.scenario == "pass":
         for p in perturbations_doc["perturbations"]:
@@ -111,6 +149,7 @@ def main() -> int:
             p["random_flips_outcome"] = False
 
     rows = run_ablation(trace, prereg, perturbations_doc)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
     write_csv(args.out, rows)
 
     nshr = sum(1 for r in rows if r["flip_ablate"] == "true") / len(rows)
