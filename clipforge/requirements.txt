@@ -1,21 +1,19 @@
 # ClipForge POC — Python 3.11+
-langgraph>=0.2.0
-langchain>=0.3.0
-langchain-core>=0.3.0
-langchain-openai>=0.2.0
-pyyaml>=6.0
-yt-dlp>=2024.0.0
-opencv-python>=4.8.0
-torch>=2.2.0
-torchvision>=0.17.0
-mediapipe>=0.10.0
-pydub>=0.25.0
-librosa>=0.10.0
-moviepy>=1.0.3,<2.0.0
-numpy>=1.26.0
-pytest>=8.0.0
-duckduckgo-search>=6.0.0  # optional: search provider duckduckgo
-gradio>=4.0.0
+# Pinned 2026-08-10. langgraph, langchain-core, opencv, moviepy, numpy, pyyaml,
+# pydub, and pytest are pinned to the versions of the environment that passes
+# clipforge/tests; the remainder are pinned to the latest PyPI release on that
+# date. Not re-verified with a clean `pip install` in this remediation pass.
+# Non-POC / optional dependencies moved to requirements-optional.txt.
+langgraph==1.2.1
+langchain-core==1.4.0
+pyyaml==6.0.3
+yt-dlp==2026.7.4
+opencv-python==4.13.0.92
+pydub==0.25.1
+librosa==0.11.0
+moviepy==1.0.3
+numpy==2.4.4
+pytest==9.0.3
 
 # DaVinci Resolve: install DaVinciResolveScript from local Resolve bundle
 # (not on PyPI). See README §7 and resolve_scripts/README.md
