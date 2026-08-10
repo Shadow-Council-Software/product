@@ -2,7 +2,10 @@
 """
 Certificate-to-trace binding verification (AW-036 / Trace-47 Phase B).
 
-Detects SWAP-CERT: valid certificate paired with wrong trace.
+Detects SWAP-CERT (valid certificate paired with wrong trace) and forged
+certificates (digests or hash not reproducible from the trace): the
+certificate is recomputed from the trace via freeze_certificate and every
+digest plus certificate_hash must match.
 """
 
 from __future__ import annotations
@@ -13,8 +16,20 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# Allow running as script from repo
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from classify_replay_divergence import ReplayDivergenceError  # noqa: E402
+from freeze_certificate import freeze_certificate  # noqa: E402
+
 REASON_CERT_MISMATCH = "CERT_MISMATCH"
 REASON_CERT_INCOMPLETE = "CERT_SPAN_COVERAGE_GAP"
+
+DIGEST_FIELDS = (
+    "inputs_closure_digest",
+    "span_carriers_digest",
+    "replay_outputs_digest",
+    "certificate_hash",
+)
 
 
 @dataclass(frozen=True)
@@ -87,6 +102,38 @@ def verify_certificate_binding(
             CertificateBindingReport(
                 reason_code=REASON_CERT_MISMATCH,
                 message="Certificate not bound to trace (SWAP-CERT detected)",
+                details={"mismatches": mismatches},
+            )
+        )
+
+    # Cryptographic verification: recompute the certificate from the trace
+    # (same logic as freeze_certificate.py) and require every digest plus
+    # certificate_hash to match. A certificate with tampered digests fails here.
+    try:
+        recomputed = freeze_certificate(trace, list(certificate.get("span_ids") or []))
+    except (ReplayDivergenceError, ValueError, KeyError) as exc:
+        raise CertificateBindingError(
+            CertificateBindingReport(
+                reason_code=REASON_CERT_MISMATCH,
+                message="Certificate could not be recomputed from trace",
+                details={"recompute_error": str(exc)},
+            )
+        ) from exc
+
+    recomputed_dict = recomputed.to_dict()
+    for field in DIGEST_FIELDS:
+        expected = recomputed_dict[field]
+        actual = certificate.get(field)
+        if actual != expected:
+            mismatches.append(
+                {"field": field, "expected": str(expected), "actual": str(actual)}
+            )
+
+    if mismatches:
+        raise CertificateBindingError(
+            CertificateBindingReport(
+                reason_code=REASON_CERT_MISMATCH,
+                message="Certificate digests do not match recomputation (forgery or drift)",
                 details={"mismatches": mismatches},
             )
         )
