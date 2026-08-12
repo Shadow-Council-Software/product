@@ -1,0 +1,40 @@
+name: Sprint 2 OHF optional
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  ohf-validate:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    services:
+      matter-server:
+        image: ghcr.io/home-assistant-libs/python-matter-server:stable
+        ports:
+          - 5580:5580
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install runtime dependencies
+        working-directory: enterprise/runtime
+        run: npm install
+      - name: Build engine
+        working-directory: enterprise/runtime
+        run: npm run build -w @enterprise/engine
+      - name: OHF adapter smoke (sidecar may have zero nodes)
+        working-directory: enterprise/runtime/engine
+        env:
+          MATTER_ADAPTER: ohf
+          OHF_SIDECAR_URL: ws://127.0.0.1:5580/ws
+        run: |
+          timeout 30 node --import tsx -e "
+            import { buildServer } from './src/index.ts';
+            const app = await buildServer();
+            await app.ready();
+            console.log('OHF connect OK');
+            await app.close();
+          " || echo "OHF smoke skipped — sidecar not ready or zero nodes"

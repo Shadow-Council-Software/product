@@ -1,0 +1,68 @@
+# ENTERPRISE acceptance gates — maps gates and contracts to OpenSpec capabilities
+# Verification: CI = automated in merge pipeline; Field = operator rack; Manual = checklist
+
+schemaVersion: "1.0.0"
+product: ENTERPRISE Main Computer
+
+gates:
+  G1:
+    name: 24h WAN-down soak pass
+    prd: [NFR-R2, FR28, FR36]
+    artifact: docs/artifacts/art-05-wan-down-soak-v0.md
+    specs: [coexistence-matter, station-api]
+    verify: Field
+  G2:
+    name: Coexistence conformance pack 100% CI
+    prd: [NFR-I3, FR-H2]
+    artifact: docs/artifacts/art-01-coexistence-pack-v1.md
+    specs: [coexistence-matter, matter-adapter]
+    verify: CI
+  G3:
+    name: HVAC success ≥99%; freshness ≤15s (7d)
+    prd: [NFR-P2]
+    specs: [station-api, matter-adapter, lcars-environmental]
+    verify: CI+Field
+  G4:
+    name: Degraded-mode fault-injection CI pass
+    prd: [NFR-R4]
+    artifact: docs/artifacts/art-06-degraded-mode-matrix.md
+    specs: [alert-fsm, station-api]
+    verify: CI
+  G5:
+    name: Fabric restore drill completed once
+    prd: [NFR-R5, FR41]
+    specs: [coexistence-matter, matter-adapter]
+    verify: Field
+
+contracts:
+  W-CT-01:
+    name: ClearanceOverlay guest denial
+    sprint: 1
+    specs: [lcars-security, tng-outcomes]
+    verify: E2E
+  W-CT-02:
+    name: chrome.session clearance contrast
+    sprint: 1
+    specs: [lcars-security]
+    verify: Contract
+  W-CT-03:
+    name: BattleStationsConfirm non-skippable
+    sprint: 1
+    specs: [lcars-security, alert-fsm]
+    verify: Contract
+  W-CT-04:
+    name: QuickEnvPin Green-only width
+    sprint: 2
+    specs: [lcars-environmental]
+    verify: E2E+Visual
+  W-CT-05:
+    name: ConflictReconcile no Command during CONFLICT
+    sprint: 2
+    specs: [lcars-conflict, tng-outcomes]
+    verify: E2E
+
+w0:
+  name: Pre-architecture sidecar spike
+  certificate: docs/fixtures/w0-spike.certificate.yaml
+  specs: [matter-adapter, coexistence-matter]
+  note: Simulate pass unblocks D-01; live rack required before production

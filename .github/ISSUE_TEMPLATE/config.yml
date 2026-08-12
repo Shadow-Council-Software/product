@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ENTERPRISE Sprint 1 Epic
+    url: https://github.com/Shadow-Council-Software/product/issues/1
+    about: Parent epic for Sprint 1 runtime foundation
+  - name: Token audit guide
+    url: https://github.com/Shadow-Council-Software/product/blob/product/enterprise/enterprise/runtime/TOKEN-AUDIT.md
+    about: How to record agent token spend per issue

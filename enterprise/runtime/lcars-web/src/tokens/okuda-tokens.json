@@ -1,0 +1,34 @@
+{
+  "bridgeDark": "#0B0E14",
+  "whitePanel": "#F4F0E8",
+  "pairs": [
+    {
+      "id": "chrome.session.clearance-label",
+      "foreground": "#E8A030",
+      "background": "#0B0E14",
+      "minRatio": 4.5,
+      "tokenRef": "color.status.environmental-amber"
+    },
+    {
+      "id": "chrome.session.clearance-captain",
+      "foreground": "#00AABB",
+      "background": "#0B0E14",
+      "minRatio": 4.5,
+      "tokenRef": "color.status.alert-cyan"
+    },
+    {
+      "id": "text.primary.white-panel",
+      "foreground": "#1A1A1A",
+      "background": "#F4F0E8",
+      "minRatio": 4.5,
+      "tokenRef": "color.text.primary"
+    },
+    {
+      "id": "text.operator-label.white-panel",
+      "foreground": "#6B6B6B",
+      "background": "#F4F0E8",
+      "minRatio": 4.5,
+      "tokenRef": "color.text.operator-label"
+    }
+  ]
+}

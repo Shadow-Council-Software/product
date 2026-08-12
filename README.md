@@ -13,4 +13,4 @@ Artifact outputs default to `_bmad-output/` and `docs/` per installer configurat
 
 Each product lives on its own branch (`product/<slug>`). **`main`** keeps BMAD Method and shared agent skills only.
 
-See **[PRODUCTS.md](./PRODUCTS.md)** for branch table and workflow.
+See **[PRODUCTS.md](./PRODUCTS.md)** for branch table and workflow. When a product is ready to ship, the repo will add **`develop`** (integration) and **`master`** (promoted shared assets); until then, use **`product/*`** and **`release/*`** only.
