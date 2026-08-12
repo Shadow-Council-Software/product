@@ -47,16 +47,33 @@ clipforge product branch; the Matterport ingest pipeline was stranded there
 for months and recovered only by audit (PR #57). The guard makes that class
 of mistake fail fast.
 
+## Shared-asset sync (automated)
+
+Product branches inherit shared assets (`.github/` CI, `.agents/skills`,
+`_bmad/` method, `docs/`, root governance files) from `main` — but only if
+they keep merging `main`. The **Shared-asset sync** workflow
+(`.github/workflows/shared-asset-sync.yml`) removes the "only if": whenever
+shared paths change on `main`, it opens a `sync/main-into-<slug>` PR into
+every branch registered in `.github/product-branches.txt` (conflicts become
+an issue asking for a manual sync instead).
+
+Why: `product/mechanistic-interpreter-testing` forked before `.github/` CI
+and `.gitignore` existed on `main` and silently stayed behind for months
+(found in the 2026-08-12 audit). Sync PRs are exempt from the product
+isolation guard — they re-deliver main's already-reviewed baseline, which may
+span promoted product folders.
+
 ## Adding a new product
 
 1. `git checkout main && git pull`
 2. `git checkout -b product/<new-slug>`
 3. Create `<new-slug>/` with `index.md`
 4. Register `<new-slug>` in `.github/product-dirs.txt` (the isolation guard blocks unregistered product folders)
-5. Point `planning_artifacts` at that folder in both BMad config files
-6. Add the product to the branch table in this file
-7. When stable, add `release/<new-slug>/<version>` from that line
-8. Push `product/<new-slug>` — do not merge product docs to `main` by default
+5. Register `product/<new-slug>` in `.github/product-branches.txt` (so shared-asset sync PRs reach it)
+6. Point `planning_artifacts` at that folder in both BMad config files
+7. Add the product to the branch table in this file
+8. When stable, add `release/<new-slug>/<version>` from that line
+9. Push `product/<new-slug>` — do not merge product docs to `main` by default
 
 ## Removed / legacy
 

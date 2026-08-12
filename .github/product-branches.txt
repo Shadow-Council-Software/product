@@ -1,0 +1,12 @@
+# Active product branches receiving shared-asset sync PRs from main.
+# The shared-asset-sync workflow (.github/workflows/shared-asset-sync.yml)
+# merges main into each branch listed here whenever shared paths change on
+# main, opening one sync/main-into-<slug> PR per branch.
+#
+# release/* branches are frozen baselines — never list them here.
+# NOTE: enterprise lane consolidation is pending (see the branch table in
+# PRODUCTS.md); prune one of the two enterprise lines once consolidated.
+product/clipforge
+product/enterprise
+product/mechanistic-interpreter-testing
+enterprise
