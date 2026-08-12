@@ -1,0 +1,19 @@
+name: Product isolation
+
+# Enforces the PRODUCTS.md one-product-per-branch rule on every PR,
+# regardless of base branch. Registry: .github/product-dirs.txt.
+on:
+  pull_request:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enforce one product per PR
+        run: |
+          git fetch --quiet origin "$GITHUB_BASE_REF"
+          bash .github/scripts/product-isolation-check.sh "origin/$GITHUB_BASE_REF"
