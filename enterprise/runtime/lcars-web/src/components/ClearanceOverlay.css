@@ -1,25 +1,40 @@
 .clearance-overlay {
   position: fixed;
   inset: 0;
-  background: rgb(11 14 20 / 72%);
+  background: rgb(0 0 0 / 82%);
   display: grid;
   place-items: center;
   z-index: 100;
+  font-family: var(--okuda-font-sans);
 }
 
 .clearance-overlay__panel {
-  min-width: min(480px, 90vw);
-  padding: calc(var(--okuda-spacing-base) * 3);
-  border-left: 6px solid var(--okuda-border-critical);
-  border-radius: var(--okuda-radius-elbow);
+  min-width: min(480px, 92vw);
+  padding: calc(var(--okuda-spacing-base) * 2.5);
+  background: var(--okuda-readout);
+  border-left: 10px solid var(--okuda-alert-red);
+  border-radius: 0 var(--okuda-elbow-inner) var(--okuda-elbow-inner) 0;
+}
+
+.clearance-overlay__panel h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--okuda-alert-red);
 }
 
 .clearance-overlay__message {
-  font-size: var(--okuda-font-operator-min);
-  margin: var(--okuda-spacing-base) 0;
+  font-size: 0.9rem;
+  margin: calc(var(--okuda-spacing-base) * 1.25) 0;
+  line-height: 1.5;
+  color: var(--okuda-panel-ink);
 }
 
 .clearance-overlay__hint {
-  color: var(--okuda-text-operator);
-  font-size: var(--okuda-font-guest-min);
+  color: var(--okuda-panel-muted);
+  font-size: 0.74rem;
+  margin: 0 0 calc(var(--okuda-spacing-base) * 1.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }

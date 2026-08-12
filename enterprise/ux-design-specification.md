@@ -26,6 +26,17 @@ uxReviewCouncil:
     - Lt. Commander Geordi La Forge
     - Lt. Commander Data
     - Lieutenant Worf
+  productionSupervision:
+    description: TNG production staff supervising episode-ready LCARS fidelity
+    members:
+      - Rick Berman (Executive Producer)
+      - Michael Piller (Showrunner)
+      - Herman Zimmerman (Production Designer)
+      - Michael Okuda (Scenic Art Supervisor / LCARS creator)
+      - Denise Okuda (Scenic Artist / Video Playback)
+      - Doug Drexler (Illustrator / Graphic Artist)
+    gate: enterprise/sim/docs/LCARS-PRODUCTION-GATE-2026-05-29.md
+    verdict: PASS
   agentWorkingGroup:
     description: Command, engineering, security, and positronic automation
     leads:
@@ -52,7 +63,8 @@ inputDocuments:
 productName: ENTERPRISE Main Computer
 workflowType: ux-design
 uxNorthStar: home_starship_operations_center
-okudaAudit: PASS_WITH_CONDITIONS
+okudaAudit: PASS_WITH_CONDITIONS  # internal review PASS (2026-05-29); external capture SIM-AC-05 pending — engine-parity certificate still PENDING
+productionGate: PASS  # TNG council unanimous, 2026-05-29 — episode-ready LCARS
 ---
 
 # UX Design Specification — ENTERPRISE Main Computer
@@ -193,6 +205,8 @@ Environment · Tactical · Engineering · Science · Ops — states: NOMINAL / A
 ### Quick Environmental pin (Green only)
 
 ≤15% center width. Shows ship mean temp + expand to `env.subsystem`. Hidden or read-only at Yellow+.
+
+> **Contract note (2026-08-10):** this compact `ops.overview` placement is **deferred** with the ops-overview hero (sprint-2 non-goal). The shipped W-CT-04 contract is the Environmental-panel authority pin defined in `openspec/specs/lcars-environmental/spec.md` — Green: full Environmental panel width, no horizontal scroll at 1280×720; shared authority: ≤480px. The ≤15% figure applies only to the future ops-overview placement.
 
 ### Tap targets
 
@@ -1248,7 +1262,7 @@ Normative CI ownership — references FR/NFR; implementers must not ship without
 | **W-CT-01** | `ClearanceOverlay` | Guest actuation → denial + read-only escape; no Adjusting (FR19–22) | E2E |
 | **W-CT-02** | `chrome.session` token | Clearance tier label contrast ≥ NFR floor | Contract |
 | **W-CT-03** | `BattleStationsConfirm` | Gate non-skippable; config/pack cannot disable (NFR-UX6) | Contract |
-| **W-CT-04** | `QuickEnvPin` | Absent or read-only at Yellow+; ≤15% width at 1280×720 | E2E + visual |
+| **W-CT-04** | `QuickEnvPin` | Green: full Environmental panel width, no h-scroll at 1280×720; shared authority ≤480px; read-only chrome (openspec `lcars-environmental` authoritative; ops-overview ≤15% pin deferred) | E2E + visual |
 | **W-CT-05** | `ConflictReconcile` | No Command while CONFLICT active (Step 10 G3) | E2E |
 | **W-CT-06** | `AlertBanner` phase | No Green until stand-down ACK (FR47) | E2E |
 | **W-CT-07** | Audit sink | Unable to comply recovery logged (FR34–FR35) | Audit assertion |
@@ -1342,7 +1356,7 @@ Navigation stays within D1+D2 skeleton; no alternate home candidates.
 
 **Validation → outcomes:** Form errors map **1:1** to interaction-contract outcome types — no invented vocabulary.
 
-**Quick Env pin:** Green only; read-only or absent Yellow+ (W-CT-04); ≤15% width at 1280×720.
+**Quick Env pin:** Green only; read-only chrome (W-CT-04). Shipped contract: full Environmental panel width at 1280×720, shared authority ≤480px (openspec `lcars-environmental`). The ≤15% compact form is deferred to the ops-overview hero.
 
 **Battle Stations:** Destructive or high-commit actuation routes through `BattleStationsConfirm` — no form submit bypass.
 
@@ -1379,7 +1393,7 @@ Navigation stays within D1+D2 skeleton; no alternate home candidates.
 |------|-------|----------|
 | **Blocked** | `<1024px` | Hard viewport gate — operator routes **do not mount** (A-11, R-11) |
 | **Floor** | `≥1024px` | NFR-UX1 minimum; D2 sparse compression allowed; clearance + conflict chrome mandatory |
-| **Certified** | `1280×720` | Roddenberry 2s read; NFR-UX3; W-CT-04 Quick Env ≤15%; five Command Horizon tiles visible |
+| **Certified** | `1280×720` | Roddenberry 2s read; NFR-UX3; W-CT-04 QuickEnvPin per `lcars-environmental` spec (Green full panel width, no h-scroll); five Command Horizon tiles visible |
 | **Growth** | `≥1440px` | D-14 D6 opt-in renderer only — not MVP default (R-01) |
 
 **Layout law:** Asymmetric LCARS grid (F-02) does not reflow to mobile IA. Red Alert applies D2 sparse density — no new widgets during urgency. **No** `@media` branch of `ops.overview` at narrow widths (R-11).

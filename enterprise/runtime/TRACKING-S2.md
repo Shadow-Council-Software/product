@@ -9,6 +9,6 @@
 
 **Milestone:** [Sprint 2 — Live Environmental loop](https://github.com/Shadow-Council-Software/product/milestone/2)
 
-**OpenSpec change:** `sprint-2-live-environmental-loop` (22/24 code tasks complete; rack W0 pending)
+**OpenSpec change:** `sprint-2-live-environmental-loop` (21/24 tasks complete; 1.1 live rack W0, 1.2 certificate evidence, and 1.3 digest pin all blocked on operator rack access)
 
-**Tests:** 17/17 engine contract tests pass
+**Tests (2026-08-10):** 20/20 engine contract tests pass (`npm test` in `enterprise/runtime`); `openspec validate --all --strict` 13/13; lcars-web typecheck + lint clean. Sim-bridge integration test wired into CI (`sim-integration` job) and passing.

@@ -1,23 +1,56 @@
 :root {
-  --okuda-bridge-dark: #0b0e14;
+  /* Condensed LCARS typography (Okuda / Drexler mandate) */
+  --okuda-font-sans: 'Antonio', 'Oswald', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+
+  /* Ground is black — the lit color blocks ARE the interface (Zimmerman) */
+  --okuda-bridge-dark: #000000;
+  --okuda-field: #0a0a0a;
+  --okuda-readout: #11151c;
+
+  /* Okuda department palette (limited simultaneous hues) */
+  --okuda-amber: #f4a000;
+  --okuda-environmental-amber: #f4a000;
+  --okuda-butterscotch: #f7c46a;
+  --okuda-peach: #ff9c6e;
+  --okuda-lavender: #b9a6e6;
+  --okuda-ice-blue: #8fc4ff;
+  --okuda-tan: #c8a98a;
+  --okuda-inactive: #5a6172;
+
   --okuda-white-panel: #f4f0e8;
-  --okuda-alert-red: #ff1e1e;
+  --okuda-panel-surface: #11151c;
+  --okuda-panel-rail: #1a1f2a;
+  --okuda-panel-border: #000000;
+  --okuda-panel-cream: #f4d7a1;
+  --okuda-panel-muted: #b9c2d6;
+  --okuda-panel-ink: #f2ede2;
+
+  /* Alert phase law: color is the sentence */
+  --okuda-alert-red: #ff2d2d;
   --okuda-battle-stations: #c41a1a;
-  --okuda-environmental-amber: #e8a030;
-  --okuda-alert-cyan: #00aabb;
-  --okuda-status-orange: #e8730a;
-  --okuda-alert-amber: #c57308;
-  --okuda-text-primary: #1a1a1a;
-  --okuda-text-operator: #6b6b6b;
-  --okuda-border-critical: #c0000f;
-  --okuda-focus-ring: var(--okuda-alert-cyan);
+  /* Yellow Alert gold — distinct from chrome amber (--okuda-amber #f4a000) */
+  --okuda-alert-amber: #ffcc00;
+  --okuda-alert-cyan: #8fc4ff;
+  --okuda-status-orange: #ff9c6e;
+  --okuda-text-primary: #f2ede2;
+  --okuda-text-operator: #b9c2d6;
+  --okuda-border-critical: #ff2d2d;
+  --okuda-focus-ring: #8fc4ff;
+
+  /* Geometry — one elbow radius family, one pill cap radius */
   --okuda-spacing-base: 8px;
-  --okuda-spacing-elbow: 4px;
-  --okuda-radius-elbow: 4px;
-  --okuda-font-operator-min: 12px;
-  --okuda-font-guest-min: 11px;
+  --okuda-gutter: 4px;
+  --okuda-elbow-outer: 64px;
+  --okuda-elbow-inner: 30px;
+  --okuda-radius-block: 0px;
+  --okuda-radius-cap: 999px;
+
+  --okuda-font-operator-min: 13px;
+  --okuda-font-guest-min: 12px;
   --okuda-motion-fast: 100ms;
-  --okuda-motion-standard: 250ms;
+  --okuda-motion-standard: 150ms;
+  --okuda-motion-alert: 1s;
+  --okuda-signal-edge: var(--okuda-alert-amber);
 }
 
 [data-substrate='bridge-dark'] {
@@ -26,6 +59,6 @@
 }
 
 [data-substrate='white-panel'] {
-  background: var(--okuda-white-panel);
-  color: var(--okuda-text-primary);
+  background: var(--okuda-field);
+  color: var(--okuda-panel-ink);
 }

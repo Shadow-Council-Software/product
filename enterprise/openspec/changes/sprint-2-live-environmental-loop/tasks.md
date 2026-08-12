@@ -4,7 +4,7 @@
 
 - [ ] 1.1 Run live W0 on rack (`enterprise/spike/w0/run-w0.mjs` without `--simulate`) — **operator rack**
 - [ ] 1.2 Update `w0-spike.certificate.yaml` with rack evidence and `architectureUnblock: true` — **blocked on 1.1**
-- [x] 1.3 Pin sidecar image digest in `docker-compose.yml` and document in architecture open items
+- [ ] 1.3 Pin sidecar image digest in `docker-compose.yml` and document in architecture open items — **blocked on 1.1** (compose still references `:stable`; digest placeholder `REPLACE_AFTER_LIVE_W0`)
 
 ## 2. OhfSidecarAdapter
 

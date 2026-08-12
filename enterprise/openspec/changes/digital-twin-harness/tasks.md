@@ -12,7 +12,7 @@
 
 - [x] 2.1 SimMatterAdapter implementing MatterAdapterPort
 - [x] 2.2 `MATTER_ADAPTER=sim` in create-adapter
-- [ ] 2.3 Integration test (sim bridge required)
+- [x] 2.3 Wire `engine/test/sim-matter.integration.test.ts` into CI (`sim-integration` job in sprint-1-validate.yml; bridge path + readiness poll fixed, verified locally 2026-08-10)
 
 ## 3. Layout & docs
 
@@ -50,4 +50,4 @@
 - [x] 7.5 `verify-sprint1-proof.mjs` CLI gate
 - [ ] 7.6 Unity Play Mode proof — HealthStrip vs live FSM (SIM-AC-02)
 - [ ] 7.7 okudaAudit capture — render target + frame (SIM-AC-05)
-- [ ] 7.8 Okuda council sign-off on sim spec
+- [x] 7.8 Okuda council sign-off on sim spec (internal PASS_WITH_CONDITIONS; see `sim/docs/OKUDA-INTERNAL-REVIEW-2026-05-29.md`)

@@ -1,29 +1,38 @@
 .battle-stations {
-  padding: calc(var(--okuda-spacing-base) * 2);
-  border: 2px solid var(--okuda-battle-stations);
-  background: var(--okuda-bridge-dark);
-  color: var(--okuda-environmental-amber);
-  margin-top: calc(var(--okuda-spacing-base) * 2);
+  padding: calc(var(--okuda-spacing-base) * 1.75);
+  background: #000;
+  border-left: 8px solid var(--okuda-alert-red);
+  border-radius: 0 var(--okuda-elbow-inner) var(--okuda-elbow-inner) 0;
+  color: var(--okuda-panel-ink);
+}
+
+.battle-stations h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--okuda-alert-red);
+}
+
+.battle-stations p {
+  margin: 10px 0 0;
+  color: var(--okuda-panel-muted);
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
 }
 
 .battle-stations__check {
   display: flex;
   gap: var(--okuda-spacing-base);
   align-items: center;
-  margin: var(--okuda-spacing-base) 0;
-  font-size: var(--okuda-font-operator-min);
+  margin: calc(var(--okuda-spacing-base) * 1.25) 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .battle-stations__actions {
   display: flex;
-  gap: var(--okuda-spacing-base);
-}
-
-.lcars-btn--danger {
-  background: var(--okuda-battle-stations);
-  color: var(--okuda-white-panel);
-}
-
-.lcars-btn--danger:disabled {
-  opacity: 0.45;
+  flex-wrap: wrap;
+  gap: var(--okuda-gutter);
 }

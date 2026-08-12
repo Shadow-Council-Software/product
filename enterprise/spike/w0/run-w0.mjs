@@ -218,7 +218,9 @@ references:
 `;
   writeFileSync(RESULTS_PATH, yaml);
   log(`Wrote ${RESULTS_PATH}`);
-  if (payload.architectureUnblock) {
+  // Only a --live rack run may promote results into the canonical fixture;
+  // simulate runs never unblock architecture (mock sidecar proves nothing).
+  if (payload.architectureUnblock && !SIMULATE) {
     const fixture = join(__dir, '../../docs/fixtures/w0-spike.certificate.yaml');
     copyFileSync(RESULTS_PATH, fixture);
     log(`Promoted → ${fixture}`);
@@ -286,6 +288,9 @@ async function main() {
   }
 
   const allPass = w0_1.pass && w0_2.pass && w0_3.pass && w0_4.pass;
+  // Simulate mode exercises the harness only — it can never certify the
+  // architecture unblock, which requires a live rack run (--live).
+  const architectureUnblock = allPass && !SIMULATE;
 
   writeResults({
     status: allPass ? 'pass' : 'partial',
@@ -296,7 +301,7 @@ async function main() {
     w0_2,
     w0_3,
     w0_4,
-    architectureUnblock: allPass,
+    architectureUnblock,
   });
 
   await cleanup();
@@ -306,7 +311,9 @@ async function main() {
   console.log(`W0-2: ${w0_2.pass ? 'PASS' : 'FAIL'} (${w0_2.pathTag})`);
   console.log(`W0-3: ${w0_3.pass ? 'PASS' : 'FAIL'}`);
   console.log(`W0-4: ${w0_4.pass ? 'PASS' : 'FAIL'}`);
-  console.log(`Architecture unblock: ${allPass ? 'YES' : 'NO'}`);
+  console.log(
+    `Architecture unblock: ${architectureUnblock ? 'YES' : SIMULATE ? 'NO (simulate mode — live rack run required)' : 'NO'}`
+  );
   process.exit(allPass ? 0 : 2);
 }
 

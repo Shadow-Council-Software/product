@@ -1,0 +1,249 @@
+.lcars-frame {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--okuda-gutter);
+  margin: var(--okuda-gutter) calc(var(--okuda-spacing-base) * 1.5)
+    calc(var(--okuda-spacing-base) * 1.5);
+  background: #000;
+  font-family: var(--okuda-font-sans);
+}
+
+/* ---- Left rail (vertical spine) ---- */
+.lcars-frame__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--okuda-gutter);
+}
+
+/* The signature elbow: amber block with a concave black cutout at bottom-right,
+   creating concentric outer/inner radii where the rail meets the header. */
+.lcars-frame__elbow {
+  position: relative;
+  height: 120px;
+  background: var(--okuda-amber);
+  border-top-left-radius: var(--okuda-elbow-outer);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.lcars-frame__elbow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: calc(100% - 36px);
+  height: 56px;
+  background: #000;
+  border-top-left-radius: var(--okuda-elbow-inner);
+}
+
+.lcars-frame__brand {
+  position: relative;
+  z-index: 1;
+  margin: 14px 18px;
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.lcars-frame__menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--okuda-gutter);
+}
+
+/* LCARS nav blocks: rectangles with one rounded (left) corner, butted into a rail */
+.lcars-frame__menu-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  border: 0;
+  border-top-left-radius: var(--okuda-elbow-inner);
+  border-bottom-left-radius: var(--okuda-elbow-inner);
+  background: var(--okuda-butterscotch);
+  color: #000;
+  padding: 12px 14px;
+  min-height: 46px;
+  font-family: var(--okuda-font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lcars-frame__menu-item:nth-child(2n) {
+  background: var(--okuda-tan);
+}
+
+.lcars-frame__menu-item.is-active {
+  background: var(--okuda-amber);
+  color: #000;
+}
+
+.lcars-frame__menu-item:focus-visible {
+  outline: 2px solid var(--okuda-ice-blue);
+  outline-offset: -2px;
+}
+
+.lcars-frame__menu-label {
+  flex: 1 1 auto;
+}
+
+.lcars-frame__menu-code {
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+.lcars-frame__rail-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--okuda-gutter);
+  background: var(--okuda-readout);
+  border-bottom-left-radius: var(--okuda-elbow-inner);
+  padding: 12px 12px 14px;
+}
+
+.lcars-frame__rail-cap {
+  margin-top: auto;
+  background: var(--okuda-inactive);
+  color: #000;
+  border-bottom-left-radius: var(--okuda-elbow-outer);
+  padding: 14px;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+/* ---- Right stage (header rail + content) ---- */
+.lcars-frame__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--okuda-gutter);
+  min-width: 0;
+}
+
+.lcars-frame__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 58px;
+  padding: 0 18px;
+  background: var(--okuda-amber);
+  border-top-right-radius: var(--okuda-elbow-inner);
+  color: #000;
+}
+
+.lcars-frame[data-alert-phase='Yellow'] .lcars-frame__header {
+  background: var(--okuda-alert-amber);
+}
+
+.lcars-frame[data-alert-phase='Red'] .lcars-frame__header {
+  background: var(--okuda-alert-red);
+  animation: lcars-alert-blink var(--okuda-motion-alert) step-end infinite;
+}
+
+.lcars-frame__header-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lcars-frame__header-code {
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.lcars-frame__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--okuda-field);
+  border-bottom-right-radius: var(--okuda-elbow-inner);
+  padding: calc(var(--okuda-spacing-base) * 2);
+  display: grid;
+  gap: var(--okuda-gutter);
+}
+
+@keyframes lcars-alert-blink {
+  0%,
+  50% {
+    background: var(--okuda-alert-red);
+  }
+  50.01%,
+  100% {
+    background: #5a0d0d;
+  }
+}
+
+/* ---- Tablet / mobile: rail becomes a top header strip, no overlap ---- */
+@media (max-width: 1000px) {
+  .lcars-frame {
+    grid-template-columns: 1fr;
+    margin-inline: var(--okuda-spacing-base);
+  }
+
+  .lcars-frame__rail {
+    flex-direction: column;
+  }
+
+  .lcars-frame__elbow {
+    height: 56px;
+    border-top-left-radius: var(--okuda-elbow-inner);
+    border-top-right-radius: var(--okuda-elbow-inner);
+    align-items: center;
+  }
+
+  .lcars-frame__elbow::after {
+    display: none;
+  }
+
+  .lcars-frame__brand {
+    margin: 0 16px;
+  }
+
+  .lcars-frame__menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .lcars-frame__menu-item {
+    flex: 1 1 160px;
+    border-radius: var(--okuda-elbow-inner);
+  }
+
+  .lcars-frame__rail-cap {
+    border-bottom-left-radius: var(--okuda-elbow-inner);
+    border-bottom-right-radius: var(--okuda-elbow-inner);
+  }
+
+  .lcars-frame__header {
+    border-radius: var(--okuda-elbow-inner);
+  }
+
+  .lcars-frame__content {
+    border-radius: var(--okuda-elbow-inner);
+  }
+}
+
+@media (max-width: 600px) {
+  .lcars-frame__menu-item {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lcars-frame[data-alert-phase='Red'] .lcars-frame__header {
+    animation: none;
+  }
+}

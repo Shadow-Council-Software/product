@@ -1,0 +1,90 @@
+.lab {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #000;
+  font-family: var(--okuda-font-sans);
+}
+
+.lab__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  padding: 10px 16px;
+  background: #06090f;
+  border-bottom: 2px solid var(--okuda-amber);
+}
+
+.lab__group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lab__legend {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--okuda-panel-muted);
+  margin-right: 4px;
+}
+
+.lab__select {
+  font-family: var(--okuda-font-sans);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #11151c;
+  color: var(--okuda-panel-cream);
+  border: 0;
+  border-radius: 14px 0 0 14px;
+  padding: 7px 12px;
+}
+
+.lab__chip {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--okuda-font-sans);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--okuda-inactive);
+  color: #000;
+  cursor: pointer;
+}
+
+.lab__chip.is-on {
+  background: var(--okuda-amber);
+}
+
+.lab__chip.is-on[data-alert='Yellow'] {
+  background: var(--okuda-alert-amber);
+}
+
+.lab__chip.is-on[data-alert='Red'] {
+  background: var(--okuda-alert-red);
+}
+
+.lab__chip:focus-visible {
+  outline: 2px solid var(--okuda-ice-blue);
+  outline-offset: 2px;
+}
+
+.lab__stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.lab__stage > svg {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}

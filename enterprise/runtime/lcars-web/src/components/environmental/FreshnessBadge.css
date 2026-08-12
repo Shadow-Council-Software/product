@@ -1,15 +1,20 @@
 .freshness-badge {
-  font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--okuda-radius-cap);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #000;
 }
 
 .freshness-badge--fresh {
-  background: #d4edda;
-  color: #155724;
+  background: #2f7d4f;
 }
 
 .freshness-badge--stale {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--okuda-alert-red);
 }

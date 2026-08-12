@@ -6,6 +6,7 @@ import './EnvironmentalPanel.css';
 
 const ENGINE = import.meta.env.VITE_ENGINE_URL ?? '';
 const TEMP_PATH = '1/513/0';
+const PRESET_SETPOINTS = [19, 21, 23] as const;
 
 export interface EnvironmentalPanelProps {
   station: StationSnapshot | undefined;
@@ -27,7 +28,8 @@ export function EnvironmentalPanel({
 
   async function submitSetpoint() {
     if (disabled) return;
-    const value = Number(target);
+    const normalized = target.replace(',', '.').trim();
+    const value = Number(normalized);
     if (!Number.isFinite(value)) {
       setMessage('Invalid setpoint');
       return;
@@ -51,39 +53,61 @@ export function EnvironmentalPanel({
 
   return (
     <section className="environmental-panel" data-substrate="white-panel">
-      <h2>Environmental</h2>
       {station && <QuickEnvPin authority={station.authority} />}
       {station ? (
         <>
           <div className="environmental-panel__readings">
-            <span>Current: {String(current ?? '—')} °C</span>
+            <div className="environmental-panel__reading-cell">
+              <span className="environmental-panel__reading-label">Current · Deck 8</span>
+              <span className="environmental-panel__reading-value">
+                {typeof current === 'number' ? current.toFixed(1) : '——'}
+                <span className="environmental-panel__reading-unit">°C</span>
+              </span>
+            </div>
             <FreshnessBadge freshnessTs={station.freshnessTs} />
           </div>
           <label className="environmental-panel__setpoint">
-            Target setpoint (°C)
-            <input
-              type="number"
-              step="0.5"
-              value={target}
-              disabled={disabled}
-              onChange={(e) => setTarget(e.target.value)}
-            />
+            Target Setpoint
+            <div className="environmental-panel__setpoint-input-row">
+              <input
+                type="text"
+                inputMode="decimal"
+                pattern="^-?[0-9]+([.,][0-9]+)?$"
+                value={target}
+                disabled={disabled}
+                onChange={(e) => setTarget(e.target.value)}
+              />
+              <span className="environmental-panel__setpoint-unit">°C</span>
+            </div>
           </label>
+          <div className="environmental-panel__presets" aria-label="Thermal presets">
+            {PRESET_SETPOINTS.map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                className="environmental-panel__preset-btn"
+                disabled={disabled}
+                onClick={() => setTarget(String(preset))}
+              >
+                {preset.toFixed(0)}°
+              </button>
+            ))}
+          </div>
           <button
             type="button"
-            className="lcars-btn"
+            className="lcars-btn environmental-panel__command-btn"
             disabled={disabled}
             onClick={() => void submitSetpoint()}
           >
-            Command setpoint
+            Engage Setpoint
           </button>
           {message && <p className="environmental-panel__msg">{message}</p>}
           {conflictActive && (
-            <p className="environmental-panel__blocked">Commands disabled — CONFLICT active</p>
+            <p className="environmental-panel__blocked">Authority conflict — commands locked</p>
           )}
         </>
       ) : (
-        <p>No station data</p>
+        <p className="environmental-panel__msg">No station telemetry</p>
       )}
     </section>
   );

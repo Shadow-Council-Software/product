@@ -35,6 +35,23 @@ describe('W-CT-05 ConflictReconcile no Command during CONFLICT', () => {
     assert.match(res.json().cause, /conflict/i);
   });
 
+  it('denies reconcile below Captain clearance', async () => {
+    await app.inject({
+      method: 'POST',
+      url: '/api/v1/test/simulate-conflict',
+    });
+
+    for (const tier of ['Guest', 'Crew'] as const) {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/v1/system/conflict/reconcile',
+        headers: { 'x-clearance': tier },
+      });
+      assert.equal(res.statusCode, 403, `${tier} must not reconcile`);
+      assert.equal(res.json().outcomeType, 'Denied');
+    }
+  });
+
   it('allows setpoint after reconcile', async () => {
     await app.inject({
       method: 'POST',

@@ -30,6 +30,7 @@ jobs:
         env:
           MATTER_ADAPTER: ohf
           OHF_SIDECAR_URL: ws://127.0.0.1:5580/ws
+        # Failure is surfaced by the step (job stays green via continue-on-error).
         run: |
           timeout 30 node --import tsx -e "
             import { buildServer } from './src/index.ts';
@@ -37,4 +38,4 @@ jobs:
             await app.ready();
             console.log('OHF connect OK');
             await app.close();
-          " || echo "OHF smoke skipped — sidecar not ready or zero nodes"
+          "

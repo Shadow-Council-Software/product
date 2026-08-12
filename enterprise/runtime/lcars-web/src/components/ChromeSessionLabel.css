@@ -1,11 +1,15 @@
 .chrome-session {
-  padding: var(--okuda-spacing-base) calc(var(--okuda-spacing-base) * 2);
-  min-width: 1024px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(var(--okuda-spacing-base) * 0.85) calc(var(--okuda-spacing-base) * 1.5);
+  background: #000;
+  font-family: var(--okuda-font-sans);
 }
 
 .chrome-session__label {
-  font-size: var(--okuda-font-operator-min);
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }

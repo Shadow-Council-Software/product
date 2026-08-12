@@ -14,7 +14,16 @@ partyModeRounds:
     topic: Panel placement IA
     verdict: PASS_WITH_CONDITIONS
     decisions: C-SIM-15 through C-SIM-19
-okudaAudit: PENDING
+  - round: 4
+    topic: Internal scripted demo pre-review
+    verdict: PASS_WITH_CONDITIONS
+    decisions: F-09/F-11 enforcement and 3m legibility checklist locked
+  - round: 5
+    topic: LCARS UI overhaul acceptance
+    verdict: PASS
+    decisions: Dashboard/menu/sim visual hierarchy and motion semantics accepted
+okudaAudit: PASS_WITH_CONDITIONS  # internal review PASS (2026-05-29); SIM-AC-05 capture (tasks 7.6/7.7) pending — engine-parity certificate still PENDING
+okudaAuditEvidence: ./sim/docs/OKUDA-INTERNAL-REVIEW-2026-05-29.md
 parentSpec:
   id: ux-design-specification
   path: ./ux-design-specification.md
@@ -367,5 +376,7 @@ Derived from C-SIM-05, C-SIM-07, C-SIM-13, C-SIM-14, and parent W-CT contracts.
 | Date | Change |
 |------|--------|
 | 2026-05-24 | Initial draft — Party Mode Rounds 1–3 locked decisions embedded |
+| 2026-05-29 | Round 4 internal Okuda pre-review completed; scripted demo approved with conditions and evidence artifact added |
+| 2026-05-29 | Round 5 LCARS UI overhaul accepted by Okuda reviewers (PASS) |
 
-**Next review:** UX Review Council Okuda audit (target: before Sprint 1 panel hardware order)
+**Next review:** SIM-AC-05 capture closure (render target + frame) before external demo or panel order

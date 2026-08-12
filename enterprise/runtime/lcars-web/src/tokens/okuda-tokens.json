@@ -1,32 +1,33 @@
 {
-  "bridgeDark": "#0B0E14",
-  "whitePanel": "#F4F0E8",
+  "bridgeDark": "#000000",
+  "fieldDark": "#0a0a0a",
+  "whitePanel": "#f4f0e8",
   "pairs": [
     {
       "id": "chrome.session.clearance-label",
-      "foreground": "#E8A030",
-      "background": "#0B0E14",
+      "foreground": "#f4a000",
+      "background": "#000000",
       "minRatio": 4.5,
       "tokenRef": "color.status.environmental-amber"
     },
     {
       "id": "chrome.session.clearance-captain",
-      "foreground": "#00AABB",
-      "background": "#0B0E14",
+      "foreground": "#8fc4ff",
+      "background": "#000000",
       "minRatio": 4.5,
       "tokenRef": "color.status.alert-cyan"
     },
     {
-      "id": "text.primary.white-panel",
-      "foreground": "#1A1A1A",
-      "background": "#F4F0E8",
+      "id": "text.primary.field-dark",
+      "foreground": "#f2ede2",
+      "background": "#0a0a0a",
       "minRatio": 4.5,
       "tokenRef": "color.text.primary"
     },
     {
-      "id": "text.operator-label.white-panel",
-      "foreground": "#6B6B6B",
-      "background": "#F4F0E8",
+      "id": "text.operator-label.field-dark",
+      "foreground": "#b9c2d6",
+      "background": "#0a0a0a",
       "minRatio": 4.5,
       "tokenRef": "color.text.operator-label"
     }

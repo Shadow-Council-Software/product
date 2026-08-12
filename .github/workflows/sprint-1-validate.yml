@@ -6,6 +6,7 @@ on:
     paths:
       - 'enterprise/runtime/**'
       - 'enterprise/openspec/**'
+      - 'enterprise/sim/**'
 
 jobs:
   validate:
@@ -54,3 +55,32 @@ jobs:
               repo: context.repo.repo,
               body
             });
+
+  sim-integration:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install sim bridge dependencies
+        working-directory: enterprise/sim/bridge
+        run: npm install
+
+      - name: Install runtime dependencies
+        working-directory: enterprise/runtime
+        run: npm install
+
+      - name: Build engine and packages
+        working-directory: enterprise/runtime
+        run: npm run build
+
+      - name: Sim bridge integration test (spawns bridge in-test)
+        working-directory: enterprise/runtime/engine
+        env:
+          RUN_SIM_INTEGRATION: '1'
+        run: node --import tsx --test test/sim-matter.integration.test.ts
