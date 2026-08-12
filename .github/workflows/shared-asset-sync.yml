@@ -1,0 +1,41 @@
+name: Shared-asset sync
+
+# Keeps product branches from silently drifting behind main's shared assets
+# (.github CI, .agents skills, BMad method, docs, root governance files).
+# Found necessary 2026-08-12: product/mechanistic-interpreter-testing forked
+# before .github/.gitignore existed on main and stayed behind for months.
+# Registry: .github/product-branches.txt.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.agents/**'
+      - '.github/**'
+      - '_bmad/**'
+      - 'docs/**'
+      - 'PRODUCTS.md'
+      - 'README.md'
+      - '.gitignore'
+  workflow_dispatch: {}
+
+concurrency:
+  group: shared-asset-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open sync PRs into product branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/shared-asset-sync.sh

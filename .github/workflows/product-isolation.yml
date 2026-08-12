@@ -1,0 +1,25 @@
+name: Product isolation
+
+# Enforces the PRODUCTS.md one-product-per-branch rule on every PR,
+# regardless of base branch. Registry: .github/product-dirs.txt.
+#
+# Exemption: sync/main-into-* branches (shared-asset-sync workflow) re-deliver
+# main's already-reviewed baseline wholesale, which may legitimately span
+# whatever product folders have been promoted to main. The one-product rule
+# governs authored changes, not baseline syncs.
+on:
+  pull_request:
+
+jobs:
+  guard:
+    if: ${{ !startsWith(github.head_ref, 'sync/main-into-') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enforce one product per PR
+        run: |
+          git fetch --quiet origin "$GITHUB_BASE_REF"
+          bash .github/scripts/product-isolation-check.sh "origin/$GITHUB_BASE_REF"

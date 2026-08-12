@@ -1,0 +1,12 @@
+# Registered product folders (one per line).
+# The product-isolation CI guard (.github/workflows/product-isolation.yml)
+# fails any PR that touches more than one of these folders, enforcing the
+# PRODUCTS.md one-product-per-branch rule.
+#
+# Adding a new product? Add its top-level folder name here (step in
+# PRODUCTS.md "Adding a new product"). The guard auto-detects unregistered
+# product-like folders (any new top-level dir containing index.md) and
+# blocks them until registered, so this list cannot silently rot.
+clipforge
+enterprise
+mechanistic-interpreter-testing
