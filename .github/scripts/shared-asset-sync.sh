@@ -7,7 +7,9 @@
 #   - already contains main     -> skipped
 #   - merge applies cleanly     -> sync branch force-pushed, PR opened
 #                                  (or existing open PR's branch updated)
-#   - merge conflicts           -> merge aborted, issue opened asking for a
+#   - conflicts only in branch-scoped files -> auto-resolved to the product
+#                                  branch's side, then treated as clean
+#   - other merge conflicts     -> merge aborted, issue opened asking for a
 #                                  manual sync (deduped by title)
 #
 # Known limitation: PRs created with the default GITHUB_TOKEN do not trigger
@@ -16,6 +18,10 @@
 set -euo pipefail
 
 REGISTRY=".github/product-branches.txt"
+# Deliberately different on every product branch (per-branch planning_artifacts
+# pointers — see PRODUCTS.md "Working on a product"). They conflict on every
+# sync by construction; the product branch's side always wins.
+BRANCH_SCOPED_FILES="_bmad/bmm/config.yaml _bmad/custom/config.toml"
 
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -41,7 +47,25 @@ while IFS= read -r branch; do
   sync_branch="sync/main-into-$slug"
 
   git checkout -q -B "$sync_branch" "origin/$branch"
+  merged=0
   if git merge --no-edit -m "chore(sync): merge main shared assets into $branch" "$main_sha"; then
+    merged=1
+  else
+    unresolvable=0
+    for f in $(git diff --name-only --diff-filter=U); do
+      case " $BRANCH_SCOPED_FILES " in
+        *" $f "*) git checkout --ours -- "$f" && git add -- "$f" ;;
+        *) unresolvable=1 ;;
+      esac
+    done
+    if [ "$unresolvable" -eq 0 ] && [ -z "$(git diff --name-only --diff-filter=U)" ]; then
+      git commit --no-edit
+      merged=1
+      echo "$branch: branch-scoped config conflicts auto-resolved to branch side"
+    fi
+  fi
+
+  if [ "$merged" -eq 1 ]; then
     git push -f origin "$sync_branch"
     open_prs=$(gh pr list --head "$sync_branch" --base "$branch" --state open --json number --jq length)
     if [ "$open_prs" = "0" ]; then

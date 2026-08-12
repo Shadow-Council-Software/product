@@ -54,8 +54,10 @@ Product branches inherit shared assets (`.github/` CI, `.agents/skills`,
 they keep merging `main`. The **Shared-asset sync** workflow
 (`.github/workflows/shared-asset-sync.yml`) removes the "only if": whenever
 shared paths change on `main`, it opens a `sync/main-into-<slug>` PR into
-every branch registered in `.github/product-branches.txt` (conflicts become
-an issue asking for a manual sync instead).
+every branch registered in `.github/product-branches.txt`. The two
+branch-scoped BMad config files always conflict by construction and are
+auto-resolved to the product branch's side; any other conflict becomes an
+issue asking for a manual sync instead.
 
 Why: `product/mechanistic-interpreter-testing` forked before `.github/` CI
 and `.gitignore` existed on `main` and silently stayed behind for months
