@@ -28,10 +28,47 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
         return {
             **state,
             "output_path": None,
+            "otio_path": None,
             "report": "dry_run: skipped Resolve render (no output produced)",
         }
 
     plan = state.get("timeline_plan") or []
+    job = (state.get("job_id") or "job").replace("/", "_")
+
+    # CF-FR-46: write the NLE-agnostic OTIO handoff artifact BEFORE attempting
+    # any render, so it exists even when Resolve is unavailable. The free
+    # Resolve edition can consume it via File > Import Timeline (no scripting).
+    # An export failure is appended to errors and therefore fails the job
+    # (exit 1) even if a render succeeds afterwards — deliberate fail-loud.
+    otio_path: str | None = None
+    otio_errors: list[str] = []
+    if plan:
+        try:
+            from clipforge.lib.otio_export import export_timeline_plan
+
+            otio_path = str(
+                export_timeline_plan(
+                    plan,
+                    out_dir / f"{job}_timeline.otio",
+                    timeline_name=str(
+                        resolve_cfg.get("timeline_name") or "ClipForge_Timeline"
+                    ),
+                    job_id=job,
+                )
+            )
+        except Exception as exc:  # noqa: BLE001
+            otio_errors.append(f"resolve_agent: OTIO export failed: {exc}")
+    else:
+        otio_errors.append(
+            "resolve_agent: timeline_plan is empty; OTIO artifact not written "
+            "(CF-FR-46)."
+        )
+    state = {
+        **state,
+        "otio_path": otio_path,
+        "errors": list(state.get("errors") or []) + otio_errors,
+    }
+
     clip_paths = [c.get("clip_path") for c in plan if c.get("clip_path")]
     if not clip_paths:
         errors = list(state.get("errors") or [])
@@ -41,11 +78,15 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
         )
         return {**state, "errors": errors}
 
-    job = (state.get("job_id") or "job").replace("/", "_")
     compilation_out = out_dir / f"{job}_compilation.mp4"
 
     editor = Path(__file__).resolve().parent.parent / "resolve_scripts" / "resolve_editor.py"
-    project_name = f"{resolve_cfg.get('project_name_prefix', 'ClipForge')}_{job}"
+    project_name = f"{resolve_cfg.get('project_name_prefix') or 'ClipForge'}_{job}"
+    # str() coercion: a null/numeric YAML value would otherwise raise an
+    # uncaught TypeError inside subprocess.run (only CalledProcessError is
+    # handled below).
+    render_format = str(resolve_cfg.get("render_format") or "mp4")
+    render_codec = str(resolve_cfg.get("render_codec") or "H264")
     cmd = [
         sys.executable,
         str(editor),
@@ -56,12 +97,20 @@ def resolve_node(state: ClipForgeState) -> ClipForgeState:
         "--project-name",
         project_name,
         "--timeline-name",
-        resolve_cfg.get("timeline_name", "ClipForge_Timeline"),
+        str(resolve_cfg.get("timeline_name") or "ClipForge_Timeline"),
+        "--render-format",
+        render_format,
+        "--render-codec",
+        render_codec,
     ]
     err_text = ""
     try:
         subprocess.run(cmd, check=True, capture_output=True, text=True)
-        outputs = sorted(out_dir.glob("*.mp4"), key=lambda p: p.stat().st_mtime)
+        # Match the configured container, not a hardcoded .mp4, so a mov/mxf
+        # render is discovered instead of a stale or missing .mp4.
+        outputs = sorted(
+            out_dir.glob(f"*.{render_format}"), key=lambda p: p.stat().st_mtime
+        )
         output_path = str(outputs[-1]) if outputs else ""
         return {
             **state,

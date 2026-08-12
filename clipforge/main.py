@@ -50,6 +50,8 @@ def cmd_run(args: argparse.Namespace) -> int:
     print(f"Job report: {report_path}")
     if result.get("output_path"):
         print(f"Output: {result['output_path']}")
+    if result.get("otio_path"):
+        print(f"Timeline (OTIO, CF-FR-46): {result['otio_path']}")
     if result.get("errors"):
         print("Errors:", file=sys.stderr)
         for err in result["errors"]:

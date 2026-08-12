@@ -55,7 +55,7 @@ _Normative technical design for the editor-simulation platform. Implementation a
 | **Security** | CF-NFR-S1–S3 | Secrets via env; no inbound network; discovery off by default |
 | **Observability** | CF-NFR-O1 (stderr stage errors) | `errors[]` + `messages[]` in `ClipForgeState` |
 | **Maintainability** | CF-NFR-M1–M2 | New workflow = YAML row; new profile = CV plug-in |
-| **Integration** | CF-NFR-I1–I2 | Resolve API 19+; yt-dlp pinned in requirements |
+| **Integration** | CF-NFR-I1–I2 | Resolve **Studio** API 19.1+ (free edition blocks external scripting); yt-dlp pinned in requirements |
 
 ### Technical Constraints & Dependencies
 
@@ -99,7 +99,7 @@ _Normative technical design for the editor-simulation platform. Implementation a
 | **D-01** | **LangGraph `StateGraph`** is the sole job orchestrator; graph compiled in `agents/orchestrator.py` | Stateful retries, conditional routing, agent observability; aligns with PRD CF-FR-02 | POC |
 | **D-02** | **YAML config plane** — `workflows.yaml`, `datasets.yaml`, `steering.*.yaml`, `settings.yaml` — drives all behavior | Configuration is the product; CF-FR-07–16, CF-NFR-M1 | POC |
 | **D-03** | **`ClipForgeState` TypedDict** (`lib/state.py`) is the canonical job schema; LangGraph `add_messages` for supervisor log | Single source of truth per job; typed agent contracts | POC |
-| **D-04** | **DaVinci Resolve** is the sole NLE backend for POC via subprocess to `resolve_scripts/resolve_editor.py`. A non-Resolve fallback (local concat/copy) exists in `resolve_agent` but is **disabled by default**; it runs only when `settings.resolve.allow_non_resolve_fallback: true`, with a prominent stderr warning | Professional finish authority; CF-NFR-I1; G3/G6 gates | POC |
+| **D-04** | **DaVinci Resolve** is the sole NLE backend for POC via subprocess to `resolve_scripts/resolve_editor.py`. A non-Resolve fallback (local concat/copy) exists in `resolve_agent` but is **disabled by default**; it runs only when `settings.resolve.allow_non_resolve_fallback: true`, with a prominent stderr warning. **Amended 2026-08-12 (CF-FR-46):** the pipeline additionally writes an **OpenTimelineIO artifact** (`lib/otio_export.py`) before any render attempt — the NLE-agnostic interchange boundary, consumed by free-edition Resolve via File > Import Timeline (the verified G6 path). The scripted Studio path and the gated fallback currently consume extracted `clip_path` files directly, not the artifact; converging them onto the artifact is Growth work (D-12). External scripting requires Resolve **Studio** 19.1+ | Professional finish authority; CF-NFR-I1; G3/G6 gates; license-free handoff | POC |
 | **D-05** | **Heuristic CV profiles** (`intensity_peaks`, `scene_change`) in `cv/segment_scorer.py` for POC; profile id from workflow | Meets CF-NFR-P1 without model training; plug-in contract Growth | POC |
 | **D-06** | **File-based artifacts** for POC — segment sidecars as JSON under `data/clips/`; **SQLite** (`data/jobs.db`) for job records Growth | Local-first audit; CF-FR-27 POC, CF-FR-42 Growth | POC → Growth |
 | **D-07** | **CLI-only surface** — `main.py` commands: `run`, `watch`, `analyze`, `test-resolve`. (`discover` and experimental `ui` also exist in code but are unspecced — see "Implemented-but-unspecced surfaces") | PRD MVP surface; no inbound network CF-NFR-S2 | POC |
@@ -449,7 +449,7 @@ class NleAdapterPort(Protocol):
 
 | Adapter | Phase | Implementation |
 |---------|-------|----------------|
-| `ResolveAdapter` | POC | Subprocess → `resolve_scripts/resolve_editor.py`; Resolve API 19+ |
+| `ResolveAdapter` | POC | Subprocess → `resolve_scripts/resolve_editor.py`; Resolve **Studio** API 19.1+ (free edition consumes the CF-FR-46 OTIO artifact instead) |
 | `ResolveAdapter` (in-process) | Growth | Optional: import Resolve scripting module directly |
 | `PremiereAdapter` | Vision | Adobe ExtendScript / UXP behind port |
 | `FinalCutAdapter` | Vision | FCPXML export + bundle trigger |

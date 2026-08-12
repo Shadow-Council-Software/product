@@ -25,6 +25,7 @@
 | Artifact | Path |
 |----------|------|
 | Sprint status | [`../_bmad-output/implementation-artifacts/sprint-status.yaml`](../_bmad-output/implementation-artifacts/sprint-status.yaml) |
+| **POC exit runbook (G1–G6 evidence)** | [docs/POC_EXIT.md](./docs/POC_EXIT.md) |
 | Code | `agents/`, `main.py`, `cv/`, `lib/` |
 
 ## POC gates
@@ -36,6 +37,7 @@
 | G3 | Local inbox job + sidecars (manual + tests) |
 | G4 | `test_g4_steering_overrides_workflow_defaults` |
 | G5 | `test_g5_watch_three_cycles_dry_run` |
+| G6 | OTIO artifact (`test_otio_export.py`) + live free-Resolve render 2026-08-12 — see [docs/POC_EXIT.md](./docs/POC_EXIT.md) |
 
 ```bash
 pytest clipforge/tests -q

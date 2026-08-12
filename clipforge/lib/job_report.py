@@ -35,6 +35,7 @@ def write_job_report(state: dict[str, Any]) -> Path:
         "ingested_paths": state.get("ingested_paths") or [],
         "source_urls": state.get("source_urls") or [],
         "output_path": state.get("output_path"),
+        "otio_path": state.get("otio_path"),
         "report": state.get("report"),
         "errors": state.get("errors") or [],
         "discovery_retries": state.get("discovery_retries"),

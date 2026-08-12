@@ -150,7 +150,7 @@ The problem: finishing video at scale requires repetitive human judgment—revie
 | **G4** | Steering YAML overrides workflow defaults on same dataset |
 | **G5** | `clipforge watch --dry-run` runs ≥3 cycles without crash |
 
-**Growth gate (G6, post-POC):** End-to-end render with extracted `clip_path` files → Resolve MP4 on disk.
+**Growth gate (G6, post-POC):** End-to-end render of the ClipForge edit → Resolve MP4 on disk. *(Amended 2026-08-12: the edit is handed off via the OTIO artifact (CF-FR-46), which references original sources with per-segment in/out ranges — the same cut, without requiring intermediate `clip_path` files. The original wording, "extracted `clip_path` files → Resolve MP4", described the Studio external-scripting implementation rather than the outcome; that path remains valid but is no longer the gate's definition.)*
 
 ## Traceability
 
@@ -159,7 +159,7 @@ The problem: finishing video at scale requires repetitive human judgment—revie
 | Loop proven | 0, 1 | CF-FR-01–04, CF-FR-24–30, CF-FR-34–37 | G1, NFR-R1 |
 | Config drives behavior | 0, 2 | CF-FR-09–12, CF-FR-15 | G4 |
 | Local ingest | 0 | CF-FR-12–13, CF-FR-24–28, CF-FR-30 | G2, G3 |
-| Resolve render | 0, 4 | CF-FR-34–37, CF-FR-29 (Growth) | G3, G6 |
+| Resolve render | 0, 4 | CF-FR-34–37, CF-FR-46, CF-FR-29 (Growth) | G3, G6 |
 | Discovery automation | 3 | CF-FR-16–19, CF-FR-23, CF-FR-30 | G5 |
 | Editor replacement (Vision) | 5, 6 | CF-FR-G1–G12 | — |
 | Rights-safe operation | all | CF-FR-38–41 | NFR-S1–S3 |
@@ -188,7 +188,7 @@ The problem: finishing video at scale requires repetitive human judgment—revie
 
 Operator drops rushes in `data/raw/inbox/`, copies `steering.example.yaml`, runs `clipforge run --trigger manual_local`. System ingests, scores segments, builds timeline plan, attempts Resolve render (or reports extraction gap).
 
-**Covers:** CF-FR-09–15, CF-FR-24–28, CF-FR-30, CF-FR-34–37, G2–G4
+**Covers:** CF-FR-09–15, CF-FR-24–28, CF-FR-30, CF-FR-34–37, CF-FR-46, G2–G4
 
 ### Journey 1 — URL batch (POC)
 
@@ -304,7 +304,7 @@ Operator installs workflow pack + analysis profile from marketplace; agents spec
 | LLM steering execution | ✗ P2 (Growth) |
 | Full web discovery | ✗ P1 (Growth) — discovery LangChain tools |
 
-**Exit:** Gates G1–G5 pass; G6 documented path for real render.
+**Exit:** Gates G1–G5 pass; G6 documented path for real render (verified live 2026-08-12 via the OTIO handoff on free Resolve — exceeding the documentation-only requirement; see `docs/POC_EXIT.md`).
 
 ### P1 — Growth: Trustworthy production jobs
 
@@ -420,6 +420,7 @@ Operator installs workflow pack + analysis profile from marketplace; agents spec
 | CF-FR-35 | System SHALL invoke professional render settings (format, codec, output directory) from configuration. |
 | CF-FR-36 | System SHALL write final outputs under a configured output path with job-identifying names. |
 | CF-FR-37 | System SHALL surface actionable errors when NLE scripting modules are unavailable. |
+| CF-FR-46 | System SHALL export the timeline plan as an OpenTimelineIO (.otio) artifact referencing original source media, written before any render attempt, so any OTIO-aware NLE (including free DaVinci Resolve via File → Import Timeline) can consume the edit without the Studio-gated scripting bridge. (Added 2026-08-12.) |
 
 ### Compliance & operations
 
@@ -472,7 +473,7 @@ Operator installs workflow pack + analysis profile from marketplace; agents spec
 | CF-NFR-O2 | Observability | Growth: structured JSON logs per agent transition |
 | CF-NFR-M1 | Maintainability | New workflow = YAML row only; no core agent fork |
 | CF-NFR-M2 | Maintainability | New analysis profile = CV module plug-in implementing scorer contract |
-| CF-NFR-I1 | Integration | Resolve scripting API 19+ documented in `resolve_scripts/README.md` |
+| CF-NFR-I1 | Integration | Resolve **Studio** scripting API 19.1+ documented in `resolve_scripts/README.md` (free edition blocks external scripting since 19.1) |
 | CF-NFR-I2 | Integration | Growth: yt-dlp version pinned in requirements.txt |
 | CF-NFR-U1 | Usability | CLI `--help` documents all triggers and required flags |
 | CF-NFR-U2 | Usability | Growth: one steering example per workflow type |

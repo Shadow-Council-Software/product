@@ -1,8 +1,10 @@
 # ClipForge POC — Python 3.11+
-# Pinned 2026-08-10. langgraph, langchain-core, opencv, moviepy, numpy, pyyaml,
-# pydub, and pytest are pinned to the versions of the environment that passes
-# clipforge/tests; the remainder are pinned to the latest PyPI release on that
-# date. Not re-verified with a clean `pip install` in this remediation pass.
+# Pinned 2026-08-10 (opentimelineio added 2026-08-12). langgraph,
+# langchain-core, opencv, moviepy, numpy, pyyaml, pydub, and pytest are pinned
+# to the versions of the environment that passes clipforge/tests; the
+# remainder are pinned to the latest PyPI release on that date.
+# Verified 2026-08-12: clean `pip install -r requirements.txt` into a fresh
+# Python 3.13 venv succeeds and the full test suite passes.
 # Non-POC / optional dependencies moved to requirements-optional.txt.
 langgraph==1.2.1
 langchain-core==1.4.0
@@ -13,6 +15,7 @@ pydub==0.25.1
 librosa==0.11.0
 moviepy==1.0.3
 numpy==2.4.4
+opentimelineio==0.18.1
 pytest==9.0.3
 
 # DaVinci Resolve: install DaVinciResolveScript from local Resolve bundle
