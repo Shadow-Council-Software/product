@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "surveyRef": "enterprise/sim/layouts/onimurasame-residence-2026-05-24.json",
+  "matterportModelId": "REPLACE_WITH_MATTERPORT_MODEL_ID",
+  "matterpakOrderedAt": "2026-05-27T00:00:00.000Z",
+  "notes": "Align Matterpak mesh so layout metadata.origin (front entrance) matches scan. Adjust position/rotation/scale after first discover run.",
+  "transform": {
+    "position": [0, 0, 0],
+    "rotationEulerDeg": [0, 0, 0],
+    "scale": [1, 1, 1]
+  },
+  "controlPoints": [
+    {
+      "label": "Front entrance center (Nest Doorbell)",
+      "surveyPosition": [8.534, 0, 0],
+      "meshPosition": [0, 0, 0],
+      "toleranceM": 0.02
+    },
+    {
+      "label": "Southwest corner (home office)",
+      "surveyPosition": [0, 0, 0],
+      "meshPosition": [0, 0, 0],
+      "toleranceM": 0.02
+    },
+    {
+      "label": "Northeast extent (main level)",
+      "surveyPosition": [17.374, 0, 9.754],
+      "meshPosition": [0, 0, 0],
+      "toleranceM": 0.03
+    }
+  ],
+  "parityTargets": {
+    "maxWallDeltaM": 0.01,
+    "maxStationDeltaM": 0.05
+  }
+}
