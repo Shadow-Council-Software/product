@@ -1,0 +1,18 @@
+# ClipForge — optional / non-POC dependencies (pinned 2026-08-10).
+# None of these are imported by the POC pipeline path (run/watch/analyze/
+# test-resolve). Install only what you need.
+
+# Experimental operator console: `clipforge ui` (out of POC scope, CF-NFR-S2)
+gradio==6.14.0
+
+# Optional discovery search provider (sources/adapters/search.py)
+duckduckgo-search==8.1.1
+
+# Growth (P1–P2): LangChain discovery tools and LLM steering interpretation
+langchain==1.3.14
+langchain-openai==1.4.3
+
+# Reserved for future CV analysis profiles (not used by any current code path)
+torch==2.13.0
+torchvision==0.28.0
+mediapipe==1.0.0

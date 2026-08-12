@@ -41,11 +41,17 @@ def score_segments(
     sample_fps: float = 2.0,
     ranking_weights: dict[str, float] | None = None,
     prefer_face_visible: bool = False,
+    bootstrap_if_empty: bool = False,
 ) -> list[dict[str, Any]]:
     """
     Content-agnostic segment detection: sample frames, score motion + visual intensity.
 
-    Profiles (intensity_peaks, scene_change) swap heuristics or models in Phase 2.
+    Profiles (intensity_peaks, scene_change) swap heuristics or models in P2 (Growth).
+
+    When bootstrap_if_empty is true (settings: analysis.bootstrap_segment_if_empty)
+    and no organic segments are found, one synthetic segment is fabricated at
+    exactly min_score and marked ``bootstrap: True``. Bootstrap segments must not
+    be used as POC gate evidence.
     """
     import cv2
 
@@ -162,7 +168,7 @@ def score_segments(
         flush_window(frame_idx)
     cap.release()
 
-    if not segments:
+    if not segments and bootstrap_if_empty:
         cap = cv2.VideoCapture(str(video_path))
         total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0
         fps = cap.get(cv2.CAP_PROP_FPS) or 30.0

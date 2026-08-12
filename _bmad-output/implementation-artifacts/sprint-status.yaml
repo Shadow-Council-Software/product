@@ -1,46 +1,99 @@
+# STATUS RESET 2026-08-10 (adversarial review remediation)
+# ---------------------------------------------------------
+# The previous version of this file marked all 5 epics / 18 stories "done",
+# dated 2026-05-26 — the same day the planning documents were authored — with
+# ZERO story files present in story_location. That was not credible tracking.
+#
+# Statuses below were reset against the actual brownfield code on branch
+# product/clipforge:
+#   - needs-review: functionality exists in code AND is exercised by a passing
+#     automated test in clipforge/tests/ (no human review has occurred).
+#   - implemented-unverified: matching code exists but no automated test or
+#     external verification covers the story's acceptance criteria.
+#   - todo: deliverable does not exist or is materially incomplete.
+# No story followed the BMad story workflow (no story files were ever created),
+# so nothing is marked "done".
+#
 # generated: 2026-05-26
-# last_updated: 2026-05-26
+# last_updated: 2026-08-10
 # project: ClipForge
 # tracking_system: file-system
 # story_location: _bmad-output/implementation-artifacts/stories
 
+# UPDATE 2026-08-12 (fourth pass): pre-commit adversarial code review (3
+# parallel layers) found 25 issues — evidence-doc contradictions, exporter
+# edge cases (zero/negative/sub-frame durations), render-output discovery
+# bugs (format-blind glob, unchecked StartRendering, no render wait), and
+# test blind spots. All patched; G6 gate definition amended in prd/epics to
+# the OTIO-boundary wording (user decision). Suite: 61 tests.
+#
+# UPDATE 2026-08-12 (third pass): G6 VERIFIED live on this machine's FREE
+# DaVinci Resolve 21.0.4.5 via the OTIO handoff + in-Resolve Lua script
+# (resolve_scripts/clipforge_g6_verify.lua, operator-triggered): OTIO import
+# reconstructed the edit exactly (1 clip, 240 frames @ 24fps = 10.00s) and
+# rendered a real H.264 MP4, independently probe-verified. Transcript in
+# docs/POC_EXIT.md. Still unverified: the external-scripting automated render
+# (free edition refuses external connections; Studio 19.1+ only).
+#
+# UPDATE 2026-08-12 (second pass): CF-FR-46 OTIO handoff artifact adopted and
+# implemented (user-approved scope addition, specced in prd.md/epics.md story
+# 5.4/architecture D-04 amendment). lib/otio_export.py + resolve_agent wiring;
+# automated tests round-trip through the real opentimelineio library, plus a
+# separate manual e2e run (job adfb1032) produced the artifact later used for
+# G6. NOT verified at that point: actual import into a Resolve install.
+#
+# UPDATE 2026-08-12: research established that external Resolve scripting is
+# Studio-only since 19.1 (free edition refuses connections) — docs corrected
+# (CF-NFR-I1 in prd/epics/architecture/README/POC_EXIT). Render format/codec
+# bug fixed in resolve_editor.py (SetCurrentRenderFormatAndCodec, codec "H264").
+# Mock contract tests added: tests/test_resolve_contract.py. Live Resolve
+# render (G6) still requires a Studio license and remains unverified.
+#
+# UPDATE 2026-08-10 (second pass, same day): story-level tests added in
+# clipforge/tests/test_story_coverage.py for 1-4, 2-2, 3-1, 3-3, 4-2, 4-4;
+# G1/G2/G3/G5 manual transcripts recorded in clipforge/docs/POC_EXIT.md
+# (41 tests passing on a clean-install venv). Stories with new evidence moved
+# implemented-unverified -> needs-review. Resolve stories (5-1, 5-2) remain
+# implemented-unverified: no DaVinci Resolve install available to test against.
+
 generated: '2026-05-26'
-last_updated: '2026-05-26'
+last_updated: '2026-08-12'
 project: ClipForge
 project_key: clipforge
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts/stories
 
 development_status:
-  epic-1: done
-  1-1-job-definition-cli: done
-  1-2-langgraph-orchestrator-graph: done
-  1-3-job-report-and-dry-run: done
-  1-4-job-id-and-supervisor-observability: done
+  epic-1: needs-review
+  1-1-job-definition-cli: needs-review  # main.py run/validate; test_cli_invalid_workflow_rejected
+  1-2-langgraph-orchestrator-graph: needs-review  # agents/orchestrator.py; tests/test_graph.py
+  1-3-job-report-and-dry-run: needs-review  # lib/job_report.py; G1 test. Note: dry-run skips analysis; timeline_plan empty, output_path null
+  1-4-job-id-and-supervisor-observability: needs-review  # test_story_coverage.py: unique job_id + supervisor message
   epic-1-retrospective: optional
 
-  epic-2: done
-  2-1-workflow-definitions-loader: done
-  2-2-dataset-path-expansion: done
-  2-3-steering-merge-overrides: done
+  epic-2: needs-review
+  2-1-workflow-definitions-loader: needs-review  # lib/config.py; tests/test_config.py
+  2-2-dataset-path-expansion: needs-review  # test_story_coverage.py: recursive glob + after_date filter
+  2-3-steering-merge-overrides: needs-review  # lib/steering.py; G4 test
   epic-2-retrospective: optional
 
-  epic-3: done
-  3-1-local-ingest-trigger: done
-  3-2-url-download-acquisition: done
-  3-3-discovery-stub-and-hybrid-retry: done
-  3-4-continuous-watch-loop: done
+  epic-3: needs-review
+  3-1-local-ingest-trigger: needs-review  # test_story_coverage.py: ingest_node populates paths + empty-inbox error; POC_EXIT.md full inbox job ff84f4ef
+  3-2-url-download-acquisition: implemented-unverified  # agents/download_agent.py; never verified against live downloads
+  3-3-discovery-stub-and-hybrid-retry: needs-review  # test_story_coverage.py: retry routing (short plan/budget/trigger/target) + counter increment. Live discovery still unexercised
+  3-4-continuous-watch-loop: needs-review  # main.py watch; G5 test
   epic-3-retrospective: optional
 
-  epic-4: done
-  4-1-segment-analysis-cli: done
-  4-2-audio-visual-scoring-filter: done
-  4-3-segment-sidecar-artifacts: done
-  4-4-timeline-sequencing-plan: done
+  epic-4: needs-review
+  4-1-segment-analysis-cli: needs-review  # main.py analyze; G2 test
+  4-2-audio-visual-scoring-filter: needs-review  # test_story_coverage.py: weight-merge formula + min_score filter + sidecar exclusion
+  4-3-segment-sidecar-artifacts: needs-review  # analysis_agent sidecars; G3 test (added 2026-08-10)
+  4-4-timeline-sequencing-plan: needs-review  # test_story_coverage.py: dedupe window, narrative order, target-duration cap
   epic-4-retrospective: optional
 
-  epic-5: done
-  5-1-resolve-timeline-handoff: done
-  5-2-render-output-configuration: done
-  5-3-poc-exit-gates-validation: done
+  epic-5: in-progress
+  5-1-resolve-timeline-handoff: needs-review  # test_resolve_contract.py: call sequence + payload shapes vs documented API (mock only; never run against a real Resolve Studio install)
+  5-2-render-output-configuration: needs-review  # settings.resolve render_format/render_codec now wired agent -> editor CLI -> SetCurrentRenderFormatAndCodec, contract-tested (test_render_format_codec_flow_from_arguments); live Studio render still unverified
+  5-3-poc-exit-gates-validation: needs-review  # docs/POC_EXIT.md complete: G1-G5 recorded transcript (2026-08-10) incl. full G3 inbox job; G6 verified live 2026-08-12 via OTIO path (see 5-4); Studio external-scripting render still contract-tested only
+  5-4-otio-timeline-handoff-artifact: needs-review  # CF-FR-46; test_otio_export.py (real otio round-trip + resolve_node integration); plus manual e2e job adfb1032 whose artifact fed the G6 run (POC_EXIT.md G6 transcript); Resolve-side import + render VERIFIED live 2026-08-12 on free Resolve 21.0.4.5
   epic-5-retrospective: optional

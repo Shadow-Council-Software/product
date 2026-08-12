@@ -5,6 +5,7 @@ stepsCompleted:
   - step-03-create-stories
 inputDocuments:
   - './prd.md'
+  - './architecture.md'
   - './docs/ARCHITECTURE.md'
 workflowType: epics-and-stories
 productName: ClipForge
@@ -81,7 +82,7 @@ This document decomposes the **P0 Editor Simulation Loop** from the ClipForge PR
 | CF-NFR-O1 | Stderr errors list agent stage and cause |
 | CF-NFR-M1 | New workflow = YAML row only |
 | CF-NFR-M2 | New analysis profile = CV plug-in implementing scorer contract |
-| CF-NFR-I1 | Resolve scripting API 19+ documented in `resolve_scripts/README.md` |
+| CF-NFR-I1 | Resolve **Studio** scripting API 19.1+ documented in `resolve_scripts/README.md` (free edition blocks external scripting) |
 | CF-NFR-U1 | CLI `--help` documents triggers and required flags |
 
 ### POC Acceptance Gates
@@ -93,14 +94,14 @@ This document decomposes the **P0 Editor Simulation Loop** from the ClipForge PR
 | **G3** | Local job with inbox media → `timeline_plan` + segment sidecars |
 | **G4** | Steering YAML overrides workflow defaults on same dataset |
 | **G5** | `clipforge watch --dry-run` runs ≥3 cycles without crash |
-| **G6** | Growth: documented path for real render with `clip_path` → Resolve MP4 |
+| **G6** | Growth: documented path for real render of the ClipForge edit → Resolve MP4 *(amended 2026-08-12: handoff via the OTIO artifact, CF-FR-46 — references original sources with per-segment ranges; the `clip_path`-based Studio scripting path remains a valid implementation, not the definition)* |
 
 ### Additional Requirements
 
 - LangGraph `StateGraph` pipeline per `docs/ARCHITECTURE.md`
 - CLI-only MVP surface; no web UI
 - Heuristic CV profiles for POC; discovery stub (seeds + queries)
-- Clip file extraction deferred (Phase 1); Resolve dry-run acceptable for POC exit
+- Clip file extraction originally deferred to P1 (Growth) but already implemented in brownfield code (`cv/clip_extractor.py`); Resolve dry-run acceptable for POC exit
 
 ### UX Design Requirements
 
@@ -111,10 +112,10 @@ None for P0 (CLI only).
 | FR IDs | Epic |
 |--------|------|
 | CF-FR-01–06 | Epic 1 |
-| CF-FR-07–16, CF-FR-09 | Epic 2 |
+| CF-FR-07–12, CF-FR-16 | Epic 2 |
 | CF-FR-13, CF-FR-17–23, CF-FR-40–41 | Epic 3 |
-| CF-FR-24–33, CF-FR-27–28 | Epic 4 |
-| CF-FR-34–37, CF-FR-29 (doc), CF-FR-38–39 | Epic 5 |
+| CF-FR-24–33 | Epic 4 |
+| CF-FR-34–37, CF-FR-46, CF-FR-29 (doc), CF-FR-38–39 | Epic 5 |
 | CF-FR-14–15 | Epic 2, 4 (steering-driven behavior) |
 
 ## Epic List
@@ -125,7 +126,7 @@ None for P0 (CLI only).
 | 2 | Configuration plane | 2.1–2.3 | G4 |
 | 3 | Media acquisition | 3.1–3.4 | G3, G5 |
 | 4 | Analysis & timeline | 4.1–4.4 | G2, G3 |
-| 5 | Render & POC exit | 5.1–5.3 | G1–G6 |
+| 5 | Render & POC exit | 5.1–5.4 | G1–G6 |
 
 ---
 
@@ -150,7 +151,7 @@ So that I can run the editor-simulation loop without editing code.
 - **Given** valid `workflows.yaml` and `datasets.yaml`, **when** I run `clipforge run --workflow <id> --dataset <id> --trigger manual_local`, **then** a job definition is accepted and passed to the orchestrator (**CF-FR-01**).
 - **Given** an optional `--steering <path>`, **when** the job starts, **then** the steering file path is loaded into job state (**CF-FR-01**).
 - **Given** `clipforge --help`, **when** I view subcommands, **then** `run`, `analyze`, `watch`, and trigger flags are documented (**CF-NFR-U1**).
-- **Given** invalid workflow or dataset id, **when** I run the command, **then** the CLI exits with a clear error before graph execution (**CF-FR-42** precursor).
+- **Given** invalid workflow or dataset id, **when** I run the command, **then** the CLI exits with a clear error before graph execution (**CF-FR-01** validation; error clarity per **CF-NFR-O1**).
 
 **Technical notes**
 
@@ -191,7 +192,7 @@ So that I can validate pipelines safely and audit outcomes.
 
 - **Given** `--dry-run`, **when** `clipforge run` completes, **then** no destructive render or destructive download side effects occur (**CF-FR-04**, **G1**).
 - **Given** a completed job (dry-run or live), **when** the graph finishes, **then** a job report includes errors (if any), segment counts, and output path when applicable (**CF-FR-03**, **G1**).
-- **Given** dry-run success, **when** I inspect emitted state artifacts, **then** `timeline_plan` and agent messages are present for downstream gates (**G1**, **G3** prep).
+- **Given** dry-run success, **when** I inspect emitted state artifacts, **then** agent messages and the job report (with `dry_run: true` and no `output_path`) are present; `timeline_plan` is **empty** because dry-run skips analysis, so no segments are scored (**G1**; G3 evidence requires a non-dry-run local job).
 
 **Technical notes**
 
@@ -288,7 +289,7 @@ So that creative briefs and thresholds change behavior without redeploying code.
 
 - Implement merge in `lib/steering.py`; hash steering for future audit (**CF-FR-41**).
 - `config/steering.example.yaml` must keep discovery disabled by default (**CF-NFR-S3**).
-- NL `directives.natural_language` stored but not executed in POC (Phase 2).
+- NL `directives.natural_language` stored but not executed in POC (P2 Growth).
 
 ---
 
@@ -509,7 +510,7 @@ So that masters land in predictable job-identified paths.
 
 **Technical notes**
 
-- Coordinate settings with `config/settings.yaml`; document Resolve version/API 19+.
+- Coordinate settings with `config/settings.yaml`; document Resolve **Studio** 19.1+ for external scripting (free edition: OTIO import per CF-FR-46).
 - Growth: MoviePy/FFmpeg extraction populates `clip_path` before render (**G6**).
 
 ---
@@ -527,7 +528,7 @@ So that the team can declare P0 complete with evidence.
 - **Given** inbox media job, **when** full dry-run or local job runs, **then** **G3** passes (`timeline_plan` + sidecars) (**G3**).
 - **Given** two steering files on same dataset, **when** jobs run, **then** **G4** passes (plans differ) (**G4**, **CF-FR-09**, **CF-FR-15**).
 - **Given** `clipforge watch --dry-run`, **when** ≥3 cycles run, **then** **G5** passes (**G5**, **CF-NFR-R2**).
-- **Given** Growth render requirement, **when** documentation is read, **then** **G6** path describes `clip_path` extraction → Resolve MP4 on disk (**G6**, **CF-FR-29**).
+- **Given** Growth render requirement, **when** documentation is read, **then** the **G6** path describes rendering the ClipForge edit to a Resolve MP4 on disk — via the OTIO handoff artifact (**CF-FR-46**, amended 2026-08-12) and/or `clip_path` extraction + Studio scripting (**G6**, **CF-FR-29**).
 - **Given** README and example steering, **when** reviewed, **then** operator media rights acknowledgment is present and core agents contain no genre hardcoding (**CF-FR-38**, **CF-FR-39**).
 
 **Technical notes**
@@ -535,6 +536,28 @@ So that the team can declare P0 complete with evidence.
 - Add `docs/POC_EXIT.md` or section in `README.md` with command transcript template.
 - Optional script `scripts/poc_gate_check.sh` invoking gates in sequence.
 - Record known limitation: no SaaS, no clip extraction in P0.
+
+---
+
+### Story 5.4: OTIO Timeline Handoff Artifact
+
+As an **operator without a Resolve Studio license**,
+I want each job to emit its timeline plan as an OpenTimelineIO file,
+So that I can import the edit into any OTIO-aware NLE (including free DaVinci Resolve) and render without the Studio-gated scripting bridge.
+
+**Acceptance criteria**
+
+- **Given** a non-empty `timeline_plan` (non-dry-run), **when** the resolve stage runs, **then** a `.otio` file is written under the output path with `job_id` in the filename **before** any render attempt, and its path is recorded in state and the job report (**CF-FR-46**, **CF-FR-36**).
+- **Given** the Resolve render fails or no `clip_path` entries exist, **when** the job finishes, **then** the `.otio` artifact still exists (handoff independent of render).
+- **Given** the exported file, **when** read back with the `opentimelineio` library, **then** clip order, per-clip source ranges (at each source's real frame rate), and original-media references round-trip correctly (**CF-FR-46**).
+- **Given** a transition intent other than `cut`, **when** exported, **then** the intent is preserved in clip metadata without fabricating OTIO transition objects (**CF-FR-33**).
+- **Given** an empty or malformed plan (missing source, non-positive duration), **when** export runs, **then** it fails loudly with an actionable error.
+
+**Technical notes**
+
+- `lib/otio_export.py`; wired in `agents/resolve_agent.py` ahead of the render attempt; `opentimelineio` pinned in requirements.
+- References ORIGINAL sources with in/out ranges (the true edit), not extracted clips.
+- **Not covered by automation:** actual import into a Resolve install (manual step, see `docs/POC_EXIT.md`).
 
 ---
 
@@ -560,5 +583,6 @@ So that the team can declare P0 complete with evidence.
 | 5.1 | `5-1-resolve-timeline-handoff` |
 | 5.2 | `5-2-render-output-configuration` |
 | 5.3 | `5-3-poc-exit-gates-validation` |
+| 5.4 | `5-4-otio-timeline-handoff-artifact` |
 
 **Next BMad step:** [SP] Sprint Planning → [IR] Implementation Readiness → [DS] Dev Story per sprint key.

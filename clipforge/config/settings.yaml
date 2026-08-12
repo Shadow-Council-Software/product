@@ -21,14 +21,24 @@ analysis:
   visual_threshold: 0.7
   audio_peak_db_threshold: -12
   sample_fps: 2
-  bootstrap_segment_if_empty: true
+  # When true, analysis fabricates ONE synthetic segment (centered, at exactly
+  # min_score) if a source yields no organic segments. The synthetic segment is
+  # marked `bootstrap: true` and MUST NOT be counted as evidence for POC gates
+  # G2/G3. Default false so empty analysis results fail honestly.
+  bootstrap_segment_if_empty: false
 
 resolve:
   project_name_prefix: ClipForge
   timeline_name: ClipForge_Timeline
   render_format: mp4
-  render_codec: H.264
+  # Documented Resolve codec identifier is "H264" (not "H.264") — see
+  # resolve_editor.py SetCurrentRenderFormatAndCodec.
+  render_codec: H264
   script_module_path: null
+  # Architecture D-04 makes Resolve the sole NLE backend. When true, a failed
+  # Resolve render falls back to a local MoviePy/ffmpeg concat (or file copy)
+  # with a prominent stderr warning. Default false: fail loudly instead.
+  allow_non_resolve_fallback: false
 
 llm:
   provider: openai  # openai | anthropic | grok

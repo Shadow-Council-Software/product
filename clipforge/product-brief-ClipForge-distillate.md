@@ -17,7 +17,7 @@ purpose: Token-efficient context for PRD and architecture workflows
 
 ## Rejected / deferred ideas
 
-- Hardcoding performers, fetish types, or site-specific logic in core agents — use steering/datasets instead.
+- Hardcoding subjects, genres, or site-specific logic in core agents — use steering/datasets instead.
 - SaaS-first or cloud-only processing for POC — local-first is mandatory.
 - Replacing Resolve in POC — Resolve is render authority; other NLEs are Vision.
 - Skipping job lineage / reproducibility — SQLite jobs planned Growth.

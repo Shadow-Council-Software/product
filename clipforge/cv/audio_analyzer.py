@@ -13,7 +13,7 @@ def score_audio_segment(
     peak_db_threshold: float = -12.0,
 ) -> float:
     """
-    Score gagging/swallow audio peaks in [start_sec, end_sec].
+    Score audio emphasis peaks (loudness relative to threshold) in [start_sec, end_sec].
 
     Uses librosa when available; falls back to 0.5 neutral score for POC bootstrap.
     """

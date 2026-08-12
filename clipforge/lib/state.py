@@ -34,6 +34,7 @@ class ClipForgeState(TypedDict, total=False):
 
     # Output
     output_path: str
+    otio_path: str | None  # CF-FR-46 OTIO handoff artifact (None when plan empty/export failed)
     report: str
     dry_run: bool
     errors: list[str]
