@@ -19,10 +19,11 @@ from typing import Any
 # Allow running as script from repo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from classify_replay_divergence import ReplayDivergenceError  # noqa: E402
-from freeze_certificate import freeze_certificate  # noqa: E402
+from freeze_certificate import CERTIFICATE_VERSION, freeze_certificate  # noqa: E402
 
 REASON_CERT_MISMATCH = "CERT_MISMATCH"
 REASON_CERT_INCOMPLETE = "CERT_SPAN_COVERAGE_GAP"
+REASON_CERT_RECOMPUTE_FAILED = "CERT_RECOMPUTE_FAILED"
 
 DIGEST_FIELDS = (
     "inputs_closure_digest",
@@ -60,10 +61,15 @@ def verify_certificate_binding(
     trace: dict[str, Any],
     certificate: dict[str, Any],
     *,
-    require_exact_span_coverage: bool = False,
+    require_exact_span_coverage: bool = True,
 ) -> CertificateBindingReport:
     """
     Returns OK report if binding holds; raises CertificateBindingError otherwise.
+
+    Identity mismatches (SWAP-CERT) are checked first so a swapped certificate
+    reports CERT_MISMATCH, not a coverage gap. Exact span coverage is required
+    by default: without it, a self-consistent certificate covering only a
+    chosen subset of spans would recompute cleanly and verify.
     """
     mismatches: list[dict[str, str]] = []
 
@@ -73,8 +79,19 @@ def verify_certificate_binding(
         if tv != cv:
             mismatches.append({"field": field, "expected": str(cv), "actual": str(tv)})
 
+    cert_version = certificate.get("certificate_version")
+    if cert_version != CERTIFICATE_VERSION:
+        mismatches.append(
+            {
+                "field": "certificate_version",
+                "expected": CERTIFICATE_VERSION,
+                "actual": str(cert_version),
+            }
+        )
+
     trace_spans = _trace_span_ids(trace)
-    cert_spans = set(certificate.get("span_ids") or [])
+    cert_span_list = list(certificate.get("span_ids") or [])
+    cert_spans = set(cert_span_list)
     missing = cert_spans - trace_spans
     if missing:
         mismatches.append(
@@ -83,18 +100,6 @@ def verify_certificate_binding(
                 "expected": f"subset of {sorted(trace_spans)}",
                 "actual": f"unknown span_ids {sorted(missing)}",
             }
-        )
-
-    if require_exact_span_coverage and cert_spans != trace_spans:
-        raise CertificateBindingError(
-            CertificateBindingReport(
-                reason_code=REASON_CERT_INCOMPLETE,
-                message="Certificate span set does not match trace span set",
-                details={
-                    "trace_span_ids": sorted(trace_spans),
-                    "certificate_span_ids": sorted(cert_spans),
-                },
-            )
         )
 
     if mismatches:
@@ -106,15 +111,51 @@ def verify_certificate_binding(
             )
         )
 
+    if require_exact_span_coverage:
+        duplicates = sorted(
+            sid for sid in cert_spans if cert_span_list.count(sid) > 1
+        )
+        if duplicates or cert_spans != trace_spans:
+            raise CertificateBindingError(
+                CertificateBindingReport(
+                    reason_code=REASON_CERT_INCOMPLETE,
+                    message="Certificate span set does not match trace span set",
+                    details={
+                        "trace_span_ids": sorted(trace_spans),
+                        "certificate_span_ids": sorted(cert_spans),
+                        "duplicate_span_ids": duplicates,
+                    },
+                )
+            )
+
     # Cryptographic verification: recompute the certificate from the trace
     # (same logic as freeze_certificate.py) and require every digest plus
     # certificate_hash to match. A certificate with tampered digests fails here.
     try:
-        recomputed = freeze_certificate(trace, list(certificate.get("span_ids") or []))
-    except (ReplayDivergenceError, ValueError, KeyError) as exc:
+        recomputed = freeze_certificate(trace, cert_span_list)
+    except ReplayDivergenceError as exc:
+        # OUTPUT_DRIFT/ENV_DRIFT mean the trace diverges from the certified
+        # replay (forgery or drift). SCHEMA_DRIFT means the verifier could not
+        # process the trace at all — that is a recompute failure, not evidence
+        # of forgery, and must not pollute the audit trail as CERT_MISMATCH.
+        if exc.report.code.value == "SCHEMA_DRIFT":
+            reason = REASON_CERT_RECOMPUTE_FAILED
+            message = "Certificate could not be recomputed from trace"
+        else:
+            reason = REASON_CERT_MISMATCH
+            message = "Trace diverges from certified replay (forgery or drift)"
         raise CertificateBindingError(
             CertificateBindingReport(
-                reason_code=REASON_CERT_MISMATCH,
+                reason_code=reason,
+                message=message,
+                details={"recompute_error": str(exc)},
+            )
+        ) from exc
+    except (ValueError, KeyError) as exc:
+        # Verifier crashed on malformed input; not evidence of forgery.
+        raise CertificateBindingError(
+            CertificateBindingReport(
+                reason_code=REASON_CERT_RECOMPUTE_FAILED,
                 message="Certificate could not be recomputed from trace",
                 details={"recompute_error": str(exc)},
             )

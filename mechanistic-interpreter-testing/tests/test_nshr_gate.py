@@ -33,12 +33,23 @@ def test_random_dominance_beats_necessity_check():
 
 
 def test_random_dominance_at_nshr_zero():
-    # The old `nshr > 0` guard masked dominance at NSHR 0.
+    # Zero-zero tie: protocol §8 trigger 2 reads "RANDOM >= NSHR" with no
+    # positivity qualifier, so an inert manifest is FALSE_MECHANISM. Whether
+    # that should instead be NECESSITY_GATE_FAILED is an open protocol
+    # decision — see deferred review finding; this test pins current behavior.
     code, reason, stats = evaluate(make_rows(10, 0, 0), PREREG)
     assert (code, reason) == (2, REASON_FALSE_MECHANISM), stats
 
 
-def test_necessity_gate_fails_when_random_dominated():
+def test_random_flips_dominate_inert_ablation():
+    # nshr = 0 with rand > 0: the quadrant the old `nshr > 0` guard governed.
+    # Random flips while ablation flips nothing — unambiguous FALSE_MECHANISM.
+    code, reason, stats = evaluate(make_rows(10, 0, 3), PREREG)
+    assert (code, reason) == (2, REASON_FALSE_MECHANISM), stats
+
+
+def test_necessity_gate_fails_when_ablation_below_theta():
+    # NSHR 0.4 < theta 0.7 while random (0.1) is dominated: necessity failure.
     code, reason, stats = evaluate(make_rows(10, 4, 1), PREREG)
     assert (code, reason) == (1, REASON_NECESSITY_GATE_FAILED), stats
 

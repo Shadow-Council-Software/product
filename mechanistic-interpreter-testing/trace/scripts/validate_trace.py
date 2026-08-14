@@ -4,8 +4,11 @@
 Usage: validate_trace.py <trace.json> [--strict-digests]
 
 --strict-digests additionally recomputes sha256 over the canonical JSON of
-each inline payload and compares it with the declared content_ref digest.
-It is opt-in because v0 fixtures carry synthetic placeholder digests.
+each inline payload and compares it with the declared content_ref digest;
+inline refs without a payload are rejected in strict mode. Blob refs are not
+strict-checked: their digest names blob content, and v0 has no blob store to
+verify against. Strict mode is opt-in because v0 fixtures carry synthetic
+placeholder digests.
 """
 
 from __future__ import annotations
@@ -88,14 +91,18 @@ def check_content_ref(
     if extra:
         err(f"{path}: unexpected keys {sorted(extra)}")
         ok = False
-    if strict_digests and "inline" in obj and isinstance(obj.get("digest"), str):
-        actual = inline_content_digest(obj["inline"])
-        if actual != obj["digest"]:
-            err(
-                f"{path}: inline content digest mismatch "
-                f"(declared {obj['digest']}, computed {actual})"
-            )
+    if strict_digests and obj.get("ref_type") == "inline":
+        if "inline" not in obj:
+            err(f"{path}: strict digests: inline ref has no inline payload to verify")
             ok = False
+        elif isinstance(obj.get("digest"), str):
+            actual = inline_content_digest(obj["inline"])
+            if actual != obj["digest"]:
+                err(
+                    f"{path}: inline content digest mismatch "
+                    f"(declared {obj['digest']}, computed {actual})"
+                )
+                ok = False
     return ok
 
 
@@ -130,9 +137,8 @@ RUN_ENVELOPE_ALLOWED = frozenset({"model_identity_hash", "toolchain_hash", "seed
 
 def validate_run_envelope(envelope: Any) -> bool:
     """Mirror schema $defs/run_envelope: string-valued known keys only,
-    additionalProperties false."""
-    if envelope is None:
-        return True
+    additionalProperties false. An explicit null is invalid (matches schema);
+    callers must only invoke this when the key is present."""
     if not isinstance(envelope, dict):
         err("root.run_envelope: must be object")
         return False
@@ -288,7 +294,8 @@ def validate_trace_root(data: Any, *, strict_digests: bool = False) -> bool:
         err("root: spans must be non-empty array")
         return False
 
-    ok = validate_run_envelope(data.get("run_envelope")) and ok
+    if "run_envelope" in data:
+        ok = validate_run_envelope(data["run_envelope"]) and ok
 
     span_ids: set[str] = set()
     for i, span in enumerate(spans):

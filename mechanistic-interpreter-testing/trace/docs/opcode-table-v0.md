@@ -23,7 +23,7 @@ Machine-facing instruction set for orchestration-scale lowering (calculator + re
 
 ## Reserved (v1, not implemented)
 
-These opcodes are specified for v1 but **not implemented** in `bytecode_vm.py`; the stub VM raises `unknown op` if they appear in a program.
+These opcodes are specified for v1 but **not implemented** in `bytecode_vm.py`; the stub VM raises `unknown op` if they appear in a program. Note the honest caveat: v0 lowering never *emits* these opcodes — unmapped TRANSFORM ops fail loudly at lowering time, but non-TRANSFORM span kinds (`CHOOSE` in the calculator path, `COMMIT`, `DELEGATE`) are silently dropped by design and never reach the VM. "Fail loud" applies to TRANSFORM ops only.
 
 | Code | Name | Args | Intended semantics |
 |------|------|------|--------------------|

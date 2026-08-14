@@ -33,19 +33,34 @@ def final_span_outcome(trace: dict[str, Any]) -> dict[str, Any]:
 
 
 def resolve_certificate(trace: dict[str, Any], trace_path: Path) -> tuple[Path, dict[str, Any]]:
-    """Find the certificate bound to this trace among certificate-*.json siblings."""
+    """Find the certificate bound to this trace among certificate-*.json siblings.
+
+    Raises FileNotFoundError when no candidate matches (reporting any unreadable
+    candidates) and ValueError when more than one certificate claims the trace.
+    """
     trace_id = trace["trace_id"]
     candidates = sorted(trace_path.parent.glob("certificate-*.json"))
+    matches: list[tuple[Path, dict[str, Any]]] = []
+    skipped: list[str] = []
     for cand in candidates:
         try:
             cert = json.loads(cand.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
+        except (OSError, json.JSONDecodeError) as e:
+            skipped.append(f"{cand.name}: {e}")
             continue
         if isinstance(cert, dict) and cert.get("trace_id") == trace_id:
-            return cand, cert
+            matches.append((cand, cert))
+    if len(matches) > 1:
+        raise ValueError(
+            f"ambiguous certificate resolution: {[p.name for p, _ in matches]} "
+            f"all claim trace_id {trace_id!r}; pass --cert to disambiguate"
+        )
+    if matches:
+        return matches[0]
+    skipped_note = f" (skipped unreadable: {skipped})" if skipped else ""
     raise FileNotFoundError(
         f"no certificate with trace_id {trace_id!r} found among "
-        f"{[c.name for c in candidates]} in {trace_path.parent} "
+        f"{[c.name for c in candidates]} in {trace_path.parent}{skipped_note} "
         "(freeze one with freeze_certificate.py --write, or pass --cert)"
     )
 
@@ -70,6 +85,9 @@ def main() -> int:
         elif args[i] == "--cert" and i + 1 < len(args):
             cert_path = Path(args[i + 1])
             i += 2
+        elif args[i] in ("--write", "--cert"):
+            print(f"missing value for {args[i]}", file=sys.stderr)
+            return 2
         else:
             print(f"unknown arg: {args[i]}", file=sys.stderr)
             return 2
@@ -92,8 +110,17 @@ def main() -> int:
             cert = json.loads(cert_path.read_text(encoding="utf-8"))
         else:
             cert_path, cert = resolve_certificate(trace, trace_path)
-    except (OSError, json.JSONDecodeError, FileNotFoundError) as e:
+    except (OSError, ValueError) as e:
+        # OSError covers FileNotFoundError; ValueError covers JSONDecodeError
+        # and ambiguous resolution.
         print(f"ERROR: certificate resolution failed: {e}", file=sys.stderr)
+        return 2
+
+    if not isinstance(cert, dict):
+        print(
+            f"ERROR: certificate {cert_path} is not a JSON object",
+            file=sys.stderr,
+        )
         return 2
 
     try:
@@ -112,11 +139,10 @@ def main() -> int:
     try:
         program = lower_trace(trace, cert_hash)
         expected = final_span_outcome(trace)
+        outcome = BytecodeVM().execute(program)
     except (KeyError, ValueError) as e:
-        print(f"ERROR: cannot lower {trace_path}: {e}", file=sys.stderr)
+        print(f"ERROR: cannot lower or execute {trace_path}: {e}", file=sys.stderr)
         return 2
-
-    outcome = BytecodeVM().execute(program)
     expected_digest = outcome_digest(expected)
     actual_digest = outcome_digest(outcome)
 

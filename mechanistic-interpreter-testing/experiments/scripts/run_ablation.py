@@ -30,17 +30,37 @@ def prereg_conformance_shortfalls(
     prereg: dict[str, Any],
     perturbations_doc: dict[str, Any],
 ) -> list[str]:
-    """Compare manifest family counts against prereg family minimums."""
+    """Compare manifest family counts against prereg family minimums.
+
+    Conformance is bidirectional: prereg minimums must be met, and every
+    manifest family must have been preregistered — unregistered perturbation
+    families are exactly what preregistration exists to prevent.
+    """
     counts = Counter(
         p.get("family_id") for p in perturbations_doc.get("perturbations", [])
     )
     shortfalls: list[str] = []
+    registered: set[str] = set()
     for fam in prereg.get("perturbation_families", []):
         fid = fam.get("family_id")
-        required = int(fam.get("min_variants", 0))
+        if fid is not None:
+            registered.add(fid)
+        if "min_variants" not in fam:
+            shortfalls.append(f"{fid}: prereg entry missing min_variants")
+            continue
+        try:
+            required = int(fam["min_variants"])
+        except (TypeError, ValueError):
+            shortfalls.append(f"{fid}: prereg min_variants is not an integer")
+            continue
         actual = counts.get(fid, 0)
         if actual < required:
             shortfalls.append(f"{fid}: manifest has {actual}, prereg requires >= {required}")
+    for fid, n in sorted(counts.items(), key=lambda kv: str(kv[0])):
+        if fid is None:
+            shortfalls.append(f"manifest has {n} perturbation(s) with no family_id")
+        elif fid not in registered:
+            shortfalls.append(f"{fid}: manifest family not preregistered ({n} variants)")
     return shortfalls
 
 
@@ -122,6 +142,13 @@ def main() -> int:
     trace = json.loads(args.trace.read_text(encoding="utf-8"))
     prereg = json.loads(args.prereg.read_text(encoding="utf-8"))
     perturbations_doc = json.loads(args.perturbations.read_text(encoding="utf-8"))
+
+    if not perturbations_doc.get("perturbations"):
+        print(
+            f"ERROR: perturbation manifest {args.perturbations} contains no perturbations",
+            file=sys.stderr,
+        )
+        return 2
 
     shortfalls = prereg_conformance_shortfalls(prereg, perturbations_doc)
     if shortfalls:

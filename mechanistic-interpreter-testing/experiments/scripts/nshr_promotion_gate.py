@@ -18,7 +18,9 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CSV = ROOT / "experiments" / "fixtures" / "T47-ABLATION-sample.csv"
+# Default matches run_ablation.py's default output so gating defaults evaluate
+# the CSV that was just generated, never a stale committed fixture.
+DEFAULT_CSV = ROOT / "out" / "T47-ABLATION-sample.csv"
 DEFAULT_PREREG = ROOT / "experiments" / "fixtures" / "trace-47-prereg.example.json"
 
 REASON_NECESSITY_GATE_FAILED = "NECESSITY_GATE_FAILED"
@@ -63,10 +65,19 @@ def main() -> int:
     parser.add_argument("--prereg", type=Path, default=DEFAULT_PREREG)
     args = parser.parse_args()
 
+    if not args.csv.exists():
+        print(
+            f"ERROR: ablation CSV not found: {args.csv} "
+            "(run run_ablation.py first, or pass --csv)",
+            file=sys.stderr,
+        )
+        return 2
+
     prereg = json.loads(args.prereg.read_text(encoding="utf-8"))
     rows = load_csv(args.csv)
     code, reason, stats = evaluate(rows, prereg)
 
+    print(f"Evaluated: {args.csv}")
     print(json.dumps({"reason_code": reason, **stats}, indent=2))
     if code == 0:
         print("OK: promotion gate passed (mock)")

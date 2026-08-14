@@ -16,8 +16,6 @@ sys.path.insert(0, str(ROOT / "trace" / "scripts"))
 
 from verify_certificate_binding import CertificateBindingError, verify_certificate_binding  # noqa: E402
 
-REASON_CERT_MISMATCH = "CERT_MISMATCH"
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Promotion integrity gate")
@@ -34,7 +32,7 @@ def main() -> int:
         verify_certificate_binding(trace, cert)
     except CertificateBindingError as e:
         print(json.dumps(e.report.to_dict(), indent=2))
-        print(f"BLOCKED: {REASON_CERT_MISMATCH}", file=sys.stderr)
+        print(f"BLOCKED: {e.report.reason_code}", file=sys.stderr)
         return 10
 
     if args.ablation_csv and args.prereg:
