@@ -1,0 +1,115 @@
+# Visual foundation freeze certificate — ENTERPRISE Main Computer
+# Referenced by UX spec Step 08 (DC-7). Regenerate on experience-pack token changes.
+schemaVersion: "1.0.0"
+product: ENTERPRISE Main Computer
+gamutProfile:
+  primary: srgb-mvp
+  fallback: p3Fallback
+  p3Enabled: true
+  colorSpaceOrder: ["srgb", "display-p3"]
+  bridgeLedV1:
+    status: reserved
+    promotionRequires: documented delta from srgb-mvp + hardware trigger condition
+contrastMatrix:
+  normalText: { minRatio: 4.5, algorithm: WCAG21 }
+  largeText: { minRatio: 3.0, algorithm: WCAG21 }
+  uiComponent: { minRatio: 3.0, algorithm: WCAG21 }
+  dc7Compliance: true
+tokens:
+  - id: color.alert.red-alert
+    srgbMvp: "#FF1E1E"
+    oklch: "oklch(0.50 0.26 25)"
+    p3Fallback: "color(display-p3 1.0 0.12 0.12)"
+    substrate: bridge-dark
+    contrastRatio: 4.8
+    motion: pulse
+    staticUseProhibited: true
+  - id: color.alert.battle-stations
+    srgbMvp: "#C41A1A"
+    oklch: "oklch(0.44 0.22 25)"
+    p3Fallback: "color(display-p3 0.77 0.10 0.10)"
+    substrate: bridge-dark
+    contrastRatio: 5.1
+    motion: none
+    deltaEFromRedAlert: 5.2
+  - id: color.status.environmental-amber
+    srgbMvp: "#E8A030"
+    oklch: "oklch(0.72 0.18 62)"
+    p3Fallback: "color(display-p3 0.91 0.65 0.19)"
+    substrate: bridge-dark
+    contrastRatio: 4.6
+    motion: none
+  - id: color.status.alert-cyan
+    srgbMvp: "#00AABB"
+    oklch: "oklch(0.68 0.14 212)"
+    p3Fallback: "color(display-p3 0.00 0.67 0.73)"
+    substrate: bridge-dark
+    contrastRatio: 4.7
+    motion: none
+  - id: color.status.orange
+    srgbMvp: "#E8730A"
+    oklch: "oklch(0.60 0.20 46)"
+    p3Fallback: "color(display-p3 0.91 0.45 0.04)"
+    substrate: white-panel
+    contrastRatio: 3.1
+    motion: none
+  - id: color.status.alert-amber
+    srgbMvp: "#C57308"
+    note: "Corrected from #D4820C — P1-minor; ≥3:1 on white (Denise Okuda)"
+    p3Fallback: "color(display-p3 0.77 0.45 0.05)"
+    substrate: white-panel
+    contrastRatio: 3.0
+    motion: none
+  - id: color.text.primary
+    srgbMvp: "#1A1A1A"
+    p3Fallback: "color(display-p3 0.10 0.10 0.10)"
+    substrate: white-panel
+    contrastRatio: 16.1
+  - id: color.text.operator-label
+    srgbMvp: "#6B6B6B"
+    p3Fallback: "color(display-p3 0.42 0.42 0.42)"
+    substrate: white-panel
+    contrastRatio: 4.6
+  - id: color.border.critical
+    srgbMvp: "#C0000F"
+    p3Fallback: "color(display-p3 0.75 0.00 0.06)"
+    substrate: white-panel
+    contrastRatio: 5.2
+motionTokenRefs:
+  - token: motion.alert.animated-red
+    value: pulse
+    tiers: [red-alert]
+  - token: motion.alert.static-red
+    value: none
+    tiers: [battle-stations]
+  - token: motion.duration.fast
+    value: 100ms
+  - token: motion.duration.standard
+    value: 250ms
+  - token: motion.reducedMotion.override
+    value: 0ms
+focusTokenRefs:
+  - token: focus.ring.width
+    value: 2px
+  - token: focus.ring.offset
+    value: 2px
+  - token: focus.ring.color
+    value: "{color.interactive.focus}"
+  - token: focus.ring.style
+    value: lcars-native
+audioTokenRefs:
+  - token: audio.klaxon.yellow
+    pattern: "3x-then-silence"
+  - token: audio.klaxon.red-alert
+    pattern: until-operator-ack
+mvpVisualFreezeScope:
+  - alert
+  - ops
+  - environmental
+typography:
+  operatorMinPx: 12
+  guestMinPx: 11
+spacing:
+  baseRhythmPx: 8
+  elbowSubGridPx: 4
+  buttonElbowMinRadiusPx: 4

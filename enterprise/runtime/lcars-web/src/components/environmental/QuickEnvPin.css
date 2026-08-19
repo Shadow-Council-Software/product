@@ -1,0 +1,30 @@
+.quick-env-pin {
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  border-left: 4px solid var(--okuda-green, #00aa44);
+  background: var(--okuda-panel-alt, #e8e4dc);
+  margin-bottom: 1rem;
+}
+
+.quick-env-pin--green-full {
+  width: 100%;
+  max-width: 100%;
+}
+
+.quick-env-pin--shared {
+  width: auto;
+  max-width: 480px;
+}
+
+.quick-env-pin__label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--okuda-text-muted, #6b6b6b);
+}
+
+.quick-env-pin__value {
+  font-weight: 600;
+  color: var(--okuda-text, #1a1a1a);
+}

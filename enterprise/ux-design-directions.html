@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENTERPRISE — Design Directions D1–D6</title>
+  <style>
+    :root {
+      --bridge-dark: #0a0a12;
+      --panel: #f4f0e8;
+      --lcars-orange: #ff9933;
+      --lcars-purple: #cc99cc;
+      --lcars-blue: #99ccff;
+      --lcars-red: #ff1e1e;
+      --lcars-amber: #c57308;
+      --lcars-cyan: #00aabb;
+      --lcars-green: #88cc88;
+      --text: #1a1a1a;
+      --muted: #6b6b6b;
+      --dept-env: #e8a030;
+      --dept-tac: #00aabb;
+      --dept-eng: #e8730a;
+      --dept-sci: #99ccff;
+      --dept-ops: #cc99cc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: var(--bridge-dark);
+      color: var(--panel);
+      min-height: 100vh;
+    }
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 3px solid var(--lcars-orange);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    header p { font-size: 0.75rem; color: var(--lcars-purple); max-width: 36rem; }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      background: #12121c;
+    }
+    .controls label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      width: 100%;
+      margin-bottom: 0.25rem;
+    }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px 999px 999px 4px;
+      background: #2a2a3a;
+      color: var(--panel);
+      transition: background 0.15s, transform 0.1s;
+    }
+    button:hover { background: #3a3a4f; }
+    button.active { background: var(--lcars-orange); color: var(--bridge-dark); font-weight: 700; }
+    button.rejected { opacity: 0.45; text-decoration: line-through; }
+    button.blocked { opacity: 0.55; border: 1px dashed var(--lcars-amber); }
+    button.merged { border: 2px solid var(--lcars-cyan); }
+    button.chosen { box-shadow: 0 0 0 2px var(--lcars-green); }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 1rem;
+      padding: 1rem 1.5rem 2rem;
+    }
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; }
+    }
+    .mockup {
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 24px 4px 24px 4px;
+      overflow: hidden;
+      min-height: 520px;
+      position: relative;
+    }
+    .mockup.red-alert .alert-banner {
+      background: var(--lcars-red);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.75; }
+    }
+    .alert-banner {
+      background: transparent;
+      color: #fff;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      padding: 0.35rem;
+      text-transform: uppercase;
+      min-height: 0;
+      transition: background 0.2s, min-height 0.2s, padding 0.2s;
+    }
+    .mockup.red-alert .alert-banner,
+    .mockup.d4 .alert-banner {
+      min-height: 2rem;
+      padding: 0.5rem;
+    }
+    .mockup.d4 .alert-banner {
+      background: var(--lcars-amber);
+      animation: none;
+      color: var(--text);
+    }
+    .mockup.red-alert.d4 .alert-banner {
+      background: var(--lcars-red);
+      animation: pulse 1.2s ease-in-out infinite;
+      color: #fff;
+    }
+    .chrome-vessel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.75rem;
+      background: #e8e4dc;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .mockup.d5 .hybrid-strip,
+    .mockup.chosen-layout .hybrid-strip { display: block; }
+    .hybrid-strip {
+      display: none;
+      background: #1a1a1a;
+      color: var(--lcars-cyan);
+      text-align: center;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      padding: 0.3rem;
+    }
+    .ops-hero {
+      padding: 0.75rem 1rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--lcars-purple);
+    }
+    .mockup.d2 .ops-hero,
+    .mockup.red-alert .ops-hero {
+      font-size: 0.85rem;
+      padding: 1rem 1.25rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+    .mockup.d2 .grid { gap: 0.85rem; padding: 1.25rem; }
+    .mockup.d6 .grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.25rem;
+      padding: 0.4rem;
+    }
+    .mockup.red-alert .grid { padding: 1rem 1.25rem; gap: 0.65rem; }
+    .tile {
+      border-radius: 16px 4px 16px 4px;
+      padding: 0.5rem 0.35rem 0.5rem 0.5rem;
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      min-height: 4.5rem;
+      position: relative;
+      background: #fff;
+      border-left: 4px solid var(--dept-ops);
+    }
+    .mockup.d2 .tile { min-height: 5.5rem; font-size: 0.65rem; }
+    .mockup.d6 .tile { min-height: 3rem; font-size: 0.45rem; border-radius: 8px 2px 8px 2px; }
+    .tile.env { border-left-color: var(--dept-env); }
+    .tile.tac { border-left-color: var(--dept-tac); }
+    .tile.eng { border-left-color: var(--dept-eng); }
+    .tile.sci { border-left-color: var(--dept-sci); }
+    .tile.ops { border-left-color: var(--dept-ops); }
+    .mockup.d3 .tile.env { background: linear-gradient(90deg, rgba(232,160,48,0.25), #fff 40%); }
+    .mockup.d3 .tile.tac { background: linear-gradient(90deg, rgba(0,170,187,0.25), #fff 40%); }
+    .mockup.d3 .tile.eng { background: linear-gradient(90deg, rgba(232,115,10,0.25), #fff 40%); }
+    .mockup.d3 .tile.sci { background: linear-gradient(90deg, rgba(153,204,255,0.35), #fff 40%); }
+    .mockup.d3 .tile.ops { background: linear-gradient(90deg, rgba(204,153,204,0.3), #fff 40%); }
+    .mockup.red-alert.d3 .tile { background: #fff !important; opacity: 0.92; }
+    .mockup.red-alert .tile { box-shadow: inset 0 0 0 1px rgba(255,30,30,0.15); }
+    .tile .code { font-size: 0.5rem; color: var(--muted); margin-top: 0.25rem; }
+    .mockup.d2 .tile .code { font-size: 0.55rem; }
+    .quick-env {
+      margin: 0 0.75rem 0.75rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--lcars-purple);
+      color: var(--text);
+      border-radius: 999px 999px 999px 4px;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      width: fit-content;
+      max-width: 15%;
+    }
+    .mockup.d2 .quick-env { max-width: 20%; font-size: 0.6rem; }
+    aside {
+      background: #12121c;
+      border-radius: 16px 4px 16px 4px;
+      padding: 1rem;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+    aside h2 {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--lcars-orange);
+      margin-bottom: 0.75rem;
+    }
+    aside .status {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .status.chosen { background: #2d4a2d; color: var(--lcars-green); }
+    .status.rejected { background: #4a2d2d; color: #ff8888; }
+    .status.blocked { background: #4a3d2d; color: var(--lcars-amber); }
+    .status.merged { background: #2d3a4a; color: var(--lcars-cyan); }
+    aside ul { margin: 0.5rem 0 0 1rem; color: #aaa; font-size: 0.7rem; }
+    aside a { color: var(--lcars-cyan); }
+    footer {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>ENTERPRISE Main Computer — Design Directions</h1>
+      <p>Step 09 showcase · Okuda LCARS canon · Compare D1–D6 at Green vs Red Alert · Chosen: D1+D2+TRIAX+D5→HealthStrip</p>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div>
+      <label>Direction</label>
+      <div class="btn-group" id="dir-buttons">
+        <button type="button" data-dir="d1" class="chosen active">D1 Ops Command</button>
+        <button type="button" data-dir="d2" class="chosen">D2 Spare Chair</button>
+        <button type="button" data-dir="d3" class="chosen">D3 TRIAX</button>
+        <button type="button" data-dir="d4" class="blocked">D4 Alert-Forward</button>
+        <button type="button" data-dir="d5" class="merged">D5 Hybrid</button>
+        <button type="button" data-dir="d6" class="rejected">D6 Dense</button>
+        <button type="button" data-dir="chosen" class="chosen">★ D1+D2 Lock</button>
+      </div>
+    </div>
+    <div>
+      <label>Alert state</label>
+      <div class="btn-group" id="alert-buttons">
+        <button type="button" data-alert="green" class="active">Green</button>
+        <button type="button" data-alert="red">Red Alert</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="mockup chosen-layout d1" id="mockup">
+      <div class="alert-banner" id="alert-banner">—</div>
+      <div class="hybrid-strip">Posture: Hybrid · External controller active</div>
+      <div class="chrome-vessel">
+        <span>Clearance: Captain</span>
+        <span>Vessel: Nominal</span>
+      </div>
+      <div class="ops-hero">Ops Overview · Whole-ship skeleton</div>
+      <div class="grid">
+        <div class="tile env"><span>Environmental</span><div class="code">ENV · NOMINAL</div></div>
+        <div class="tile tac"><span>Tactical</span><div class="code">TAC · OFFLINE</div></div>
+        <div class="tile eng"><span>Engineering</span><div class="code">ENG · PENDING</div></div>
+        <div class="tile sci"><span>Science</span><div class="code">SCI · OFFLINE</div></div>
+        <div class="tile ops"><span>Operations</span><div class="code">OPS · LIVE</div></div>
+      </div>
+      <div class="quick-env">Quick Env</div>
+    </div>
+
+    <aside id="panel">
+      <h2 id="panel-title">D1 Ops Command</h2>
+      <span class="status chosen" id="panel-status">Chosen (base)</span>
+      <p id="panel-desc">Hero ops.overview, department grid dominant, Quick Env pin subtle. Canonical north star — ship first.</p>
+      <ul id="panel-notes">
+        <li>Five department tiles always visible</li>
+        <li>Quick Env pin ≤15% width at Green</li>
+        <li>Pairs with D2 sparse mode under Red Alert</li>
+      </ul>
+      <p style="margin-top:1rem;font-size:0.65rem;"><a href="./ux-design-specification.md">UX spec § Design Direction Decision</a> · <a href="./docs/agents/process-party-mode.md">Decision ledger</a></p>
+    </aside>
+  </main>
+
+  <footer>ENTERPRISE · ux-design-directions.html · Certificate tokens srgb-mvp · Not normative wireframes — directional mockups for council review</footer>
+
+  <script>
+    const meta = {
+      d1: {
+        title: 'D1 Ops Command',
+        status: 'chosen',
+        statusLabel: 'Chosen (base)',
+        desc: 'Hero ops.overview, department grid dominant, Quick Env pin subtle. Canonical north star — ship first.',
+        notes: ['Five department tiles always visible', 'Quick Env pin ≤15% width at Green', 'Pairs with D2 sparse mode under Red Alert']
+      },
+      d2: {
+        title: "D2 Spare Captain's Chair",
+        status: 'chosen',
+        statusLabel: 'Chosen (density mode)',
+        desc: 'Larger labels, fewer tiles visible, max whitespace. Roddenberry 2-second read at 1280×720.',
+        notes: ['Typography scale up', 'Red Alert sparse chrome', '12px operator minimum preserved']
+      },
+      d3: {
+        title: 'D3 TRIAX Department Identity',
+        status: 'chosen',
+        statusLabel: 'Chosen (token layer)',
+        desc: 'Three channels: label, rail (4px), fill. Alert wins hue; department wins structure under stress.',
+        notes: ['Green: full chroma', 'Yellow: 50% rail/fill', 'Red: rail luminance 20%, fill 5%', 'Battle Stations: suppressed rail/fill']
+      },
+      d4: {
+        title: 'D4 Alert-Forward',
+        status: 'blocked',
+        statusLabel: 'Blocked (R-02)',
+        desc: 'Banner + health strip consume top 25%. Blocked: persistent banner at Green violates alert-as-behavior.',
+        notes: ['Revisit when banner hidden at Green (D-04)', 'Michael Okuda BLOCKED']
+      },
+      d5: {
+        title: 'D5 Hybrid Honest',
+        status: 'merged',
+        statusLabel: 'Merged → HealthStrip',
+        desc: 'POSTURE: HYBRID as ship status — not Google watermark. Merged into HealthStrip posture badge.',
+        notes: ['Non-dismissible at all FSM tiers (Worf)', 'Roddenberry ship-status framing']
+      },
+      d6: {
+        title: 'D6 Dense Mission Control',
+        status: 'rejected',
+        statusLabel: 'Rejected MVP (R-01)',
+        desc: 'Higher tile density, SCADA-like. Fails AC-E1; hides clearance chrome. Opt-in ≥1440px deferred only.',
+        notes: ['Worf rejected', 'Roddenberry: passenger architecture', 'See D-14 for large display path']
+      },
+      chosen: {
+        title: 'D1 + D2 + TRIAX + D5→HealthStrip',
+        status: 'chosen',
+        statusLabel: 'Council lock',
+        desc: 'Production direction: D1 layout, D2 sparse/typography under stress, TRIAX tokens, D5 in HealthStrip.',
+        notes: ['Step 09 PASS 2026-05-19', 'Certificate TRIAX merge blocked until D-09', 'architecture.md before implementation (D-01)']
+      }
+    };
+
+    const mockup = document.getElementById('mockup');
+    const banner = document.getElementById('alert-banner');
+    const dirButtons = document.querySelectorAll('#dir-buttons button');
+    const alertButtons = document.querySelectorAll('#alert-buttons button');
+
+    let currentDir = 'd1';
+    let currentAlert = 'green';
+
+    function applyState() {
+      mockup.className = 'mockup';
+      if (currentDir === 'chosen') mockup.classList.add('chosen-layout', 'd1');
+      else mockup.classList.add(currentDir);
+      if (currentAlert === 'red') {
+        mockup.classList.add('red-alert');
+        banner.textContent = 'Red Alert · Condition red';
+      } else {
+        banner.textContent = currentDir === 'd4' ? 'Yellow watch · Banner demo (blocked at Green in spec)' : '—';
+      }
+      if (currentDir === 'd5' || currentDir === 'chosen') mockup.classList.add('d5');
+
+      const m = meta[currentDir];
+      document.getElementById('panel-title').textContent = m.title;
+      const st = document.getElementById('panel-status');
+      st.textContent = m.statusLabel;
+      st.className = 'status ' + m.status;
+      document.getElementById('panel-desc').textContent = m.desc;
+      document.getElementById('panel-notes').innerHTML = m.notes.map(n => '<li>' + n + '</li>').join('');
+
+      dirButtons.forEach(b => b.classList.toggle('active', b.dataset.dir === currentDir));
+      alertButtons.forEach(b => b.classList.toggle('active', b.dataset.alert === currentAlert));
+    }
+
+    dirButtons.forEach(b => b.addEventListener('click', () => { currentDir = b.dataset.dir; applyState(); }));
+    alertButtons.forEach(b => b.addEventListener('click', () => { currentAlert = b.dataset.alert; applyState(); }));
+
+    applyState();
+  </script>
+</body>
+</html>

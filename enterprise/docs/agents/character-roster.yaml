@@ -1,0 +1,52 @@
+schemaVersion: "1.0.1"
+product: ENTERPRISE Main Computer
+purpose: Character agent roster for Party Mode, senior staff meetings, positronic agent factory
+
+meetingDefaults:
+  chair: enterprise-agent-picard
+  seniorStaff:
+    - enterprise-agent-la-forge
+    - enterprise-agent-data
+    - enterprise-agent-worf
+  synthesisOwner: enterprise-agent-picard
+  fullCouncilAdds:
+    - michael-okuda
+    - denise-okuda
+    - gene-roddenberry
+
+agents:
+  - id: enterprise-agent-picard
+    name: Captain Jean-Luc Picard
+    icon: "⚜️"
+    archetype: synthesis_command_ethics
+    extremityIndex: 0.5  # balance point — integrates extremes
+    specFile: captain-picard.md
+    meetingRole: chair
+    productDomains: [command, ethics, alert_authority, clearance_captain, council_synthesis]
+
+  - id: enterprise-agent-la-forge
+    name: Lt. Commander Geordi La Forge
+    icon: "🔧"
+    archetype: engineering_moderation
+    extremityIndex: 0.45  # moderate — between Data and Worf
+    specFile: lt-commander-la-forge.md
+    meetingRole: chief_engineer
+    productDomains: [station_api, matter_adapter, diagnostics, renderer_parity, feasibility]
+
+  - id: enterprise-agent-data
+    name: Lt. Commander Data
+    icon: "🤖"
+    archetype: logic_positronic_lifecycle
+    extremityIndex: 0.35  # balanced logic — low emotional variance
+    specFile: lt-commander-data.md
+    meetingRole: operations_officer_automation
+    productDomains: [positronic_agents, holodeck_programs, instantiate_train_deploy, capability_boundaries]
+
+  - id: enterprise-agent-worf
+    name: Lieutenant Worf
+    icon: "⚔️"
+    archetype: security_honor_extreme
+    extremityIndex: 0.95  # deliberate extreme — threat-first
+    specFile: lieutenant-worf.md
+    meetingRole: security_officer
+    productDomains: [clearance, audit, hybrid_seam, battle_stations_gate, threat_posture]
